@@ -1,7 +1,9 @@
 // Notes JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    // Check authentication
-    if (!checkAuth()) {
+    // Check authentication first - redirect if not logged in
+    const userType = localStorage.getItem('userType');
+    if (!userType) {
+        window.location.href = 'login.html';
         return;
     }
     

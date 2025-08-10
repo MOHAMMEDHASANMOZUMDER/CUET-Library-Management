@@ -103,15 +103,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Utility functions for authentication
 function logout() {
-    localStorage.clear();
+    // Clear all authentication data
+    localStorage.removeItem('userType');
+    localStorage.removeItem('userId');  
+    localStorage.removeItem('userName');
+    
+    // Show confirmation
+    alert('You have been logged out successfully!');
+    
+    // Redirect to homepage
     window.location.href = 'index.html';
 }
 
 function checkAuth() {
     const userType = localStorage.getItem('userType');
     if (!userType) {
-        window.location.href = 'login.html';
-        return false;
+        // Only redirect to login if we're not already on a public page
+        const currentPage = window.location.pathname;
+        const publicPages = ['/', '/index.html', '/login.html', '/register.html', '/about.html', '/faq.html'];
+        
+        if (!publicPages.includes(currentPage)) {
+            window.location.href = 'login.html';
+            return false;
+        }
     }
     return true;
 }
