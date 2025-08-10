@@ -39,6 +39,8 @@ function loadBooks() {
             isbn: '978-0072465631',
             location: 'CS-245',
             status: 'available',
+            availableCopies: 3,
+            totalCopies: 5,
             image: 'https://via.placeholder.com/150x200?text=Database+Systems'
         },
         {
@@ -119,6 +121,7 @@ function renderBooks(books) {
                 <div class="book-meta">
                     <span class="book-isbn">ISBN: ${book.isbn}</span>
                     <span class="book-location">Shelf: ${book.location}</span>
+                    <span class="book-copies">Available: ${book.availableCopies || 0}/${book.totalCopies || 1} copies</span>
                 </div>
             </div>
             <div class="book-actions">
