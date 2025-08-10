@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Fines - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </div>
+            <div class="header-actions">
+                <a href="dashboard.html" class="btn btn-ghost">
+                    <i data-lucide="home"></i>
+                    Dashboard
+                </a>
+                <a href="my-books.html" class="btn btn-ghost">
+                    <i data-lucide="book"></i>
+                    My Books
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Library Fines</h1>
+            <p class="page-description">View and pay your outstanding library fines</p>
+        </div>
+
+        <!-- Fine Summary -->
+        <div class="fine-summary">
+            <div class="summary-card total">
+                <div class="summary-icon">
+                    <i data-lucide="credit-card"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-amount">৳90</div>
+                    <div class="summary-label">Total Outstanding</div>
+                </div>
+            </div>
+            <div class="summary-card overdue">
+                <div class="summary-icon">
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-amount">2</div>
+                    <div class="summary-label">Overdue Books</div>
+                </div>
+            </div>
+            <div class="summary-card paid">
+                <div class="summary-icon">
+                    <i data-lucide="check-circle"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-amount">৳150</div>
+                    <div class="summary-label">Paid This Year</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outstanding Fines -->
+        <div class="fines-section">
+            <div class="section-header">
+                <h2>Outstanding Fines</h2>
+                <button class="btn btn-primary" onclick="payAllFines()">
+                    <i data-lucide="credit-card"></i>
+                    Pay All Fines
+                </button>
+            </div>
+
+            <div class="fines-list">
+                <div class="fine-item">
+                    <div class="fine-book">
+                        <img src="https://via.placeholder.com/60x80?text=Networks" alt="Computer Networks">
+                        <div class="book-info">
+                            <h4>Computer Networks</h4>
+                            <p>by Andrew S. Tanenbaum</p>
+                            <p class="overdue-info">8 days overdue</p>
+                        </div>
+                    </div>
+                    <div class="fine-details">
+                        <div class="fine-amount">৳40</div>
+                        <div class="fine-calculation">৳5 × 8 days</div>
+                        <div class="fine-dates">
+                            <span>Due: 2025-01-10</span>
+                            <span>Today: 2025-01-18</span>
+                        </div>
+                    </div>
+                    <div class="fine-actions">
+                        <button class="btn btn-primary btn-small" onclick="payFine(1, 40)">
+                            <i data-lucide="credit-card"></i>
+                            Pay ৳40
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="viewFineDetails(1)">
+                            <i data-lucide="eye"></i>
+                            Details
+                        </button>
+                    </div>
+                </div>
+
+                <div class="fine-item">
+                    <div class="fine-book">
+                        <img src="https://via.placeholder.com/60x80?text=Physics" alt="Physics Book">
+                        <div class="book-info">
+                            <h4>University Physics</h4>
+                            <p>by Hugh D. Young</p>
+                            <p class="overdue-info">10 days overdue</p>
+                        </div>
+                    </div>
+                    <div class="fine-details">
+                        <div class="fine-amount">৳50</div>
+                        <div class="fine-calculation">৳5 × 10 days</div>
+                        <div class="fine-dates">
+                            <span>Due: 2025-01-08</span>
+                            <span>Today: 2025-01-18</span>
+                        </div>
+                    </div>
+                    <div class="fine-actions">
+                        <button class="btn btn-primary btn-small" onclick="payFine(2, 50)">
+                            <i data-lucide="credit-card"></i>
+                            Pay ৳50
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="viewFineDetails(2)">
+                            <i data-lucide="eye"></i>
+                            Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-section">
+            <h2>Payment Methods</h2>
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <div class="method-icon">
+                        <img src="https://via.placeholder.com/40x40?text=bKash" alt="bKash">
+                    </div>
+                    <div class="method-info">
+                        <h4>bKash</h4>
+                        <p>Pay using your bKash mobile wallet</p>
+                    </div>
+                    <div class="method-status">
+                        <span class="badge badge-primary">Available</span>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="method-icon">
+                        <img src="https://via.placeholder.com/40x40?text=Nagad" alt="Nagad">
+                    </div>
+                    <div class="method-info">
+                        <h4>Nagad</h4>
+                        <p>Pay using your Nagad mobile wallet</p>
+                    </div>
+                    <div class="method-status">
+                        <span class="badge badge-primary">Available</span>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="method-icon">
+                        <img src="https://via.placeholder.com/40x40?text=Rocket" alt="Rocket">
+                    </div>
+                    <div class="method-info">
+                        <h4>Rocket</h4>
+                        <p>Pay using your Rocket mobile wallet</p>
+                    </div>
+                    <div class="method-status">
+                        <span class="badge badge-primary">Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment History -->
+        <div class="history-section">
+            <div class="section-header">
+                <h2>Payment History</h2>
+                <div class="history-filters">
+                    <select id="history-period" class="filter-select">
+                        <option value="all">All Time</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="payment-history">
+                <div class="history-item">
+                    <div class="history-date">
+                        <div class="date">Jan 15</div>
+                        <div class="year">2025</div>
+                    </div>
+                    <div class="history-details">
+                        <h4>Fine Payment</h4>
+                        <p>Operating System Concepts - 3 days overdue</p>
+                        <p class="payment-method-used">Paid via bKash</p>
+                    </div>
+                    <div class="history-amount">
+                        <span class="amount">৳15</span>
+                        <span class="status paid">Paid</span>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-date">
+                        <div class="date">Dec 28</div>
+                        <div class="year">2024</div>
+                    </div>
+                    <div class="history-details">
+                        <h4>Fine Payment</h4>
+                        <p>Database Management Systems - 5 days overdue</p>
+                        <p class="payment-method-used">Paid via Nagad</p>
+                    </div>
+                    <div class="history-amount">
+                        <span class="amount">৳25</span>
+                        <span class="status paid">Paid</span>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-date">
+                        <div class="date">Dec 20</div>
+                        <div class="year">2024</div>
+                    </div>
+                    <div class="history-details">
+                        <h4>Fine Payment</h4>
+                        <p>Introduction to Algorithms - 7 days overdue</p>
+                        <p class="payment-method-used">Paid via bKash</p>
+                    </div>
+                    <div class="history-amount">
+                        <span class="amount">৳35</span>
+                        <span class="status paid">Paid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fine Policy -->
+        <div class="policy-section">
+            <h2>Fine Policy</h2>
+            <div class="policy-content">
+                <div class="policy-item">
+                    <i data-lucide="clock"></i>
+                    <div>
+                        <h4>Overdue Books</h4>
+                        <p>৳5 per day for each overdue book, starting from the day after the due date.</p>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <i data-lucide="book-x"></i>
+                    <div>
+                        <h4>Lost Books</h4>
+                        <p>Full replacement cost of the book plus ৳100 processing fee.</p>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <i data-lucide="alert-triangle"></i>
+                    <div>
+                        <h4>Damaged Books</h4>
+                        <p>Repair cost or full replacement cost depending on the extent of damage.</p>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <i data-lucide="ban"></i>
+                    <div>
+                        <h4>Borrowing Restriction</h4>
+                        <p>Students with outstanding fines cannot borrow new books until all fines are cleared.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pay Fine</h3>
+                <button class="modal-close" onclick="closePaymentModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-details">
+                    <h4 id="payment-book-title">Book Title</h4>
+                    <p id="payment-fine-amount">Amount: ৳0</p>
+                </div>
+                
+                <div class="payment-method-selection">
+                    <h4>Select Payment Method</h4>
+                    <div class="method-options">
+                        <label class="method-option">
+                            <input type="radio" name="payment-method" value="bkash" checked>
+                            <div class="option-content">
+                                <img src="https://via.placeholder.com/30x30?text=bK" alt="bKash">
+                                <span>bKash</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="payment-method" value="nagad">
+                            <div class="option-content">
+                                <img src="https://via.placeholder.com/30x30?text=N" alt="Nagad">
+                                <span>Nagad</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="payment-method" value="rocket">
+                            <div class="option-content">
+                                <img src="https://via.placeholder.com/30x30?text=R" alt="Rocket">
+                                <span>Rocket</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="payment-instructions">
+                    <h4>Payment Instructions</h4>
+                    <ol>
+                        <li>Open your mobile banking app</li>
+                        <li>Send money to: <strong>01712345678</strong></li>
+                        <li>Amount: <strong id="instruction-amount">৳0</strong></li>
+                        <li>Reference: <strong id="instruction-reference">LIB-FINE-001</strong></li>
+                        <li>Take a screenshot of the transaction</li>
+                        <li>Upload the screenshot below</li>
+                    </ol>
+                </div>
+
+                <div class="screenshot-upload">
+                    <h4>Upload Transaction Screenshot</h4>
+                    <div class="upload-area">
+                        <input type="file" id="screenshot-input" accept="image/*">
+                        <div class="upload-placeholder">
+                            <i data-lucide="upload"></i>
+                            <p>Click to upload screenshot or drag and drop</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closePaymentModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitPayment()">Submit Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/fines.js"></script>
+</body>
+</html>

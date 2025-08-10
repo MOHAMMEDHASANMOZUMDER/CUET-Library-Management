@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <a href="index.html" class="auth-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" style="width: 2rem; height: 2rem;">
+                <span>CUET Library</span>
+            </a>
+            <p class="auth-subtitle">Create your student account</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="auth-card">
+            <div class="card-header">
+                <h1 class="card-title">Student Registration</h1>
+                <p class="card-description">Fill in your details to create an account</p>
+            </div>
+
+            <form class="auth-form" id="registration-form">
+                <div class="form-group">
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id" name="studentId" placeholder="e.g., 2204054" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your.email@student.cuet.ac.bd" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" name="department" required>
+                        <option value="">Select your department</option>
+                        <option value="cse">Computer Science & Engineering</option>
+                        <option value="eee">Electrical & Electronic Engineering</option>
+                        <option value="me">Mechanical Engineering</option>
+                        <option value="ce">Civil Engineering</option>
+                        <option value="che">Chemical Engineering</option>
+                        <option value="ipe">Industrial & Production Engineering</option>
+                        <option value="arch">Architecture</option>
+                        <option value="urp">Urban & Regional Planning</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="session">Session</label>
+                    <select id="session" name="session" required>
+                        <option value="">Select your session</option>
+                        <option value="2024-25">2024-2025</option>
+                        <option value="2023-24">2023-2024</option>
+                        <option value="2022-23">2022-2023</option>
+                        <option value="2021-22">2021-2022</option>
+                        <option value="2020-21">2020-2021</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+        </div>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="login.html">Sign in here</a></p>
+        </div>
+    </div>
+
+    <script src="scripts/auth.js"></script>
+</body>
+</html>

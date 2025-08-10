@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="dashboard">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost">
+                    <i data-lucide="bell"></i>
+                </button>
+                <div class="nav-right">
+    <div class="dropdown"> 
+      <button class="dropbtn"> <i data-lucide="user">Profile ▼</i>
+                    </button>
+      <div class="dropdown-content">
+        <a href="#">Edit Profile</a>
+        <a href="#">Settings</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
+  </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome back, Mohammad Hasan!</h1>
+            <p class="welcome-subtitle">Student ID: 2204054 | Department: Computer Science & Engineering</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Books Borrowed</span>
+                    <i data-lucide="book-open"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">3</div>
+                    <p class="stat-description">2 due soon</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Outstanding Fines</span>
+                    <i data-lucide="credit-card"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">৳50</div>
+                    <p class="stat-description">1 overdue book</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Notes Uploaded</span>
+                    <i data-lucide="file-text"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">12</div>
+                    <p class="stat-description">+2 this week</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Pre-bookings</span>
+                    <i data-lucide="clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">1</div>
+                    <p class="stat-description">Ready for pickup</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="actions-grid">
+            <div class="action-card">
+                <div class="action-header">
+                    <i data-lucide="search"></i>
+                    <h3>Search Books</h3>
+                </div>
+                <p class="action-description">Find and pre-book your next read</p>
+                <a href="books.html" class="btn btn-primary">Browse Library</a>
+            </div>
+
+            <div class="action-card">
+                <div class="action-header">
+                    <i data-lucide="book-open"></i>
+                    <h3>My Books</h3>
+                </div>
+                <p class="action-description">Manage your borrowed books</p>
+                <a href="my-books.html" class="btn btn-outline">View Books</a>
+            </div>
+
+            <div class="action-card">
+                <div class="action-header">
+                    <i data-lucide="credit-card"></i>
+                    <h3>Pay Fines</h3>
+                </div>
+                <p class="action-description">Clear your outstanding dues</p>
+                <a href="fines.html" class="btn btn-outline">Pay Now</a>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Due Dates -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                    <p>Your latest library transactions</p>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <p class="activity-title">Database Management Systems</p>
+                            <p class="activity-date">Borrowed on 2025-01-15</p>
+                        </div>
+                        <span class="badge badge-primary">Borrowed</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <p class="activity-title">Software Engineering</p>
+                            <p class="activity-date">Renewed on 2025-01-14</p>
+                        </div>
+                        <span class="badge badge-secondary">Renewed</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <p class="activity-title">Computer Networks</p>
+                            <p class="activity-date">Returned on 2025-01-12</p>
+                        </div>
+                        <span class="badge badge-secondary">Returned</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Upcoming Due Dates</h3>
+                    <p>Books that need to be returned soon</p>
+                </div>
+                <div class="due-list">
+                    <div class="due-item">
+                        <div class="due-info">
+                            <p class="due-title">Database Management Systems</p>
+                            <p class="due-date">Due: 2025-02-15</p>
+                        </div>
+                        <span class="badge badge-primary">25 days left</span>
+                    </div>
+                    <div class="due-item">
+                        <div class="due-info">
+                            <p class="due-title">Software Engineering</p>
+                            <p class="due-date">Due: 2025-02-20</p>
+                        </div>
+                        <span class="badge badge-primary">30 days left</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="my-books.html" class="btn btn-outline btn-full">Renew Books</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>

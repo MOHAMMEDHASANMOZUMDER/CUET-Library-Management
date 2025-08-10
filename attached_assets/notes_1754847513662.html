@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Notes - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </div>
+            <div class="header-actions">
+                <a href="dashboard.html" class="btn btn-ghost">
+                    <i data-lucide="home"></i>
+                    Dashboard
+                </a>
+                <button class="btn btn-primary" onclick="openUploadModal()">
+                    <i data-lucide="upload"></i>
+                    Upload Notes
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Study Notes</h1>
+            <p class="page-description">Share and download study notes with fellow students</p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-card">
+            <div class="card-header">
+                <h3><i data-lucide="search"></i> Search Notes</h3>
+            </div>
+            <div class="search-form">
+                <div class="search-grid">
+                    <input type="text" id="notes-search" placeholder="Search by title, subject, or author..." class="search-input">
+                    <select id="department-filter" class="filter-select">
+                        <option value="all">All Departments</option>
+                        <option value="CSE">Computer Science & Engineering</option>
+                        <option value="EEE">Electrical & Electronic Engineering</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="CE">Civil Engineering</option>
+                    </select>
+                    <select id="subject-filter" class="filter-select">
+                        <option value="all">All Subjects</option>
+                        <option value="programming">Programming</option>
+                        <option value="database">Database</option>
+                        <option value="networking">Networking</option>
+                        <option value="algorithms">Algorithms</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="searchNotes()">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Stats -->
+        <div class="notes-stats">
+            <div class="stat-item">
+                <div class="stat-number">1,234</div>
+                <div class="stat-label">Total Notes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">12</div>
+                <div class="stat-label">My Uploads</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">89</div>
+                <div class="stat-label">Downloads</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Avg Rating</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="notes-tabs">
+            <button class="tab-btn active" data-tab="browse">Browse Notes</button>
+            <button class="tab-btn" data-tab="my-notes">My Notes</button>
+            <button class="tab-btn" data-tab="favorites">Favorites</button>
+        </div>
+
+        <!-- Browse Notes Tab -->
+        <div class="tab-content active" id="browse-tab">
+            <div class="notes-grid">
+                <div class="note-card">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-actions">
+                            <button class="btn-icon" onclick="toggleFavorite(1)">
+                                <i data-lucide="heart"></i>
+                            </button>
+                            <button class="btn-icon" onclick="shareNote(1)">
+                                <i data-lucide="share-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Database Management Systems - Complete Notes</h3>
+                        <p class="note-description">Comprehensive notes covering all topics from DBMS including normalization, SQL queries, and transaction management.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by Ahmed Hassan</span>
+                            <span class="note-department">CSE</span>
+                            <span class="note-date">Jan 15, 2025</span>
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat">
+                                <i data-lucide="download"></i>
+                                <span>234 downloads</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="star"></i>
+                                <span>4.8 rating</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="eye"></i>
+                                <span>1.2k views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-primary btn-small" onclick="downloadNote(1)">
+                            <i data-lucide="download"></i>
+                            Download PDF
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="previewNote(1)">
+                            <i data-lucide="eye"></i>
+                            Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="note-card">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-actions">
+                            <button class="btn-icon" onclick="toggleFavorite(2)">
+                                <i data-lucide="heart"></i>
+                            </button>
+                            <button class="btn-icon" onclick="shareNote(2)">
+                                <i data-lucide="share-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Data Structures and Algorithms</h3>
+                        <p class="note-description">Detailed notes on arrays, linked lists, trees, graphs, sorting and searching algorithms with examples.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by Fatima Rahman</span>
+                            <span class="note-department">CSE</span>
+                            <span class="note-date">Jan 12, 2025</span>
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat">
+                                <i data-lucide="download"></i>
+                                <span>189 downloads</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="star"></i>
+                                <span>4.6 rating</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="eye"></i>
+                                <span>890 views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-primary btn-small" onclick="downloadNote(2)">
+                            <i data-lucide="download"></i>
+                            Download PDF
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="previewNote(2)">
+                            <i data-lucide="eye"></i>
+                            Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="note-card">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-actions">
+                            <button class="btn-icon" onclick="toggleFavorite(3)">
+                                <i data-lucide="heart"></i>
+                            </button>
+                            <button class="btn-icon" onclick="shareNote(3)">
+                                <i data-lucide="share-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Circuit Analysis and Design</h3>
+                        <p class="note-description">Complete notes on AC/DC circuits, Kirchhoff's laws, network theorems, and circuit analysis techniques.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by Karim Abdullah</span>
+                            <span class="note-department">EEE</span>
+                            <span class="note-date">Jan 10, 2025</span>
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat">
+                                <i data-lucide="download"></i>
+                                <span>156 downloads</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="star"></i>
+                                <span>4.7 rating</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="eye"></i>
+                                <span>678 views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-primary btn-small" onclick="downloadNote(3)">
+                            <i data-lucide="download"></i>
+                            Download PDF
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="previewNote(3)">
+                            <i data-lucide="eye"></i>
+                            Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="note-card">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-actions">
+                            <button class="btn-icon" onclick="toggleFavorite(4)">
+                                <i data-lucide="heart"></i>
+                            </button>
+                            <button class="btn-icon" onclick="shareNote(4)">
+                                <i data-lucide="share-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Thermodynamics Fundamentals</h3>
+                        <p class="note-description">Essential concepts of thermodynamics including laws, cycles, entropy, and heat transfer mechanisms.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by Rashid Ahmed</span>
+                            <span class="note-department">ME</span>
+                            <span class="note-date">Jan 8, 2025</span>
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat">
+                                <i data-lucide="download"></i>
+                                <span>203 downloads</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="star"></i>
+                                <span>4.5 rating</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="eye"></i>
+                                <span>945 views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-primary btn-small" onclick="downloadNote(4)">
+                            <i data-lucide="download"></i>
+                            Download PDF
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="previewNote(4)">
+                            <i data-lucide="eye"></i>
+                            Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Notes Tab -->
+        <div class="tab-content" id="my-notes-tab">
+            <div class="my-notes-header">
+                <h3>My Uploaded Notes</h3>
+                <button class="btn btn-primary" onclick="openUploadModal()">
+                    <i data-lucide="plus"></i>
+                    Upload New Note
+                </button>
+            </div>
+
+            <div class="notes-grid">
+                <div class="note-card my-note">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-status">
+                            <span class="badge badge-primary">Approved</span>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Software Engineering Principles</h3>
+                        <p class="note-description">Comprehensive notes on SDLC, design patterns, and software testing methodologies.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by You</span>
+                            <span class="note-department">CSE</span>
+                            <span class="note-date">Jan 5, 2025</span>
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat">
+                                <i data-lucide="download"></i>
+                                <span>67 downloads</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="star"></i>
+                                <span>4.3 rating</span>
+                            </div>
+                            <div class="stat">
+                                <i data-lucide="eye"></i>
+                                <span>234 views</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-outline btn-small" onclick="editNote(1)">
+                            <i data-lucide="edit"></i>
+                            Edit
+                        </button>
+                        <button class="btn btn-ghost btn-small" onclick="deleteNote(1)">
+                            <i data-lucide="trash-2"></i>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                <div class="note-card my-note">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-status">
+                            <span class="badge badge-secondary">Pending Review</span>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Computer Networks Lab Manual</h3>
+                        <p class="note-description">Lab exercises and solutions for computer networks course including packet analysis.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by You</span>
+                            <span class="note-department">CSE</span>
+                            <span class="note-date">Jan 16, 2025</span>
+                        </div>
+                        <div class="note-stats">
+                            <div class="stat">
+                                <i data-lucide="clock"></i>
+                                <span>Under review</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-outline btn-small" onclick="editNote(2)">
+                            <i data-lucide="edit"></i>
+                            Edit
+                        </button>
+                        <button class="btn btn-ghost btn-small" onclick="deleteNote(2)">
+                            <i data-lucide="trash-2"></i>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites Tab -->
+        <div class="tab-content" id="favorites-tab">
+            <div class="favorites-header">
+                <h3>My Favorite Notes</h3>
+                <p>Notes you've marked as favorites for quick access</p>
+            </div>
+
+            <div class="notes-grid">
+                <div class="note-card favorite">
+                    <div class="note-header">
+                        <div class="note-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="note-actions">
+                            <button class="btn-icon active" onclick="toggleFavorite(1)">
+                                <i data-lucide="heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <h3 class="note-title">Database Management Systems - Complete Notes</h3>
+                        <p class="note-description">Comprehensive notes covering all topics from DBMS including normalization, SQL queries, and transaction management.</p>
+                        <div class="note-meta">
+                            <span class="note-author">by Ahmed Hassan</span>
+                            <span class="note-department">CSE</span>
+                            <span class="note-date">Jan 15, 2025</span>
+                        </div>
+                    </div>
+                    <div class="note-footer">
+                        <button class="btn btn-primary btn-small" onclick="downloadNote(1)">
+                            <i data-lucide="download"></i>
+                            Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload Study Notes</h3>
+                <button class="modal-close" onclick="closeUploadModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label for="note-title">Title *</label>
+                        <input type="text" id="note-title" name="title" placeholder="Enter note title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note-description">Description *</label>
+                        <textarea id="note-description" name="description" placeholder="Describe what your notes cover" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="note-department">Department *</label>
+                            <select id="note-department" name="department" required>
+                                <option value="">Select Department</option>
+                                <option value="CSE">Computer Science & Engineering</option>
+                                <option value="EEE">Electrical & Electronic Engineering</option>
+                                <option value="ME">Mechanical Engineering</option>
+                                <option value="CE">Civil Engineering</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="note-subject">Subject *</label>
+                            <input type="text" id="note-subject" name="subject" placeholder="e.g., Database Management" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note-file">PDF File *</label>
+                        <div class="file-upload">
+                            <input type="file" id="note-file" name="file" accept=".pdf" required>
+                            <div class="upload-area">
+                                <i data-lucide="upload"></i>
+                                <p>Click to select PDF file or drag and drop</p>
+                                <small>Maximum file size: 10MB</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms-agree" required>
+                            <span class="checkmark"></span>
+                            I confirm that this content is original or properly cited, and I have the right to share it.
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitNote()">Upload Note</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/notes.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library Admin</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="admin.html" class="nav-link active">Dashboard</a>
+                <a href="admin-books.html" class="nav-link">Books</a>
+                <a href="admin-students.html" class="nav-link">Students</a>
+                <a href="admin-notes.html" class="nav-link">Notes</a>
+                <a href="admin-reports.html" class="nav-link">Reports</a>
+            </nav>
+            
+            <button class="btn btn-outline" onclick="logout()">Log out</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Dashboard Overview</h1>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total Books</span>
+                    <i data-lucide="book-open"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">10,247</div>
+                    <p class="stat-description">8,932 available</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Active Students</span>
+                    <i data-lucide="users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">3,876</div>
+                    <p class="stat-description">of 5,432 registered</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Pending Fines</span>
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">৳15,750</div>
+                    <p class="stat-description">125 students</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Study Notes</span>
+                    <i data-lucide="file-text"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">1,234</div>
+                    <p class="stat-description">23 pending review</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3><i data-lucide="clipboard-list"></i> Recent Activity</h3>
+            </div>
+            <div class="admin-activity-list">
+                <div class="admin-activity-item">
+                    <div class="activity-info">
+                        <p class="activity-title">Book Added</p>
+                        <p class="activity-details">Artificial Intelligence: A Modern Approach</p>
+                    </div>
+                    <span class="activity-time">2 h ago</span>
+                </div>
+                <div class="admin-activity-item">
+                    <div class="activity-info">
+                        <p class="activity-title">Student Registered</p>
+                        <p class="activity-details">Fatima Rahman (2204089)</p>
+                    </div>
+                    <span class="activity-time">3 h ago</span>
+                </div>
+                <div class="admin-activity-item">
+                    <div class="activity-info">
+                        <p class="activity-title">Fine Paid</p>
+                        <p class="activity-details">৳50 by Mohammad Hasan</p>
+                    </div>
+                    <span class="activity-time">5 h ago</span>
+                </div>
+                <div class="admin-activity-item">
+                    <div class="activity-info">
+                        <p class="activity-title">Book Returned</p>
+                        <p class="activity-details">Database Management Systems</p>
+                    </div>
+                    <span class="activity-time">6 h ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Grid -->
+        <div class="dashboard-grid">
+            <!-- Overdue Books -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3><i data-lucide="alert-triangle"></i> Overdue Books</h3>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Book</th>
+                                <th>Days Overdue</th>
+                                <th>Fine (৳)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mohammad Hasan</td>
+                                <td>Computer Networks</td>
+                                <td>5</td>
+                                <td class="text-red">25</td>
+                            </tr>
+                            <tr>
+                                <td>Zubayer Muntasir</td>
+                                <td>Operating Systems</td>
+                                <td>3</td>
+                                <td class="text-red">15</td>
+                            </tr>
+                            <tr>
+                                <td>Sazid Hossan</td>
+                                <td>Software Engineering</td>
+                                <td>8</td>
+                                <td class="text-red">40</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pending Notes -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3><i data-lucide="file-text"></i> Notes Pending Review</h3>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Upload Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Machine Learning Algorithms</td>
+                                <td>Ahmed Hassan</td>
+                                <td>2025-01-18</td>
+                                <td><span class="badge badge-secondary">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>Circuit Analysis Notes</td>
+                                <td>Fatima Rahman</td>
+                                <td>2025-01-17</td>
+                                <td><span class="badge badge-secondary">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>Structural Design Principles</td>
+                                <td>Karim Abdullah</td>
+                                <td>2025-01-16</td>
+                                <td><span class="badge badge-secondary">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="admin-footer">
+            <p>&copy; 2025 CUET Library Management System — Admin Panel</p>
+        </footer>
+    </div>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html>

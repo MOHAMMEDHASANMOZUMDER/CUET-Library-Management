@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <a href="index.html" class="auth-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" style="width: 2rem; height: 2rem;">
+                <span>CUET Library</span>
+            </a>
+            <p class="auth-subtitle">Sign in to your account</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-card">
+            <div class="card-header">
+                <h1 class="card-title">Login</h1>
+                <p class="card-description">Choose your account type to continue</p>
+            </div>
+
+            <div class="tabs">
+                <div class="tab-list">
+                    <button class="tab-button active" data-tab="student">
+                        <i data-lucide="user"></i>
+                        <span>Student</span>
+                    </button>
+                    <button class="tab-button" data-tab="admin">
+                        <i data-lucide="shield"></i>
+                        <span>Admin</span>
+                    </button>
+                </div>
+
+                <!-- Student Login Tab -->
+                <div class="tab-content active" id="student-tab">
+                    <form class="auth-form" id="student-login-form">
+                        <div class="form-group">
+                            <label for="student-id">Student ID</label>
+                            <input type="text" id="student-id" name="studentId" placeholder="Enter your student ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-password">Password</label>
+                            <input type="password" id="student-password" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Sign In as Student</button>
+                    </form>
+                </div>
+
+                <!-- Admin Login Tab -->
+                <div class="tab-content" id="admin-tab">
+                    <form class="auth-form" id="admin-login-form">
+                        <div class="form-group">
+                            <label for="admin-email">Email</label>
+                            <input type="email" id="admin-email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-password">Password</label>
+                            <input type="password" id="admin-password" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Sign In as Admin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+    </div>
+
+    <script src="scripts/auth.js"></script>
+</body>
+</html>

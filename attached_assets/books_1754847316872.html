@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="books">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="dashboard.html" class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </a>
+            <nav class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="my-books.html" class="nav-link">My Books</a>
+                <a href="notes.html" class="nav-link">Notes</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Library Catalog</h1>
+            <p class="page-description">Search and discover books from our extensive collection</p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-card">
+            <div class="card-header">
+                <h3><i data-lucide="search"></i> Search Books</h3>
+            </div>
+            <div class="search-form">
+                <div class="search-grid">
+                    <input type="text" id="search-input" placeholder="Search by title, author, or keyword..." class="search-input">
+                    <select id="department-filter" class="filter-select">
+                        <option value="all">All Departments</option>
+                        <option value="CSE">Computer Science & Engineering</option>
+                        <option value="EEE">Electrical & Electronic Engineering</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="CE">Civil Engineering</option>
+                    </select>
+                    <select id="category-filter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="Textbook">Textbook</option>
+                        <option value="Reference">Reference</option>
+                        <option value="Research">Research</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="searchBooks()">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Summary -->
+        <div class="results-summary">
+            <p id="results-count">Showing 6 of 6 books</p>
+        </div>
+
+        <!-- Books Grid -->
+        <div class="books-grid" id="books-container">
+            <!-- Books will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="scripts/books.js"></script>
+</body>
+</html>

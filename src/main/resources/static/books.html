@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="books">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="dashboard.html" class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </a>
+            <nav class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="my-books.html" class="nav-link">My Books</a>
+                <a href="notes.html" class="nav-link">Notes</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Library Catalog</h1>
+            <p class="page-description">Search and discover books from our extensive collection</p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-card">
+            <div class="card-header">
+                <h3><i data-lucide="search"></i> Search Books</h3>
+            </div>
+            <div class="search-form">
+                <div class="search-grid">
+                    <input type="text" id="search-input" placeholder="Search by title, author, or keyword..." class="search-input">
+                    <select id="department-filter" class="filter-select">
+                        <option value="all">All Departments</option>
+                        <option value="CSE">Computer Science & Engineering</option>
+                        <option value="EEE">Electrical & Electronic Engineering</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="CE">Civil Engineering</option>
+                    </select>
+                    <select id="category-filter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="Textbook">Textbook</option>
+                        <option value="Reference">Reference</option>
+                        <option value="Research">Research</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="searchBooks()">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Summary -->
+        <div class="results-summary">
+            <p id="results-count">Showing 6 of 6 books</p>
+        </div>
+
+        <!-- Books Grid -->
+        <div class="books-grid" id="books-container">
+            <!-- Sample books for demo -->
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="https://via.placeholder.com/150x200?text=Database+Systems" alt="Database Management Systems">
+                    <div class="book-status available">Available</div>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Database Management Systems</h3>
+                    <p class="book-author">by Raghu Ramakrishnan</p>
+                    <p class="book-details">3rd Edition • CSE Department</p>
+                    <div class="book-meta">
+                        <span class="book-isbn">ISBN: 978-0072465631</span>
+                        <span class="book-location">Shelf: CS-245</span>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <button class="btn btn-primary" onclick="reserveBook(1)">
+                        <i data-lucide="calendar"></i>
+                        Reserve
+                    </button>
+                    <button class="btn btn-outline" onclick="viewDetails(1)">
+                        <i data-lucide="info"></i>
+                        Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="https://via.placeholder.com/150x200?text=Data+Structures" alt="Data Structures and Algorithms">
+                    <div class="book-status borrowed">Borrowed</div>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Data Structures and Algorithms in Java</h3>
+                    <p class="book-author">by Robert Sedgewick</p>
+                    <p class="book-details">4th Edition • CSE Department</p>
+                    <div class="book-meta">
+                        <span class="book-isbn">ISBN: 978-0321573513</span>
+                        <span class="book-location">Shelf: CS-156</span>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <button class="btn btn-primary" disabled>
+                        <i data-lucide="calendar"></i>
+                        Unavailable
+                    </button>
+                    <button class="btn btn-outline" onclick="viewDetails(2)">
+                        <i data-lucide="info"></i>
+                        Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="https://via.placeholder.com/150x200?text=Computer+Networks" alt="Computer Networks">
+                    <div class="book-status available">Available</div>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Computer Networks</h3>
+                    <p class="book-author">by Andrew S. Tanenbaum</p>
+                    <p class="book-details">5th Edition • CSE Department</p>
+                    <div class="book-meta">
+                        <span class="book-isbn">ISBN: 978-0132126953</span>
+                        <span class="book-location">Shelf: CS-302</span>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <button class="btn btn-primary" onclick="reserveBook(3)">
+                        <i data-lucide="calendar"></i>
+                        Reserve
+                    </button>
+                    <button class="btn btn-outline" onclick="viewDetails(3)">
+                        <i data-lucide="info"></i>
+                        Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="https://via.placeholder.com/150x200?text=Software+Engineering" alt="Software Engineering">
+                    <div class="book-status available">Available</div>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Software Engineering</h3>
+                    <p class="book-author">by Ian Sommerville</p>
+                    <p class="book-details">10th Edition • CSE Department</p>
+                    <div class="book-meta">
+                        <span class="book-isbn">ISBN: 978-0133943030</span>
+                        <span class="book-location">Shelf: CS-401</span>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <button class="btn btn-primary" onclick="reserveBook(4)">
+                        <i data-lucide="calendar"></i>
+                        Reserve
+                    </button>
+                    <button class="btn btn-outline" onclick="viewDetails(4)">
+                        <i data-lucide="info"></i>
+                        Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="https://via.placeholder.com/150x200?text=Circuit+Analysis" alt="Circuit Analysis">
+                    <div class="book-status available">Available</div>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Fundamentals of Electric Circuits</h3>
+                    <p class="book-author">by Charles Alexander</p>
+                    <p class="book-details">6th Edition • EEE Department</p>
+                    <div class="book-meta">
+                        <span class="book-isbn">ISBN: 978-0078028229</span>
+                        <span class="book-location">Shelf: EE-101</span>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <button class="btn btn-primary" onclick="reserveBook(5)">
+                        <i data-lucide="calendar"></i>
+                        Reserve
+                    </button>
+                    <button class="btn btn-outline" onclick="viewDetails(5)">
+                        <i data-lucide="info"></i>
+                        Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="https://via.placeholder.com/150x200?text=Thermodynamics" alt="Thermodynamics">
+                    <div class="book-status reserved">Reserved</div>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Thermodynamics: An Engineering Approach</h3>
+                    <p class="book-author">by Yunus Cengel</p>
+                    <p class="book-details">8th Edition • ME Department</p>
+                    <div class="book-meta">
+                        <span class="book-isbn">ISBN: 978-0073398174</span>
+                        <span class="book-location">Shelf: ME-205</span>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <button class="btn btn-primary" disabled>
+                        <i data-lucide="calendar"></i>
+                        Reserved
+                    </button>
+                    <button class="btn btn-outline" onclick="viewDetails(6)">
+                        <i data-lucide="info"></i>
+                        Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/books.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
