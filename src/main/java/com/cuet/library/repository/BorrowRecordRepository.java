@@ -15,20 +15,19 @@ import java.util.List;
 public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long> {
     List<BorrowRecord> findByUser(User user);
     List<BorrowRecord> findByBook(Book book);
-    List<BorrowRecord> findByStatus(BorrowRecord.Status status);
     
-    @Query("SELECT br FROM BorrowRecord br WHERE br.user = :user AND br.status = :status")
-    List<BorrowRecord> findByUserAndStatus(@Param("user") User user, @Param("status") BorrowRecord.Status status);
+    @Query("SELECT br FROM BorrowRecord br WHERE br.user = :user AND br.returnDate IS NULL")
+    List<BorrowRecord> findByUserAndReturnDateIsNull(@Param("user") User user);
     
-    @Query("SELECT br FROM BorrowRecord br WHERE br.dueDate < :date AND br.status = 'BORROWED'")
+    @Query("SELECT br FROM BorrowRecord br WHERE br.dueDate < :date AND br.returnDate IS NULL")
     List<BorrowRecord> findOverdueRecords(@Param("date") LocalDate date);
     
-    @Query("SELECT COUNT(br) FROM BorrowRecord br WHERE br.user = :user AND br.status = 'BORROWED'")
+    @Query("SELECT COUNT(br) FROM BorrowRecord br WHERE br.user = :user AND br.returnDate IS NULL")
     long countActiveBorrowsByUser(@Param("user") User user);
     
-    @Query("SELECT br FROM BorrowRecord br WHERE br.user = :user AND br.book = :book AND br.status = 'BORROWED'")
+    @Query("SELECT br FROM BorrowRecord br WHERE br.user = :user AND br.book = :book AND br.returnDate IS NULL")
     List<BorrowRecord> findActiveBorrowRecord(@Param("user") User user, @Param("book") Book book);
     
-    @Query("SELECT COUNT(br) FROM BorrowRecord br WHERE br.status = 'BORROWED'")
-    long countActiveBorrows();
+    @Query("SELECT COUNT(br) FROM BorrowRecord br WHERE br.returnDate IS NULL")
+    long countByReturnDateIsNull();
 }

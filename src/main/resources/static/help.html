@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="books.html" class="nav-link">Books</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="about.html" class="nav-link">About</a>
+            </nav>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="register.html" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Help & Support</h1>
+            <p class="page-description">Get assistance with the CUET Library Management System</p>
+        </div>
+
+        <!-- Quick Help Options -->
+        <div class="help-options">
+            <div class="help-card">
+                <div class="help-icon">
+                    <i data-lucide="book-open"></i>
+                </div>
+                <h3>User Guide</h3>
+                <p>Step-by-step instructions for using all system features</p>
+                <a href="user-guide.html" class="btn btn-outline">View Guide</a>
+            </div>
+
+            <div class="help-card">
+                <div class="help-icon">
+                    <i data-lucide="help-circle"></i>
+                </div>
+                <h3>FAQ</h3>
+                <p>Find answers to frequently asked questions</p>
+                <a href="faq.html" class="btn btn-outline">Browse FAQ</a>
+            </div>
+
+            <div class="help-card">
+                <div class="help-icon">
+                    <i data-lucide="message-circle"></i>
+                </div>
+                <h3>Contact Support</h3>
+                <p>Get direct help from our support team</p>
+                <button class="btn btn-primary" onclick="openContactForm()">Contact Us</button>
+            </div>
+
+            <div class="help-card">
+                <div class="help-icon">
+                    <i data-lucide="video"></i>
+                </div>
+                <h3>Video Tutorials</h3>
+                <p>Watch video guides for common tasks</p>
+                <a href="#tutorials" class="btn btn-outline">Watch Videos</a>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-section">
+            <h2>Contact Information</h2>
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <div class="method-icon">
+                        <i data-lucide="mail"></i>
+                    </div>
+                    <div class="method-info">
+                        <h4>Email Support</h4>
+                        <p>library@cuet.ac.bd</p>
+                        <p>support@cuet.ac.bd</p>
+                        <small>Response time: 2-4 hours</small>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="method-icon">
+                        <i data-lucide="phone"></i>
+                    </div>
+                    <div class="method-info">
+                        <h4>Phone Support</h4>
+                        <p>+880-31-714946</p>
+                        <p>+880-31-714947</p>
+                        <small>Available: Sun-Thu 8AM-8PM</small>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="method-icon">
+                        <i data-lucide="map-pin"></i>
+                    </div>
+                    <div class="method-info">
+                        <h4>Visit Library</h4>
+                        <p>CUET Library Help Desk</p>
+                        <p>Chattogram-4349, Bangladesh</p>
+                        <small>Open: Sun-Thu 8AM-8PM</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Issues -->
+        <div class="common-issues">
+            <h2>Common Issues & Solutions</h2>
+            <div class="issues-grid">
+                <div class="issue-card">
+                    <div class="issue-icon">
+                        <i data-lucide="lock"></i>
+                    </div>
+                    <h4>Login Problems</h4>
+                    <p>Can't access your account?</p>
+                    <ul>
+                        <li>Check your Student ID and password</li>
+                        <li>Clear browser cache and cookies</li>
+                        <li>Try password reset</li>
+                        <li>Contact support if issue persists</li>
+                    </ul>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-icon">
+                        <i data-lucide="book"></i>
+                    </div>
+                    <h4>Book Pre-booking</h4>
+                    <p>Issues with reserving books?</p>
+                    <ul>
+                        <li>Ensure book is available</li>
+                        <li>Check your borrowing limit</li>
+                        <li>Clear any outstanding fines</li>
+                        <li>Try refreshing the page</li>
+                    </ul>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-icon">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <h4>Payment Issues</h4>
+                    <p>Problems paying fines?</p>
+                    <ul>
+                        <li>Check mobile banking balance</li>
+                        <li>Verify payment details</li>
+                        <li>Upload clear transaction screenshot</li>
+                        <li>Wait for processing (2-4 hours)</li>
+                    </ul>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-icon">
+                        <i data-lucide="upload"></i>
+                    </div>
+                    <h4>File Upload</h4>
+                    <p>Can't upload study notes?</p>
+                    <ul>
+                        <li>Check file format (PDF only)</li>
+                        <li>Ensure file size under 10MB</li>
+                        <li>Try different browser</li>
+                        <li>Check internet connection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Tutorials -->
+        <div class="tutorials-section" id="tutorials">
+            <h2>Video Tutorials</h2>
+            <div class="tutorials-grid">
+                <div class="tutorial-card">
+                    <div class="tutorial-thumbnail">
+                        <img src="https://via.placeholder.com/300x200?text=Registration+Tutorial" alt="Registration Tutorial">
+                        <div class="play-button">
+                            <i data-lucide="play"></i>
+                        </div>
+                    </div>
+                    <div class="tutorial-info">
+                        <h4>How to Register</h4>
+                        <p>Learn how to create your student account</p>
+                        <span class="tutorial-duration">3:45</span>
+                    </div>
+                </div>
+
+                <div class="tutorial-card">
+                    <div class="tutorial-thumbnail">
+                        <img src="https://via.placeholder.com/300x200?text=Book+Search+Tutorial" alt="Book Search Tutorial">
+                        <div class="play-button">
+                            <i data-lucide="play"></i>
+                        </div>
+                    </div>
+                    <div class="tutorial-info">
+                        <h4>Searching & Pre-booking Books</h4>
+                        <p>Find and reserve books online</p>
+                        <span class="tutorial-duration">5:20</span>
+                    </div>
+                </div>
+
+                <div class="tutorial-card">
+                    <div class="tutorial-thumbnail">
+                        <img src="https://via.placeholder.com/300x200?text=Fine+Payment+Tutorial" alt="Fine Payment Tutorial">
+                        <div class="play-button">
+                            <i data-lucide="play"></i>
+                        </div>
+                    </div>
+                    <div class="tutorial-info">
+                        <h4>Paying Fines Online</h4>
+                        <p>Step-by-step fine payment process</p>
+                        <span class="tutorial-duration">4:15</span>
+                    </div>
+                </div>
+
+                <div class="tutorial-card">
+                    <div class="tutorial-thumbnail">
+                        <img src="https://via.placeholder.com/300x200?text=Notes+Upload+Tutorial" alt="Notes Upload Tutorial">
+                        <div class="play-button">
+                            <i data-lucide="play"></i>
+                        </div>
+                    </div>
+                    <div class="tutorial-info">
+                        <h4>Uploading Study Notes</h4>
+                        <p>Share your notes with other students</p>
+                        <span class="tutorial-duration">6:30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="system-status">
+            <h2>System Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-indicator online"></div>
+                    <div class="status-info">
+                        <h4>Website</h4>
+                        <p>All systems operational</p>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-indicator online"></div>
+                    <div class="status-info">
+                        <h4>Book Search</h4>
+                        <p>Working normally</p>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-indicator online"></div>
+                    <div class="status-info">
+                        <h4>Payment System</h4>
+                        <p>All payment methods available</p>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-indicator maintenance"></div>
+                    <div class="status-info">
+                        <h4>File Upload</h4>
+                        <p>Scheduled maintenance: Jan 20, 2AM-4AM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Contact Support</h3>
+                <button class="modal-close" onclick="closeContactForm()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="contact-name">Full Name *</label>
+                        <input type="text" id="contact-name" name="name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contact-email">Email *</label>
+                            <input type="email" id="contact-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-student-id">Student ID</label>
+                            <input type="text" id="contact-student-id" name="studentId" placeholder="Optional">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-category">Issue Category *</label>
+                        <select id="contact-category" name="category" required>
+                            <option value="">Select category</option>
+                            <option value="login">Login Issues</option>
+                            <option value="books">Book Management</option>
+                            <option value="fines">Fine Payment</option>
+                            <option value="notes">Study Notes</option>
+                            <option value="technical">Technical Issues</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-subject">Subject *</label>
+                        <input type="text" id="contact-subject" name="subject" placeholder="Brief description of your issue" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-message">Message *</label>
+                        <textarea id="contact-message" name="message" rows="5" placeholder="Please describe your issue in detail..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-attachment">Attachment (Optional)</label>
+                        <input type="file" id="contact-attachment" name="attachment" accept="image/*,.pdf">
+                        <small>Upload screenshot or relevant document (Max 5MB)</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeContactForm()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitContactForm()">Send Message</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i data-lucide="book-open"></i>
+                        <span>CUET Library</span>
+                    </div>
+                    <p class="footer-text">
+                        Chittagong University of Engineering and Technology<br>
+                        Chattogram-4349, Bangladesh
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="books.html">Browse Books</a></li>
+                        <li><a href="login.html">Student Login</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                        <li><a href="help.html">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact</h3>
+                    <p class="footer-text">
+                        Email: library@cuet.ac.bd<br>
+                        Phone: +880-31-714946
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CUET Library Management System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/help.js"></script>
+</body>
+</html>

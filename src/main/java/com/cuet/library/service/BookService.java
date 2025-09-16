@@ -19,18 +19,11 @@ public class BookService {
     private BookRepository bookRepository;
 
     public Book createBook(Book book) {
-        if (bookRepository.existsByIsbn(book.getIsbn())) {
-            throw new RuntimeException("Book with this ISBN already exists");
-        }
         return bookRepository.save(book);
     }
 
     public Optional<Book> findById(Long id) {
         return bookRepository.findById(id);
-    }
-
-    public Optional<Book> findByIsbn(String isbn) {
-        return bookRepository.findByIsbn(isbn);
     }
 
     public List<Book> findAll() {
@@ -41,12 +34,8 @@ public class BookService {
         return bookRepository.findAll(pageable);
     }
 
-    public List<Book> findByDepartment(String department) {
-        return bookRepository.findByDepartment(department);
-    }
-
-    public List<Book> findByCategory(String category) {
-        return bookRepository.findByCategory(category);
+    public List<Book> findByAuthor(String author) {
+        return bookRepository.findByAuthor(author);
     }
 
     public List<Book> findAvailableBooks() {
@@ -54,11 +43,11 @@ public class BookService {
     }
 
     public Page<Book> searchBooks(String keyword, Pageable pageable) {
-        return bookRepository.findByTitleOrIsbnContaining(keyword, pageable);
+        return bookRepository.findByTitleOrAuthorContaining(keyword, pageable);
     }
 
-    public Page<Book> findBooksWithFilters(String title, String department, String category, Boolean available, Pageable pageable) {
-        return bookRepository.findBooksWithFilters(title, department, category, available, pageable);
+    public Page<Book> findBooksWithFilters(String title, String author, Boolean available, Pageable pageable) {
+        return bookRepository.findBooksWithFilters(title, author, available, pageable);
     }
 
     public Book updateBook(Book book) {
@@ -69,20 +58,12 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    public boolean existsByIsbn(String isbn) {
-        return bookRepository.existsByIsbn(isbn);
-    }
-
     public long getTotalBookCount() {
-        return bookRepository.countTotalBooks();
+        return bookRepository.count();
     }
 
     public long getAvailableBookCount() {
-        return bookRepository.countAvailableBooks();
-    }
-
-    public List<Book> getRecentBooks(int limit) {
-        return bookRepository.findRecentBooks(Pageable.ofSize(limit));
+        return bookRepository.countByAvailableCopiesGreaterThan(0);
     }
 
     public Book borrowBook(Long bookId) {

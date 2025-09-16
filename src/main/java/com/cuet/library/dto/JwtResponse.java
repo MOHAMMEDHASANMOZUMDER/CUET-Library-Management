@@ -5,17 +5,17 @@ import com.cuet.library.entity.User;
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
-    private String studentId;
-    private String fullName;
+    private String email;
+    private String name;
     private User.Role role;
 
     // Constructors
     public JwtResponse() {}
 
-    public JwtResponse(String token, String studentId, String fullName, User.Role role) {
+    public JwtResponse(String token, String email, String name, User.Role role) {
         this.token = token;
-        this.studentId = studentId;
-        this.fullName = fullName;
+        this.email = email;
+        this.name = name;
         this.role = role;
     }
 
@@ -36,20 +36,20 @@ public class JwtResponse {
         this.type = type;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public User.Role getRole() {

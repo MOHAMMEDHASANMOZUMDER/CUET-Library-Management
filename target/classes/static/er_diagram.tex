@@ -1,0 +1,418 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz}
+\usepackage{tikz-er2}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+% Page setup
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{CUET Library Management System}
+\fancyhead[R]{ER Diagram}
+\fancyfoot[C]{\thepage}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries\color{blue!70!black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{blue!50!black}}{\thesubsection}{1em}{}
+
+\title{\textbf{\Large Entity Relationship Diagram\\CUET Library Management System}}
+\author{Mohammad Hasan (2204054)\\Md. Zubayer Muntasir (2204058)\\Md. Sazid Hossan (2204065)\\Md. Fakhrul Hasan (2204066)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Entity Relationship Diagram}
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm, auto]
+
+% Define colors
+\definecolor{entitycolor}{RGB}{173,216,230}
+\definecolor{relationcolor}{RGB}{255,182,193}
+\definecolor{attributecolor}{RGB}{144,238,144}
+
+% Entities
+\node[entity, fill=entitycolor] (student) at (0,8) {STUDENT};
+\node[entity, fill=entitycolor] (book) at (8,8) {BOOK};
+\node[entity, fill=entitycolor] (admin) at (0,4) {ADMIN};
+\node[entity, fill=entitycolor] (author) at (8,4) {AUTHOR};
+\node[entity, fill=entitycolor] (department) at (4,0) {DEPARTMENT};
+\node[entity, fill=entitycolor] (notes) at (12,6) {NOTES};
+\node[entity, fill=entitycolor] (fine) at (0,0) {FINE};
+\node[entity, fill=entitycolor] (category) at (12,2) {CATEGORY};
+
+% Relationships
+\node[relationship, fill=relationcolor] (borrows) at (4,8) {BORROWS};
+\node[relationship, fill=relationcolor] (manages) at (4,4) {MANAGES};
+\node[relationship, fill=relationcolor] (writes) at (8,6) {WRITES};
+\node[relationship, fill=relationcolor] (belongs_to) at (4,6) {BELONGS\_TO};
+\node[relationship, fill=relationcolor] (uploads) at (6,6) {UPLOADS};
+\node[relationship, fill=relationcolor] (has_fine) at (0,2) {HAS\_FINE};
+\node[relationship, fill=relationcolor] (categorized) at (10,4) {CATEGORIZED};
+\node[relationship, fill=relationcolor] (prebooks) at (2,10) {PREBOOKS};
+
+% Entity connections
+\draw (student) -- (borrows);
+\draw (book) -- (borrows);
+\draw (student) -- (prebooks);
+\draw (book) -- (prebooks);
+\draw (admin) -- (manages);
+\draw (book) -- (manages);
+\draw (author) -- (writes);
+\draw (book) -- (writes);
+\draw (student) -- (belongs_to);
+\draw (department) -- (belongs_to);
+\draw (student) -- (uploads);
+\draw (notes) -- (uploads);
+\draw (student) -- (has_fine);
+\draw (fine) -- (has_fine);
+\draw (book) -- (categorized);
+\draw (category) -- (categorized);
+
+% Cardinality labels
+\node[above] at (2,8.2) {M};
+\node[above] at (6,8.2) {N};
+\node[above] at (1,10.2) {M};
+\node[above] at (3,10.2) {N};
+\node[left] at (2,4.2) {1};
+\node[right] at (6,4.2) {N};
+\node[above] at (8,5) {1};
+\node[above] at (8,7) {N};
+\node[left] at (2,6.2) {N};
+\node[right] at (6,6.2) {1};
+\node[left] at (3,6.2) {N};
+\node[right] at (9,6.2) {N};
+\node[left] at (0,1) {1};
+\node[left] at (0,3) {N};
+\node[above] at (9,4.2) {N};
+\node[above] at (11,4.2) {1};
+
+% Attributes for STUDENT
+\node[attribute, fill=attributecolor] (s_id) at (-2,9) {\underline{Student\_ID}};
+\node[attribute, fill=attributecolor] (s_name) at (-2,8.5) {Name};
+\node[attribute, fill=attributecolor] (s_email) at (-2,8) {Email};
+\node[attribute, fill=attributecolor] (s_dept) at (-2,7.5) {Department};
+\node[attribute, fill=attributecolor] (s_session) at (-2,7) {Session};
+\node[attribute, fill=attributecolor] (s_password) at (-2,6.5) {Password};
+
+% Attributes for BOOK
+\node[attribute, fill=attributecolor] (b_id) at (10,9) {\underline{Book\_ID}};
+\node[attribute, fill=attributecolor] (b_title) at (10,8.5) {Title};
+\node[attribute, fill=attributecolor] (b_isbn) at (10,8) {ISBN};
+\node[attribute, fill=attributecolor] (b_publisher) at (10,7.5) {Publisher};
+\node[attribute, fill=attributecolor] (b_year) at (10,7) {Year};
+\node[attribute, fill=attributecolor] (b_copies) at (10,6.5) {Total\_Copies};
+\node[attribute, fill=attributecolor] (b_available) at (10,6) {Available\_Copies};
+
+% Attributes for ADMIN
+\node[attribute, fill=attributecolor] (a_id) at (-2,4.5) {\underline{Admin\_ID}};
+\node[attribute, fill=attributecolor] (a_name) at (-2,4) {Name};
+\node[attribute, fill=attributecolor] (a_email) at (-2,3.5) {Email};
+\node[attribute, fill=attributecolor] (a_password) at (-2,3) {Password};
+
+% Attributes for NOTES
+\node[attribute, fill=attributecolor] (n_id) at (14,7) {\underline{Note\_ID}};
+\node[attribute, fill=attributecolor] (n_title) at (14,6.5) {Title};
+\node[attribute, fill=attributecolor] (n_description) at (14,6) {Description};
+\node[attribute, fill=attributecolor] (n_file) at (14,5.5) {File\_Path};
+\node[attribute, fill=attributecolor] (n_upload_date) at (14,5) {Upload\_Date};
+\node[attribute, fill=attributecolor] (n_downloads) at (14,4.5) {Downloads};
+
+% Attributes for FINE
+\node[attribute, fill=attributecolor] (f_id) at (-2,0.5) {\underline{Fine\_ID}};
+\node[attribute, fill=attributecolor] (f_amount) at (-2,0) {Amount};
+\node[attribute, fill=attributecolor] (f_date) at (-2,-0.5) {Fine\_Date};
+\node[attribute, fill=attributecolor] (f_status) at (-2,-1) {Status};
+
+% Connect attributes to entities
+\draw (student) -- (s_id);
+\draw (student) -- (s_name);
+\draw (student) -- (s_email);
+\draw (student) -- (s_dept);
+\draw (student) -- (s_session);
+\draw (student) -- (s_password);
+
+\draw (book) -- (b_id);
+\draw (book) -- (b_title);
+\draw (book) -- (b_isbn);
+\draw (book) -- (b_publisher);
+\draw (book) -- (b_year);
+\draw (book) -- (b_copies);
+\draw (book) -- (b_available);
+
+\draw (admin) -- (a_id);
+\draw (admin) -- (a_name);
+\draw (admin) -- (a_email);
+\draw (admin) -- (a_password);
+
+\draw (notes) -- (n_id);
+\draw (notes) -- (n_title);
+\draw (notes) -- (n_description);
+\draw (notes) -- (n_file);
+\draw (notes) -- (n_upload_date);
+\draw (notes) -- (n_downloads);
+
+\draw (fine) -- (f_id);
+\draw (fine) -- (f_amount);
+\draw (fine) -- (f_date);
+\draw (fine) -- (f_status);
+
+\end{tikzpicture}
+\end{center}
+
+\newpage
+
+\section{Entity Relationship Diagram Explanation}
+
+\subsection{1. Entities and Their Attributes}
+
+\subsubsection{1.1 STUDENT Entity}
+The \textbf{STUDENT} entity represents all registered students in the CUET Library Management System.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Student\_ID} (Primary Key): Unique identifier for each student (e.g., 2204054)
+    \item \textbf{Name}: Full name of the student
+    \item \textbf{Email}: Student's email address for communication
+    \item \textbf{Department}: Academic department (CSE, EEE, ME, CE, etc.)
+    \item \textbf{Session}: Academic session (e.g., 2022-2023)
+    \item \textbf{Password}: Encrypted password for system access
+\end{itemize}
+
+\subsubsection{1.2 BOOK Entity}
+The \textbf{BOOK} entity represents all books available in the library collection.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Book\_ID} (Primary Key): Unique identifier for each book
+    \item \textbf{Title}: Title of the book
+    \item \textbf{ISBN}: International Standard Book Number
+    \item \textbf{Publisher}: Publishing company
+    \item \textbf{Year}: Publication year
+    \item \textbf{Total\_Copies}: Total number of copies available
+    \item \textbf{Available\_Copies}: Number of copies currently available for borrowing
+\end{itemize}
+
+\subsubsection{1.3 ADMIN Entity}
+The \textbf{ADMIN} entity represents library administrators and staff members.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Admin\_ID} (Primary Key): Unique identifier for each administrator
+    \item \textbf{Name}: Full name of the administrator
+    \item \textbf{Email}: Administrator's email address
+    \item \textbf{Password}: Encrypted password for system access
+\end{itemize}
+
+\subsubsection{1.4 AUTHOR Entity}
+The \textbf{AUTHOR} entity represents book authors.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Author\_ID} (Primary Key): Unique identifier for each author
+    \item \textbf{Name}: Full name of the author
+    \item \textbf{Biography}: Brief biography of the author
+\end{itemize}
+
+\subsubsection{1.5 NOTES Entity}
+The \textbf{NOTES} entity represents study notes uploaded by students.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Note\_ID} (Primary Key): Unique identifier for each note
+    \item \textbf{Title}: Title of the study notes
+    \item \textbf{Description}: Brief description of the content
+    \item \textbf{File\_Path}: Path to the uploaded PDF file
+    \item \textbf{Upload\_Date}: Date when the note was uploaded
+    \item \textbf{Downloads}: Number of times the note has been downloaded
+\end{itemize}
+
+\subsubsection{1.6 FINE Entity}
+The \textbf{FINE} entity represents fines imposed on students for overdue books.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Fine\_ID} (Primary Key): Unique identifier for each fine
+    \item \textbf{Amount}: Fine amount in Taka (৳)
+    \item \textbf{Fine\_Date}: Date when the fine was imposed
+    \item \textbf{Status}: Payment status (Paid/Unpaid)
+\end{itemize}
+
+\subsubsection{1.7 DEPARTMENT Entity}
+The \textbf{DEPARTMENT} entity represents academic departments in CUET.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Dept\_ID} (Primary Key): Unique identifier for each department
+    \item \textbf{Name}: Department name (e.g., Computer Science \& Engineering)
+    \item \textbf{Code}: Department code (e.g., CSE, EEE, ME)
+\end{itemize}
+
+\subsubsection{1.8 CATEGORY Entity}
+The \textbf{CATEGORY} entity represents book categories or subjects.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Category\_ID} (Primary Key): Unique identifier for each category
+    \item \textbf{Name}: Category name (e.g., Database, Software Engineering)
+    \item \textbf{Description}: Brief description of the category
+\end{itemize}
+
+\subsection{2. Relationships and Their Cardinalities}
+
+\subsubsection{2.1 BORROWS Relationship}
+\textbf{Entities Involved:} STUDENT and BOOK \\
+\textbf{Cardinality:} Many-to-Many (M:N) \\
+\textbf{Description:} A student can borrow multiple books, and a book can be borrowed by multiple students (at different times).
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Borrow\_Date}: Date when the book was borrowed
+    \item \textbf{Due\_Date}: Date when the book should be returned
+    \item \textbf{Return\_Date}: Actual return date (NULL if not returned)
+    \item \textbf{Status}: Current status (Borrowed/Returned/Overdue)
+\end{itemize}
+
+\subsubsection{2.2 PREBOOKS Relationship}
+\textbf{Entities Involved:} STUDENT and BOOK \\
+\textbf{Cardinality:} Many-to-Many (M:N) \\
+\textbf{Description:} Students can pre-book multiple books, and books can be pre-booked by multiple students.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Prebook\_Date}: Date when the pre-booking was made
+    \item \textbf{Expiry\_Date}: Date when the pre-booking expires
+    \item \textbf{Status}: Status of pre-booking (Active/Expired/Fulfilled)
+\end{itemize}
+
+\subsubsection{2.3 MANAGES Relationship}
+\textbf{Entities Involved:} ADMIN and BOOK \\
+\textbf{Cardinality:} One-to-Many (1:N) \\
+\textbf{Description:} One admin can manage multiple books, but each book management action is performed by one admin.
+
+\textbf{Attributes:}
+\begin{itemize}
+    \item \textbf{Action}: Type of management action (Add/Update/Delete)
+    \item \textbf{Action\_Date}: Date when the action was performed
+\end{itemize}
+
+\subsubsection{2.4 WRITES Relationship}
+\textbf{Entities Involved:} AUTHOR and BOOK \\
+\textbf{Cardinality:} One-to-Many (1:N) \\
+\textbf{Description:} One author can write multiple books, but each book has one primary author.
+
+\subsubsection{2.5 UPLOADS Relationship}
+\textbf{Entities Involved:} STUDENT and NOTES \\
+\textbf{Cardinality:} Many-to-Many (M:N) \\
+\textbf{Description:} A student can upload multiple notes, and notes can be related to multiple books.
+
+\subsubsection{2.6 HAS\_FINE Relationship}
+\textbf{Entities Involved:} STUDENT and FINE \\
+\textbf{Cardinality:} One-to-Many (1:N) \\
+\textbf{Description:} One student can have multiple fines, but each fine belongs to one student.
+
+\subsubsection{2.7 BELONGS\_TO Relationship}
+\textbf{Entities Involved:} STUDENT and DEPARTMENT \\
+\textbf{Cardinality:} Many-to-One (N:1) \\
+\textbf{Description:} Multiple students belong to one department, but each student belongs to one department.
+
+\subsubsection{2.8 CATEGORIZED Relationship}
+\textbf{Entities Involved:} BOOK and CATEGORY \\
+\textbf{Cardinality:} Many-to-One (N:1) \\
+\textbf{Description:} Multiple books can belong to one category, but each book belongs to one primary category.
+
+\subsection{3. Business Rules and Constraints}
+
+\subsubsection{3.1 Borrowing Rules}
+\begin{itemize}
+    \item A student can borrow a maximum of 5 books at any time
+    \item Each book can be borrowed for a maximum of 30 days
+    \item Books can be renewed up to 2 times (maximum 90 days total)
+    \item Overdue books incur a fine of ৳5 per day
+\end{itemize}
+
+\subsubsection{3.2 Pre-booking Rules}
+\begin{itemize}
+    \item Students can pre-book up to 5 books simultaneously
+    \item Pre-bookings are valid for 24 hours
+    \item Pre-booked books must be collected within the validity period
+\end{itemize}
+
+\subsubsection{3.3 Fine Management}
+\begin{itemize}
+    \item Fines are automatically calculated for overdue books
+    \item Students must clear all fines before borrowing new books
+    \item Fines can be paid online through mobile banking
+\end{itemize}
+
+\subsubsection{3.4 Notes Sharing}
+\begin{itemize}
+    \item Only registered students can upload notes
+    \item Notes must be in PDF format with maximum size of 10MB
+    \item All uploaded notes are reviewed by administrators before publication
+    \item Students can download notes freely without restrictions
+\end{itemize}
+
+\subsection{4. System Features Supported by the ER Model}
+
+\subsubsection{4.1 Book Management}
+\begin{itemize}
+    \item Real-time book availability tracking
+    \item Comprehensive book information storage
+    \item Category-based book organization
+    \item Author information management
+\end{itemize}
+
+\subsubsection{4.2 Student Services}
+\begin{itemize}
+    \item Online book pre-booking system
+    \item Digital fine payment integration
+    \item Book renewal without physical visit
+    \item Study notes sharing platform
+\end{itemize}
+
+\subsubsection{4.3 Administrative Functions}
+\begin{itemize}
+    \item Complete book inventory management
+    \item Student registration and management
+    \item Fine tracking and collection
+    \item Notes moderation and approval
+    \item Comprehensive reporting system
+\end{itemize}
+
+\subsection{5. Database Implementation Considerations}
+
+\subsubsection{5.1 Primary Keys}
+All entities have well-defined primary keys that ensure unique identification of records.
+
+\subsubsection{5.2 Foreign Keys}
+Relationships are implemented using foreign keys to maintain referential integrity.
+
+\subsubsection{5.3 Indexes}
+Strategic indexing on frequently queried attributes (Student\_ID, Book\_ID, ISBN) for optimal performance.
+
+\subsubsection{5.4 Data Types}
+\begin{itemize}
+    \item \textbf{VARCHAR}: For text fields like names, titles, descriptions
+    \item \textbf{INT}: For numeric IDs and counts
+    \item \textbf{DATE}: For date fields
+    \item \textbf{DECIMAL}: For fine amounts
+    \item \textbf{ENUM}: For status fields with predefined values
+\end{itemize}
+
+\section{Conclusion}
+
+This Entity Relationship Diagram provides a comprehensive foundation for the CUET Library Management System database. It supports all the key features mentioned in the project proposal, including book pre-booking, online fine payment, book renewal, and notes sharing. The design ensures data integrity, supports efficient queries, and provides scalability for future enhancements.
+
+The ER model effectively captures the complex relationships between students, books, administrators, and various library operations while maintaining simplicity and clarity in the database structure.
+
+\end{document}

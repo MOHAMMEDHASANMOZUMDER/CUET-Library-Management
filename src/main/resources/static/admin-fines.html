@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Manage Students & Fines - CUET Library Admin</title>
+
+<!-- Lucide icons UMD -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- Minimal professional styles (keeps design consistent with provided layout) -->
+<link rel="stylesheet" href="styles/main.css" />
+<link rel="stylesheet" href="css/admin-modals.css" />
+<style>
+  :root{
+    --green:#2d6a38;
+    --muted:#64748b;
+    --card-bg:#fff;
+    --surface:#f4f6f9;
+    --danger:#ef4444;
+    --accent:#0ea5a3;
+  }
+
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--surface);color:#0f1724}
+  .admin-layout{display:flex;min-height:100vh}
+  .sidebar{width:260px;background:var(--green);color:#e6edf3;padding:28px 20px;box-shadow:2px 0 8px rgba(2,6,23,0.12);display:flex;flex-direction:column;gap:20px}
+  .sidebar .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:16px}
+  .sidebar .nav{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+  .sidebar .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#cfe7ff;text-decoration:none;font-size:14px}
+  .sidebar .nav a.active,.sidebar .nav a:hover{background:rgba(255,255,255,0.04);color:#fff}
+  .sidebar .small{font-size:12px;color:#97a6b7;margin-top:auto}
+
+  main.main{flex:1;padding:28px}
+  .main-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+  .search{flex:1;display:flex;gap:12px;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .search input{border:0;outline:0;width:100%;background:transparent;font-size:14px}
+  .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}
+  .card{background:var(--card-bg);padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
+  .card .title{display:flex;align-items:center;gap:10px;font-weight:600;color:#0f1724}
+  .stat-number{font-size:20px;font-weight:700;margin-top:8px}
+
+  .section-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .table-container{overflow:auto;background:var(--card-bg);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
+  table.admin-table{width:100%;border-collapse:collapse;font-size:14px}
+  table.admin-table th, table.admin-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #eef2f6;vertical-align:middle}
+  table.admin-table th{font-weight:600;color:#334155;background:transparent}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;border:0}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:transparent;color:#0f1724;border:1px solid #e6eef2}
+  .btn-danger{background:var(--danger);color:#fff}
+  .btn-small{padding:6px 8px;font-size:12px;border-radius:6px}
+  .badge{padding:6px 8px;border-radius:999px;font-size:12px;font-weight:600;display:inline-block}
+  .badge-overdue{background:#fff1f2;color:#9f1239;border:1px solid #ffdce0}
+  .badge-ok{background:#ecfdf5;color:#047857;border:1px solid #d1fae5}
+
+  .actions{display:flex;gap:8px}
+  .muted{color:var(--muted);font-size:13px}
+  .admin-footer{color:#94a3b8;font-size:13px;margin-top:14px}
+
+  /* Responsive */
+  @media(max-width:980px){
+    .cards-grid{grid-template-columns:repeat(2,1fr)}
+    .section-grid{grid-template-columns:1fr}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" aria-label="Admin navigation">
+            <div class="brand">
+                <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
+                <div>
+                    <div style="font-size:15px">CUET Library Admin</div>
+                    <div style="font-size:12px;color:#9fb6cc">Management Console</div>
+                </div>
+            </div>
+
+            <nav class="nav" role="navigation">
+                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
+                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
+                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
+                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
+                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
+                <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+            </nav>
+
+            <div class="small">Signed in as <strong>Admin</strong></div>
+        </aside>
+  <main class="main">
+    <div class="main-header">
+      <div style="display:flex;gap:16px;align-items:center;">
+        <h1 style="margin:0;font-size:20px;">Manage Students & Fines</h1>
+        <div class="muted">View borrowed items, automatically calculate overdue fines and charge students.</div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="search" style="max-width:420px;">
+          <i data-lucide="search"></i>
+          <input id="globalSearch" placeholder="Search students, ids, books..." />
+        </div>
+        <button class="btn btn-ghost" onclick="logout()">Log out</button>
+      </div>
+    </div>
+
+    <div class="cards-grid" aria-hidden="false">
+      <div class="card">
+        <div class="title"><i data-lucide="users"></i> Active Students</div>
+        <div class="stat-number" id="statStudents">—</div>
+        <div class="muted" style="margin-top:6px;">Students with at least one borrowing</div>
+      </div>
+      <div class="card">
+        <div class="title"><i data-lucide="clock"></i> Overdue Items</div>
+        <div class="stat-number" id="statOverdue">—</div>
+        <div class="muted" style="margin-top:6px;">Items past due date</div>
+      </div>
+      <div class="card">
+        <div class="title"><i data-lucide="dollar-sign"></i> Outstanding Fines</div>
+        <div class="stat-number" id="statFines">৳0</div>
+        <div class="muted" style="margin-top:6px;">Total unpaid fines</div>
+      </div>
+      <div class="card">
+        <div class="title"><i data-lucide="book-open"></i> Total Borrowed</div>
+        <div class="stat-number" id="statBorrowed">—</div>
+        <div class="muted" style="margin-top:6px;">Active borrow records</div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <!-- Left: Students and borrow records -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="table-container">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div class="title"><i data-lucide="users"></i> Students & Borrowings</div>
+            <div>
+              <button class="btn btn-primary btn-small" onclick="openAddStudent()">Add Student</button>
+            </div>
+          </div>
+
+          <table class="admin-table" id="studentsTable" aria-label="Students borrow list">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Dept</th>
+                <th>Book</th>
+                <th>Due Date</th>
+                <th>Overdue (days)</th>
+                <th>Fine (৳)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- populated by JS -->
+            </tbody>
+          </table>
+          <div style="margin-top:10px;color:var(--muted);font-size:13px;">Fine rule: ৳5 per overdue day (configurable in code)</div>
+        </div>
+      </div>
+
+      <!-- Right: Fines monitor & quick actions -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="card">
+          <div class="title"><i data-lucide="alert-triangle"></i> Fines Monitoring</div>
+          <div style="margin-top:10px;color:#475569;font-size:13px;">Outstanding fines and quick payment controls</div>
+
+          <div style="margin-top:12px;">
+            <table class="admin-table" id="finesTable" aria-label="Fines list">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Amount (৳)</th>
+                  <th>Overdue days</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- populated by JS -->
+              </tbody>
+            </table>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+              <div class="muted">Total outstanding: <strong id="totalOutstanding">৳0</strong></div>
+              <div><button class="btn btn-primary btn-small" onclick="collectAllFines()">Mark All Paid</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title"><i data-lucide="file-text"></i> Quick Actions</div>
+          <div style="margin-top:10px;color:#475569;font-size:13px;">Utilities for administrative tasks</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-ghost" onclick="recalculateAll()">Recalculate fines now</button>
+            <button class="btn btn-ghost" onclick="simulateDueToday()">Simulate borrow due today (test)</button>
+            <button class="btn btn-ghost" onclick="exportOutstanding()">Export outstanding (CSV)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="admin-footer">&copy; 2025 CUET Library Management System — Admin Panel</footer>
+  </main>
+</div>
+
+<script>
+/*
+  Simple in-page data + logic for fines:
+  - Overdue days = max(0, today - dueDate)
+  - Fine per day = CONFIG_FINE_PER_DAY
+  - Records hold whether finePaid boolean
+  This is demo-only; replace with real server calls.
+*/
+
+const CONFIG_FINE_PER_DAY = 5; // ৳ per day
+
+// sample data (id: unique borrow record id)
+let borrowRecords = [
+  { recordId: 1, studentName: 'Fatima Rahman', studentId: '1804012', dept: 'CSE', book: 'Artificial Intelligence', dueDate: '2025-02-01', finePaid: false },
+  { recordId: 2, studentName: 'Hasan Ahmed', studentId: '1804021', dept: 'EEE', book: 'Circuit Analysis', dueDate: '2025-02-10', finePaid: false },
+  { recordId: 3, studentName: 'Ali Hassan', studentId: '1804033', dept: 'CSE', book: 'Database Systems', dueDate: '2025-03-01', finePaid: false },
+  // add more rows as needed
+];
+
+function daysOverdue(dueDateIso){
+  const today = new Date();
+  const due = new Date(dueDateIso + 'T23:59:59');
+  const diff = Math.floor((today - due) / (1000*60*60*24));
+  return diff > 0 ? diff : 0;
+}
+
+function computeFineForRecord(rec){
+  const days = daysOverdue(rec.dueDate);
+  return days * CONFIG_FINE_PER_DAY;
+}
+
+function renderTables(filterText = '') {
+  const tbody = document.querySelector('#studentsTable tbody');
+  tbody.innerHTML = '';
+  let overdueCount = 0;
+  let borrowedCount = borrowRecords.length;
+  const studentsSet = new Set();
+  borrowRecords.forEach(rec=>{
+    studentsSet.add(rec.studentId);
+  });
+
+  borrowRecords.filter(r => {
+    if(!filterText) return true;
+    const q = filterText.toLowerCase();
+    return `${r.studentName} ${r.studentId} ${r.book} ${r.dept}`.toLowerCase().includes(q);
+  }).forEach(rec=>{
+    const days = daysOverdue(rec.dueDate);
+    const fine = computeFineForRecord(rec);
+    if(days>0) overdueCount++;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${rec.studentName}</td>
+      <td>${rec.studentId}</td>
+      <td>${rec.dept}</td>
+      <td>${rec.book}</td>
+      <td>${rec.dueDate}</td>
+      <td>${days > 0 ? '<span class="badge badge-overdue">'+days+'</span>' : '<span class="badge badge-ok">0</span>'}</td>
+      <td>৳${fine}</td>
+      <td class="actions">
+        ${!rec.finePaid ? `<button class="btn btn-primary btn-small" onclick="fineStudent(${rec.recordId})"><i data-lucide="credit-card"></i> Charge</button>` : `<button class="btn btn-ghost btn-small" onclick="markPaid(${rec.recordId})"><i data-lucide="check-circle"></i> Mark Paid</button>`}
+        <button class="btn btn-ghost btn-small" onclick="openEdit(${rec.recordId})"><i data-lucide="edit-2"></i></button>
+        <button class="btn btn-danger btn-small" onclick="deleteRecord(${rec.recordId})"><i data-lucide="trash-2"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // fines table
+  const finesTbody = document.querySelector('#finesTable tbody');
+  finesTbody.innerHTML = '';
+  let totalOutstanding = 0;
+  borrowRecords.filter(r => computeFineForRecord(r) > 0 && !r.finePaid).forEach(rec=>{
+    const days = daysOverdue(rec.dueDate);
+    const fine = computeFineForRecord(rec);
+    totalOutstanding += fine;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${rec.studentName} — ${rec.studentId}</td>
+      <td>৳${fine}</td>
+      <td>${days}</td>
+      <td><button class="btn btn-primary btn-small" onclick="markPaid(${rec.recordId})">Mark Paid</button></td>
+    `;
+    finesTbody.appendChild(tr);
+  });
+
+  document.getElementById('statStudents').textContent = studentsSet.size;
+  document.getElementById('statOverdue').textContent = overdueCount;
+  document.getElementById('statBorrowed').textContent = borrowedCount;
+  document.getElementById('statFines').textContent = '৳' + totalOutstanding;
+  document.getElementById('totalOutstanding').textContent = '৳' + totalOutstanding;
+
+  // replace lucide icons in newly added markup
+  if (window.lucide && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  } else if (window.lucide && typeof lucide.replace === 'function') {
+    lucide.replace();
+  }
+}
+
+function fineStudent(recordId){
+  const rec = borrowRecords.find(r=>r.recordId===recordId);
+  if(!rec) return;
+  const fine = computeFineForRecord(rec);
+  if(fine <= 0){
+    alert('No fine due for this record.');
+    return;
+  }
+  // demo: "charge" the fine (in real app make server call)
+  const ok = confirm(`Charge ৳${fine} to ${rec.studentName} (${rec.studentId})?`);
+  if(ok){
+    rec.finePaid = true; // mark as charged/paid for demo purposes
+    alert('Fine recorded (demo). Replace with server call in production.');
+    renderTables(document.getElementById('globalSearch').value.trim());
+  }
+}
+
+function markPaid(recordId){
+  const rec = borrowRecords.find(r=>r.recordId===recordId);
+  if(!rec) return;
+  rec.finePaid = true;
+  alert('Marked paid (demo).');
+  renderTables(document.getElementById('globalSearch').value.trim());
+}
+
+function deleteRecord(recordId){
+  if(!confirm('Delete this borrow record?')) return;
+  borrowRecords = borrowRecords.filter(r=>r.recordId!==recordId);
+  renderTables(document.getElementById('globalSearch').value.trim());
+}
+
+function openAddStudent(){
+  alert('Open add student modal (implement).');
+}
+
+function openEdit(recordId){
+  alert('Open edit modal for record #' + recordId + ' (implement).');
+}
+
+function recalculateAll(){
+  // In a real app you'd request updated server data
+  renderTables(document.getElementById('globalSearch').value.trim());
+  alert('Recalculation complete (demo).');
+}
+
+function collectAllFines(){
+  if(!confirm('Mark all outstanding fines as paid?')) return;
+  borrowRecords.forEach(r=>{
+    if(computeFineForRecord(r) > 0) r.finePaid = true;
+  });
+  renderTables(document.getElementById('globalSearch').value.trim());
+  alert('All outstanding fines marked paid (demo).');
+}
+
+function exportOutstanding(){
+  // simple CSV export of outstanding fines
+  const rows = [['Student','ID','Book','Due Date','OverdueDays','Fine']];
+  borrowRecords.filter(r => computeFineForRecord(r) > 0 && !r.finePaid).forEach(r=>{
+    rows.push([r.studentName, r.studentId, r.book, r.dueDate, daysOverdue(r.dueDate), computeFineForRecord(r)]);
+  });
+  const csv = rows.map(r=>r.map(c => `"${(''+c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'outstanding_fines.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function simulateDueToday(){
+  // set first record due date to yesterday to test overdue
+  if(borrowRecords.length) borrowRecords[0].dueDate = new Date(Date.now() - 2*24*3600*1000).toISOString().slice(0,10);
+  renderTables(document.getElementById('globalSearch').value.trim());
+}
+
+// Search binding
+document.getElementById('globalSearch').addEventListener('input', (e)=>{
+  renderTables(e.target.value.trim());
+});
+
+// simple logout
+function logout(){ location.href = 'index.html'; }
+
+// initial render
+renderTables();
+
+</script>
+
+<!-- Optionally include local admin scripts -->
+<script src="scripts/admin.js" defer></script>
+<script src="js/admin-modals.js"></script>
+</body>
+</html>

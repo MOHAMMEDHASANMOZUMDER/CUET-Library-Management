@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edit Profile - CUET Library</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="dashboard">
+  <header class="dashboard-header">
+    <div class="container">
+      <div class="nav-brand">
+        <img src="images/cuet-logo.png" alt="CUET Logo" class="logo" />
+        <span class="brand-text">CUET Library</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container dashboard-container">
+    <h1>Edit Profile</h1>
+    <form class="form-card" id="edit-profile-form">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" placeholder="Mohammad Hasan" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="hasan@example.com" required />
+
+      <label for="department">Department</label>
+      <select id="department" name="department" required>
+        <option value="">Select Department</option>
+        <option value="CSE">Computer Science & Engineering</option>
+        <option value="EEE">Electrical & Electronic Engineering</option>
+        <option value="ME">Mechanical Engineering</option>
+        <!-- Add other departments as needed -->
+      </select>
+
+      <label for="password">New Password</label>
+      <input type="password" id="password" name="password" placeholder="Leave blank to keep current password" />
+
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" />
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const pwd = e.target.password.value;
+      const confirmPwd = e.target.confirmPassword.value;
+      if (pwd !== confirmPwd) {
+        alert("Passwords don't match!");
+        return;
+      }
+
+      // Here you would add your actual update logic (e.g., API call)
+      alert("Profile updated successfully!");
+    });
+  </script>
+</body>
+</html>

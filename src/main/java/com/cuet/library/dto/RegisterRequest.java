@@ -1,40 +1,28 @@
 package com.cuet.library.dto;
 
 public class RegisterRequest {
-    private String studentId;
-    private String fullName;
+    private String name;
     private String email;
     private String password;
     private String department;
-    private String session;
 
     // Constructors
     public RegisterRequest() {}
 
-    public RegisterRequest(String studentId, String fullName, String email, String password, String department, String session) {
-        this.studentId = studentId;
-        this.fullName = fullName;
+    public RegisterRequest(String name, String email, String password, String department) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.department = department;
-        this.session = session;
     }
 
     // Getters and Setters
-    public String getStudentId() {
-        return studentId;
+    public String getName() {
+        return name;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -59,13 +47,5 @@ public class RegisterRequest {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-
-    public String getSession() {
-        return session;
-    }
-
-    public void setSession(String session) {
-        this.session = session;
     }
 }

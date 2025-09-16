@@ -11,6 +11,7 @@
     <div class="auth-container">
         <!-- Header -->
         <div class="auth-header">
+            <a href="index.html" class="back-to-home"><i data-lucide="arrow-left"></i><span>Back to Home</span></a>
             <a href="index.html" class="auth-brand">
                 <img src="images/cuet-logo.png" alt="CUET Logo" style="width: 2rem; height: 2rem;">
                 <span>CUET Library</span>
@@ -21,14 +22,14 @@
         <!-- Registration Form -->
         <div class="auth-card">
             <div class="card-header">
-                <h1 class="card-title">Student Registration</h1>
+                <h1 class="card-title">User Registration</h1>
                 <p class="card-description">Fill in your details to create an account</p>
             </div>
 
             <form class="auth-form" id="registration-form">
                 <div class="form-group">
-                    <label for="student-id">Student ID</label>
-                    <input type="text" id="student-id" name="studentId" placeholder="e.g., 2204054" required>
+                    <label for="student-id">User ID</label>
+                    <input type="text" id="student-id" name="UserId" placeholder="e.g., 2204054" required>
                 </div>
 
                 <div class="form-group">
@@ -79,7 +80,6 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-full">Create Account</button>
-            </form>
         </div>
 
         <div class="auth-footer">

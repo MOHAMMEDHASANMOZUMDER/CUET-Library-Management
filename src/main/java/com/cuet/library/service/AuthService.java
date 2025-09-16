@@ -21,28 +21,23 @@ public class AuthService {
     @Autowired
     private UserService userService;
 
-    public String authenticateUser(String studentId, String password) {
+    public String authenticateUser(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(studentId, password)
+            new UsernamePasswordAuthenticationToken(email, password)
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return tokenProvider.generateToken(authentication);
     }
 
-    public User registerUser(String studentId, String name, String email, String password, 
-                           String department, String session) {
+    public User registerUser(String name, String email, String password, String department) {
         User user = new User();
-        user.setStudentId(studentId);
-        user.setUsername(studentId);
-        user.setFullName(name);
+        user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
         user.setDepartment(department);
-        user.setSession(session);
         user.setRole(User.Role.STUDENT);
         user.setEnabled(true);
-        user.setIsActive(true);
         
         return userService.createUser(user);
     }
@@ -50,8 +45,8 @@ public class AuthService {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            String studentId = authentication.getName();
-            return userService.findByStudentId(studentId)
+            String email = authentication.getName();
+            return userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         }
         throw new RuntimeException("No authenticated user found");

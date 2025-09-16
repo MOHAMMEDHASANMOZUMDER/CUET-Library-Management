@@ -9,60 +9,27 @@ public class Note {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Note_ID")
     private Long id;
     
-    @Column(nullable = false)
-    private String title;
-    
-    @Column(columnDefinition = "TEXT")
-    private String content;
-    
-    private String subject;
-    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "User_ID", nullable = false)
     private User user;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "Book_ID")
     private Book book;
     
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
-    
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
-    
-    public enum Status {
-        PENDING, APPROVED, REJECTED
-    }
+    @Column(name = "Upload_time", nullable = false)
+    private LocalDateTime uploadTime;
     
     // Constructors
     public Note() {}
     
-    public Note(String title, String content, String subject, User user, Book book) {
-        this.title = title;
-        this.content = content;
-        this.subject = subject;
+    public Note(User user, Book book) {
         this.user = user;
         this.book = book;
-        this.status = Status.PENDING;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-    
-    // Business methods
-    public void approve() {
-        this.status = Status.APPROVED;
-        this.updatedAt = LocalDateTime.now();
-    }
-    
-    public void reject() {
-        this.status = Status.REJECTED;
-        this.updatedAt = LocalDateTime.now();
+        this.uploadTime = LocalDateTime.now();
     }
     
     // Getters and Setters
@@ -72,30 +39,6 @@ public class Note {
     
     public void setId(Long id) {
         this.id = id;
-    }
-    
-    public String getTitle() {
-        return title;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    public String getContent() {
-        return content;
-    }
-    
-    public void setContent(String content) {
-        this.content = content;
-    }
-    
-    public String getSubject() {
-        return subject;
-    }
-    
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
     
     public User getUser() {
@@ -114,32 +57,11 @@ public class Note {
         this.book = book;
     }
     
-    public Status getStatus() {
-        return status;
+    public LocalDateTime getUploadTime() {
+        return uploadTime;
     }
     
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-    
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public void setUploadTime(LocalDateTime uploadTime) {
+        this.uploadTime = uploadTime;
     }
 }

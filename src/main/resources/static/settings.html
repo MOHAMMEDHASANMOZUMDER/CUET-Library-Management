@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings - CUET Library</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* Additional styles specific to settings page */
+    .settings-section {
+      margin-top: 2rem;
+      max-width: 480px;
+    }
+    .settings-section h2 {
+      margin-bottom: 1rem;
+    }
+    .theme-options {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .theme-option {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.3s;
+    }
+    .theme-option.selected {
+      border-color: #007bff;
+      background-color: #e7f1ff;
+    }
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .toggle-switch input[type="checkbox"] {
+      width: 40px;
+      height: 20px;
+      appearance: none;
+      background: #ccc;
+      border-radius: 20px;
+      position: relative;
+      outline: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .toggle-switch input[type="checkbox"]:checked {
+      background: #007bff;
+    }
+    .toggle-switch input[type="checkbox"]::before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      top: 1px;
+      left: 1px;
+      background: white;
+      transition: transform 0.3s;
+      transform: translateX(0);
+    }
+    .toggle-switch input[type="checkbox"]:checked::before {
+      transform: translateX(20px);
+    }
+  </style>
+</head>
+<body class="dashboard">
+  <header class="dashboard-header">
+    <div class="container">
+      <div class="nav-brand">
+        <img src="images/cuet-logo.png" alt="CUET Logo" class="logo" />
+        <span class="brand-text">CUET Library</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container dashboard-container">
+    <h1>Settings</h1>
+
+    <section class="settings-section">
+      <h2>Theme</h2>
+      <div class="theme-options" role="list">
+        <div class="theme-option selected" tabindex="0" role="listitem" data-theme="light">
+          <i data-lucide="sun"></i>
+          <p>Light</p>
+        </div>
+        <div class="theme-option" tabindex="0" role="listitem" data-theme="dark">
+          <i data-lucide="moon"></i>
+          <p>Dark</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>Notifications</h2>
+      <label class="toggle-switch" for="notifications-toggle">
+        <input type="checkbox" id="notifications-toggle" checked />
+        <span>Enable Notifications</span>
+      </label>
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    const themeOptions = document.querySelectorAll('.theme-option');
+    const body = document.body;
+    const savedTheme = localStorage.getItem('cuet-theme') || 'light';
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        body.classList.add('dark-theme');
+      } else {
+        body.classList.remove('dark-theme');
+      }
+      localStorage.setItem('cuet-theme', theme);
+
+      themeOptions.forEach((option) => {
+        option.classList.toggle('selected', option.dataset.theme === theme);
+      });
+    }
+
+    themeOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        applyTheme(option.dataset.theme);
+      });
+      option.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          applyTheme(option.dataset.theme);
+        }
+      });
+    });
+
+    // Initialize theme on page load
+    applyTheme(savedTheme);
+    document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+
+  // Load saved preference
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    body.classList.add('dark-mode');
+    toggle.checked = true;
+  }
+
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'disabled');
+    }
+  });
+});
+
+  </script>
+</body>
+</html>

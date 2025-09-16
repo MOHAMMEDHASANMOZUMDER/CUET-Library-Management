@@ -1,0 +1,62 @@
+/* General form style for edit profile */
+.form-card {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  max-width: 480px;
+  margin: 2rem auto 4rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-card label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-card input,
+.form-card select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-card input:focus,
+.form-card select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px #007bff;
+}
+
+/* Dashboard dark theme support */
+body.dark-theme {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark-theme header,
+body.dark-theme .form-card,
+body.dark-theme .dashboard-container {
+  background-color: #1e1e1e;
+  color: #eee;
+}
+
+body.dark-theme input,
+body.dark-theme select {
+  background-color: #333;
+  border-color: #555;
+  color: #eee;
+}
+
+body.dark-theme input::placeholder {
+  color: #bbb;
+}
+
+body.dark-theme .btn-primary {
+  background-color: #3399ff;
+  color: white;
+}

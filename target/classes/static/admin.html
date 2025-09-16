@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="css/admin-modals.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Layout */
+        .admin-layout { display: flex; min-height: 100vh; background:#f4f6f9; color:#222; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+        .sidebar { width: 260px; background: #2d6a38; color: #e6edf3; padding: 28px 20px; box-shadow: 2px 0 8px rgba(2,6,23,0.12); display:flex; flex-direction:column; gap:20px; }
+        .sidebar .brand { display:flex; align-items:center; gap:12px; font-weight:700; font-size:16px; }
+        .sidebar .nav { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+        .sidebar .nav a { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; color:#cfe7ff; text-decoration:none; font-size:14px; }
+        .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255,255,255,0.04); color:#fff; }
+        .sidebar .small { font-size:12px; color:#97a6b7; margin-top:auto; }
+
+        .main { flex:1; padding:28px; }
+
+        /* Modal styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(16,24,40,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: #fff; padding: 24px; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-body .form-group { margin-bottom: 14px; }
+        .modal-body label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+        .modal-body input { width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+        /* Header area inside main */
+        .main-header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:18px; }
+        .search { flex:1; display:flex; gap:12px; align-items:center; background:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 1px 2px rgba(16,24,40,.04); }
+        .search input { border:0; outline:0; width:100%; font-size:14px; background:transparent; }
+
+        /* Cards and grids */
+        .cards-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:18px; }
+        .card { background:#fff; padding:16px; border-radius:10px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
+        .card .title { display:flex; align-items:center; gap:10px; font-weight:600; color:#0f1724; }
+        .stat-number { font-size:20px; font-weight:700; margin-top:8px; }
+
+        /* Dashboard sections */
+        .section-grid { display:grid; grid-template-columns: 2fr 1fr; gap:16px; margin-bottom:18px; }
+        .table-container { overflow:auto; background: #fff; border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
+        table.admin-table { width:100%; border-collapse:collapse; font-size:14px; }
+        table.admin-table th, table.admin-table td { padding:10px 12px; text-align:left; border-bottom:1px solid #eef2f6; }
+        table.admin-table th { font-weight:600; color:#334155; background:transparent; }
+
+        /* Action buttons */
+        .btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; font-size:13px; cursor:pointer; border:0; }
+        .btn-primary { background:#0ea5a3; color:#fff; }
+        .btn-ghost { background:transparent; color:#0f1724; border:1px solid #e6eef2; }
+        .btn-danger { background:#ef4444; color:#fff; }
+        .btn-small { padding:6px 8px; font-size:12px; border-radius:6px; }
+
+        /* Badges */
+        .badge { padding:6px 8px; border-radius:999px; font-size:12px; font-weight:600; display:inline-block; }
+        .badge-pending { background:#fff7ed; color:#c2410c; border:1px solid #ffe7c2; }
+        .badge-approved { background:#ecfdf5; color:#047857; border:1px solid #d1fae5; }
+        .badge-overdue { background:#fff1f2; color:#9f1239; border:1px solid #ffdce0; }
+
+        /* Notes moderation area */
+        .note-row { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:10px 8px; border-bottom:1px dashed #f1f5f9; }
+        .note-meta { display:flex; gap:10px; align-items:center; }
+        .note-title { font-weight:600; color:#0f1724; }
+        .note-controls { display:flex; gap:8px; }
+
+        /* Responsive */
+        @media (max-width: 980px){
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+            .section-grid { grid-template-columns: 1fr; }
+            .sidebar { display:none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Admin navigation">
+            <div class="brand">
+                <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
+                <div>
+                    <div style="font-size:15px">CUET Library Admin</div>
+                    <div style="font-size:12px;color:#9fb6cc">Management Console</div>
+                </div>
+            </div>
+
+            <nav class="nav" role="navigation">
+                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
+                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
+                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
+                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
+                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
+                <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+            </nav>
+
+            <div class="small">Signed in as <strong>Admin</strong></div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+            <div class="main-header">
+                <div style="display:flex; gap:16px; align-items:center;">
+                    <h1 style="margin:0; font-size:20px;">Dashboard Overview</h1>
+                    <div style="color:#64748b; font-size:13px;">Monitor library operations and moderate content</div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <div class="search" style="max-width:420px;">
+                        <i data-lucide="search"></i>
+                        <input placeholder="Search books, students, notes..." />
+                    </div>
+                    <button class="btn btn-outline" onclick="logout()" style="background:transparent;border:1px solid #e6eef2;padding:8px 10px;border-radius:8px;">Log out</button>
+                </div>
+            </div>
+
+            <!-- Quick stats -->
+            <div class="cards-grid" aria-hidden="false">
+                <div class="card">
+                    <div class="title"><i data-lucide="book-open"></i> Total Books</div>
+                    <div class="stat-number" id="total-books">...</div>
+                    <div style="color:#64748b; margin-top:6px;" id="available-books">...</div>
+                </div>
+                <div class="card">
+                    <div class="title"><i data-lucide="users"></i> Active Students</div>
+                    <div class="stat-number" id="active-students">...</div>
+                    <div style="color:#64748b; margin-top:6px;" id="registered-students">...</div>
+                </div>
+                <div class="card">
+                    <div class="title"><i data-lucide="clock"></i> Pending Prebookings</div>
+                    <div class="stat-number" id="pending-prebookings">...</div>
+                    <div style="color:#64748b; margin-top:6px;">Manage and confirm reservations</div>
+                </div>
+                <div class="card">
+                    <div class="title"><i data-lucide="file-text"></i> Notes Pending</div>
+                    <div class="stat-number" id="pending-notes">...</div>
+                    <div style="color:#64748b; margin-top:6px;">Moderation required</div>
+                </div>
+            </div>
+
+            <!-- Main sections: tables and moderation -->
+            <div class="section-grid">
+                <!-- Left: Manage Books & Prebookings -->
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- Manage Books -->
+                    <div class="table-container">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <div class="title"><i data-lucide="book"></i> Manage Books</div>
+                            <div>
+                                <button class="btn btn-primary btn-small" onclick="openAddBook()">Add Book</button>
+                            </div>
+                        </div>
+
+                        <table class="admin-table" aria-label="Manage books">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Copies</th>
+                                    <th>Available</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="books-table-body">
+                                <!-- Book rows will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Prebookings -->
+                    <div class="table-container">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <div class="title"><i data-lucide="calendar"></i> Prebookings</div>
+                            <div style="color:#64748b; font-size:13px;">Confirm or cancel pending reservations</div>
+                        </div>
+
+                        <table class="admin-table" aria-label="Prebookings">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book</th>
+                                    <th>Pickup Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prebookings-table-body">
+                                <!-- Prebooking rows will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right: Fines monitor & Notes moderation -->
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- Fines -->
+                    <div class="card">
+                        <div class="title"><i data-lucide="alert-triangle"></i> Fines Monitoring</div>
+                        <div style="margin-top:10px; color:#475569; font-size:13px;">Overview of outstanding fines and quick actions</div>
+
+                        <div style="margin-top:12px;">
+                            <table class="admin-table" aria-label="Fines list">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Amount (৳)</th>
+                                        <th>Overdue days</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fines-table-body">
+                                    <!-- Fines rows will be inserted here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Notes moderation -->
+                    <div class="card">
+                        <div class="title"><i data-lucide="file-text"></i> Notes Moderation</div>
+                        <div style="margin-top:10px; color:#475569; font-size:13px;">Review and approve or reject uploaded study notes</div>
+
+                        <div style="margin-top:12px;" id="notes-moderation-list">
+                            <!-- Note rows will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer style="color:#94a3b8; font-size:13px; margin-top:14px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
+        </main>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div id="addBookModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Book</h2>
+                <button onclick="closeModal('addBookModal')" style="background:transparent;border:0;cursor:pointer;"><i data-lucide="x"></i></button>
+            </div>
+            <form id="addBookForm" onsubmit="addBook(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="bookTitle">Title</label>
+                        <input type="text" id="bookTitle" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookAuthor">Author</label>
+                        <input type="text" id="bookAuthor" name="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCopies">Total Copies</label>
+                        <input type="number" id="bookCopies" name="copies" required min="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('addBookModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // Replace lucide icons
+        if (window.lucide) lucide.replace();
+
+        // Minimal action stubs (replace with real implementations)
+        function logout(){ location.href = 'index.html'; }
+        
+        function openAddBook(){ 
+            openModal('addBookModal');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Sync active nav link
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.sidebar .nav a');
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html>
+                                <div class="note-controls">
+                                    <button class="btn btn-primary btn-small" onclick="approveNote(203)">Approve</button>
+                                    <button class="btn btn-ghost btn-small" onclick="rejectNote(203)">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer style="color:#94a3b8; font-size:13px; margin-top:14px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
+        </main>
+    </div>
+
+    <script>
+        // Replace lucide icons
+        if (window.lucide) lucide.replace();
+
+        // Minimal action stubs (replace with real implementations)
+        function logout(){ location.href = 'index.html'; }
+        function openAddBook(){ alert('Open add book modal (implement).'); }
+        function confirmPrebooking(id){ alert('Confirm prebooking #' + id + ' (implement).'); }
+        function cancelPrebooking(id){ alert('Cancel prebooking #' + id + ' (implement).'); }
+        function markPaid(id){ alert('Mark fine paid for record #' + id + ' (implement).'); }
+        function approveNote(id){
+            alert('Approved note #' + id + ' (implement server call).');
+            // UI update could be done here after response
+        }
+        function rejectNote(id){
+            alert('Rejected note #' + id + ' (implement server call).');
+        }
+    </script>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html></div>

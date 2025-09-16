@@ -28,7 +28,7 @@ public class BorrowController {
     private AuthService authService;
 
     @PostMapping("/book/{bookId}")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> borrowBook(@PathVariable Long bookId) {
         try {
             User user = authService.getCurrentUser();
@@ -43,7 +43,7 @@ public class BorrowController {
     }
 
     @PutMapping("/return/{borrowRecordId}")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> returnBook(@PathVariable Long borrowRecordId) {
         try {
             BorrowRecord borrowRecord = borrowService.returnBook(borrowRecordId);
@@ -53,19 +53,8 @@ public class BorrowController {
         }
     }
 
-    @PutMapping("/renew/{borrowRecordId}")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN') or hasRole('LIBRARIAN')")
-    public ResponseEntity<?> renewBook(@PathVariable Long borrowRecordId) {
-        try {
-            BorrowRecord borrowRecord = borrowService.renewBook(borrowRecordId);
-            return ResponseEntity.ok(borrowRecord);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     @GetMapping("/my-borrows")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<List<BorrowRecord>> getMyBorrows() {
         try {
             User user = authService.getCurrentUser();
@@ -77,7 +66,7 @@ public class BorrowController {
     }
 
     @GetMapping("/my-active-borrows")
-    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<List<BorrowRecord>> getMyActiveBorrows() {
         try {
             User user = authService.getCurrentUser();
@@ -89,13 +78,13 @@ public class BorrowController {
     }
 
     @GetMapping("/overdue")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BorrowRecord>> getOverdueRecords() {
         return ResponseEntity.ok(borrowService.getOverdueRecords());
     }
 
     @GetMapping("/stats/active")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Long> getActiveBorrowCount() {
         return ResponseEntity.ok(borrowService.getActiveBorrowCount());
     }

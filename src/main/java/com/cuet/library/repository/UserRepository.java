@@ -13,9 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByStudentId(String studentId);
     Optional<User> findByEmail(String email);
-    boolean existsByStudentId(String studentId);
     boolean existsByEmail(String email);
     
     List<User> findByRole(User.Role role);
@@ -24,12 +22,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.role = :role AND u.enabled = true")
     List<User> findActiveUsersByRole(@Param("role") User.Role role);
     
-    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'STUDENT'")
-    long countStudents();
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = :role")
+    long countByRole(@Param("role") User.Role role);
     
-    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'STUDENT' AND u.enabled = true")
-    long countActiveStudents();
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = :role AND u.enabled = true")
+    long countByRoleAndEnabledTrue(@Param("role") User.Role role);
     
-    @Query("SELECT u FROM User u WHERE u.username LIKE %:keyword% OR u.fullName LIKE %:keyword%")
-    Page<User> findByUsernameContainingIgnoreCase(@Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT u FROM User u WHERE u.name LIKE %:keyword% OR u.email LIKE %:keyword%")
+    Page<User> findByNameContainingIgnoreCase(@Param("keyword") String keyword, Pageable pageable);
 }

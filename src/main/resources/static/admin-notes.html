@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notes Moderation - CUET Library Admin</title>
+
+<!-- Base stylesheet -->
+<link rel="stylesheet" href="styles/main.css" />
+<link rel="stylesheet" href="css/admin-modals.css" />
+
+<!-- Lucide icons (UMD) -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- Inline CSS for professional layout and components -->
+<style>
+  :root{
+    --sidebar:#2d6a38;
+    --muted:#64748b;
+    --card-bg:#fff;
+    --bg:#f4f6f9;
+    --accent:#0ea5a3;
+  }
+
+  html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+
+  .admin-layout { display: flex; min-height: 100vh; }
+  .sidebar { width: 260px; background:var(--sidebar); color:#e6edf3; padding:28px 20px; box-shadow: 2px 0 8px rgba(2,6,23,0.12); display:flex; flex-direction:column; gap:20px; }
+  .sidebar .brand { display:flex; align-items:center; gap:12px; font-weight:700; font-size:16px; }
+  .sidebar .brand img{width:36px;height:36px;border-radius:6px;object-fit:cover}
+  .sidebar .nav { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .sidebar .nav a { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; color:#cfe7ff; text-decoration:none; font-size:14px; }
+  .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255,255,255,0.04); color:#fff; }
+  .sidebar .small { font-size:12px; color:#97a6b7; margin-top:auto; }
+
+  .main { flex:1; padding:28px; display:flex; flex-direction:column; gap:18px; }
+
+  .main-header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:4px; }
+  .main-header h1{margin:0;font-size:20px}
+  .search { flex:1; display:flex; gap:12px; align-items:center; background:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 1px 2px rgba(16,24,40,.04); max-width:520px; }
+  .search input { border:0; outline:0; width:100%; font-size:14px; background:transparent; }
+
+  .cards-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; }
+  .card { background:var(--card-bg); padding:16px; border-radius:10px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
+  .card .title { display:flex; align-items:center; gap:10px; font-weight:600; color:#0f1724; }
+  .stat-number { font-size:20px; font-weight:700; margin-top:8px; color:#0f1724; }
+
+  .section-grid { display:grid; grid-template-columns: 2fr 1fr; gap:16px; align-items:start; }
+
+  .table-container { overflow:auto; background: var(--card-bg); border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
+  table.admin-table { width:100%; border-collapse:collapse; font-size:14px; }
+  table.admin-table th, table.admin-table td { padding:10px 12px; text-align:left; border-bottom:1px solid #eef2f6; }
+  table.admin-table th { font-weight:600; color:#334155; background:transparent; }
+
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; font-size:13px; cursor:pointer; border:0; }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-ghost { background:transparent; color:#0f1724; border:1px solid #e6eef2; }
+  .btn-danger { background:#ef4444; color:#fff; }
+  .btn-small { padding:6px 8px; font-size:12px; border-radius:6px; }
+
+  .note-card { background:var(--card-bg); border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
+  .note-row { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:10px 8px; border-bottom:1px dashed #f1f5f9; }
+  .note-row:last-child{border-bottom:0}
+  .note-meta { display:flex; gap:12px; align-items:center; }
+  .note-avatar { width:56px;height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#0f1724; }
+  .note-title { font-weight:600; color:#0f1724; }
+  .note-controls { display:flex; gap:8px; align-items:center; }
+
+  /* modal */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,0.5); display:none; align-items:center; justify-content:center; z-index:1200; }
+  .modal{ width:min(920px,96%); background:#fff; border-radius:10px; padding:18px; box-shadow:0 10px 40px rgba(2,6,23,.5); max-height:86vh; overflow:auto; }
+  .modal h3{margin:0 0 8px 0}
+  .modal .meta{color:var(--muted);font-size:13px;margin-bottom:12px}
+
+  /* responsive */
+  @media (max-width: 980px){
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-grid { grid-template-columns: 1fr; }
+    .sidebar { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" aria-label="Admin navigation">
+            <div class="brand">
+                <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
+                <div>
+                    <div style="font-size:15px">CUET Library Admin</div>
+                    <div style="font-size:12px;color:#9fb6cc">Management Console</div>
+                </div>
+            </div>
+
+            <nav class="nav" role="navigation">
+                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
+                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
+                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
+                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
+                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
+                <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+            </nav>
+
+            <div class="small">Signed in as <strong>Admin</strong></div>
+        </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="main-header">
+      <div style="display:flex; gap:16px; align-items:center;">
+        <h1>Notes Moderation</h1>
+        <div style="color:var(--muted); font-size:13px;">Review uploaded study notes and approve or reject.</div>
+      </div>
+
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="search" style="max-width:420px;">
+          <i data-lucide="search"></i>
+          <input id="globalSearch" placeholder="Search notes..." onkeyup="filterNotes()" />
+        </div>
+        <button class="btn btn-ghost" onclick="logout()" style="background:transparent;border:1px solid #e6eef2;padding:8px 10px;border-radius:8px;">Log out</button>
+      </div>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="cards-grid" aria-hidden="false">
+      <div class="card">
+        <div class="title"><i data-lucide="file-text"></i> Notes Pending</div>
+        <div class="stat-number" id="pendingCount">3</div>
+        <div style="color:var(--muted); margin-top:6px;">Moderation required</div>
+      </div>
+      <div class="card">
+        <div class="title"><i data-lucide="check-circle"></i> Approved</div>
+        <div class="stat-number" id="approvedCount">0</div>
+        <div style="color:var(--muted); margin-top:6px;">Accepted notes</div>
+      </div>
+      <div class="card">
+        <div class="title"><i data-lucide="x-circle"></i> Rejected</div>
+        <div class="stat-number" id="rejectedCount">0</div>
+        <div style="color:var(--muted); margin-top:6px;">Rejected notes</div>
+      </div>
+      <div class="card">
+        <div class="title"><i data-lucide="users"></i> Active Students</div>
+        <div class="stat-number">3,876</div>
+        <div style="color:var(--muted); margin-top:6px;">Registered users</div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <!-- Left: Recent notes (list with view) -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="table-container">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div class="title"><i data-lucide="list"></i> Recent Notes</div>
+            <div style="color:var(--muted); font-size:13px;">Click view to inspect content, then approve or reject.</div>
+          </div>
+
+          <div id="notesList" class="note-card" aria-live="polite">
+            <!-- Note rows: store data attributes for quick access -->
+            <div class="note-row" data-id="301" data-title="Machine Learning Algorithms" data-author="Ahmed Hassan" data-date="2025-01-18" data-content="Comprehensive ML algorithms summary: supervised, unsupervised, regression, classification, key formulas and examples.">
+              <div class="note-meta">
+                <div class="note-avatar" style="background:#eef2ff">ML</div>
+                <div>
+                  <div class="note-title">Machine Learning Algorithms</div>
+                  <div style="font-size:12px;color:var(--muted);">Ahmed Hassan — uploaded 2025-01-18</div>
+                </div>
+              </div>
+              <div class="note-controls">
+                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
+                <button class="btn btn-primary btn-small" onclick="approveNote(301,this)"><i data-lucide="check"></i> Approve</button>
+                <button class="btn btn-ghost btn-small" onclick="rejectNote(301,this)"><i data-lucide="x"></i> Reject</button>
+              </div>
+            </div>
+
+            <div class="note-row" data-id="302" data-title="Circuit Analysis Notes" data-author="Fatima Rahman" data-date="2025-01-17" data-content="Fundamentals of circuit analysis, nodal/mesh, AC steady-state, examples and solved problems.">
+              <div class="note-meta">
+                <div class="note-avatar" style="background:#ffeef0;color:#6b2135">CA</div>
+                <div>
+                  <div class="note-title">Circuit Analysis Notes</div>
+                  <div style="font-size:12px;color:var(--muted);">Fatima Rahman — uploaded 2025-01-17</div>
+                </div>
+              </div>
+              <div class="note-controls">
+                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
+                <button class="btn btn-primary btn-small" onclick="approveNote(302,this)"><i data-lucide="check"></i> Approve</button>
+                <button class="btn btn-ghost btn-small" onclick="rejectNote(302,this)"><i data-lucide="x"></i> Reject</button>
+              </div>
+            </div>
+
+            <div class="note-row" data-id="303" data-title="Structural Design Principles" data-author="Karim Abdullah" data-date="2025-01-16" data-content="Notes on structural design, materials, load calculations and typical design examples.">
+              <div class="note-meta">
+                <div class="note-avatar" style="background:#eefaf1;color:#065f46">SD</div>
+                <div>
+                  <div class="note-title">Structural Design Principles</div>
+                  <div style="font-size:12px;color:var(--muted);">Karim Abdullah — uploaded 2025-01-16</div>
+                </div>
+              </div>
+              <div class="note-controls">
+                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
+                <button class="btn btn-primary btn-small" onclick="approveNote(303,this)"><i data-lucide="check"></i> Approve</button>
+                <button class="btn btn-ghost btn-small" onclick="rejectNote(303,this)"><i data-lucide="x"></i> Reject</button>
+              </div>
+            </div>
+
+            <!-- Example of previous admin-notes entries (kept for continuity) -->
+            <div class="note-row" data-id="304" data-title="Thermodynamics Summary" data-author="John Doe" data-date="2025-07-21" data-content="Short summary with main laws and examples.">
+              <div class="note-meta">
+                <div class="note-avatar" style="background:#f7f7f7;color:#0f1724">TS</div>
+                <div>
+                  <div class="note-title">Thermodynamics Summary</div>
+                  <div style="font-size:12px;color:var(--muted);">John Doe — uploaded 2025-07-21</div>
+                </div>
+              </div>
+              <div class="note-controls">
+                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
+                <button class="btn btn-primary btn-small" onclick="approveNote(304,this)"><i data-lucide="check"></i> Approve</button>
+                <button class="btn btn-ghost btn-small" onclick="rejectNote(304,this)"><i data-lucide="x"></i> Reject</button>
+              </div>
+            </div>
+
+            <div class="note-row" data-id="305" data-title="DBMS Revision Notes" data-author="Jane Smith" data-date="2025-08-02" data-content="Revision notes on normalization, indexing and transactions.">
+              <div class="note-meta">
+                <div class="note-avatar" style="background:#eef2ff;color:#0f1724">DB</div>
+                <div>
+                  <div class="note-title">DBMS Revision Notes</div>
+                  <div style="font-size:12px;color:var(--muted);">Jane Smith — uploaded 2025-08-02</div>
+                </div>
+              </div>
+              <div class="note-controls">
+                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
+                <button class="btn btn-primary btn-small" onclick="approveNote(305,this)"><i data-lucide="check"></i> Approve</button>
+                <button class="btn btn-ghost btn-small" onclick="rejectNote(305,this)"><i data-lucide="x"></i> Reject</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional: table of all notes for CSV/export (kept minimal) -->
+        <div class="table-container">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div class="title"><i data-lucide="download"></i> Export</div>
+            <div>
+              <button class="btn btn-ghost btn-small" onclick="exportNotes()">Export CSV</button>
+            </div>
+          </div>
+          <div style="color:var(--muted); font-size:13px;">Export a CSV of current notes for offline review.</div>
+        </div>
+      </div>
+
+      <!-- Right: quick actions and moderation stats -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="card">
+          <div class="title"><i data-lucide="alert-triangle"></i> Moderation Queue</div>
+          <div style="margin-top:10px; color:var(--muted); font-size:13px;">Approve carefully. Rejections should include reason (server side).</div>
+
+          <div style="margin-top:12px;">
+            <table class="admin-table" aria-label="Moderation summary">
+              <thead>
+                <tr><th>Category</th><th>Count</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Pending</td><td id="summaryPending">5</td></tr>
+                <tr><td>Approved</td><td id="summaryApproved">0</td></tr>
+                <tr><td>Rejected</td><td id="summaryRejected">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title"><i data-lucide="file-text"></i> Quick Actions</div>
+          <div style="margin-top:10px; color:var(--muted); font-size:13px;">Batch approve or reject selected notes (future enhancement).</div>
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <button class="btn btn-primary" onclick="approveAllVisible()">Approve Visible</button>
+            <button class="btn btn-ghost" onclick="rejectAllVisible()">Reject Visible</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer style="color:var(--muted); font-size:13px; margin-top:8px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
+  </main>
+</div>
+
+<!-- Modal to view note -->
+<div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <div>
+        <h3 id="modalTitle">Note title</h3>
+        <div class="meta" id="modalMeta">Author — date</div>
+      </div>
+      <div>
+        <button class="btn btn-ghost" onclick="closeModal(event)"><i data-lucide="x"></i></button>
+      </div>
+    </div>
+    <div id="modalContent" style="white-space:pre-wrap; color:#0f1724; margin-top:12px;">Note content</div>
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+      <button class="btn btn-ghost" onclick="closeModal(event)">Close</button>
+      <button class="btn btn-primary" id="modalApproveBtn" onclick="">Approve</button>
+      <button class="btn btn-danger" id="modalRejectBtn" onclick="">Reject</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initialize lucide icons (UMD)
+  if (window.lucide && lucide.replace) lucide.replace();
+
+  function logout(){ location.href = 'index.html'; }
+
+  // Filter notes by text input
+  function filterNotes(){
+    const input = document.getElementById('globalSearch').value.toLowerCase();
+    const rows = document.querySelectorAll('#notesList .note-row');
+    rows.forEach(r=>{
+      const text = (r.dataset.title + ' ' + r.dataset.author + ' ' + r.dataset.date + ' ' + r.dataset.content).toLowerCase();
+      r.style.display = text.includes(input) ? '' : 'none';
+    });
+    updatePendingCounts();
+  }
+
+  // View note modal
+  function viewNote(row){
+    const backdrop = document.getElementById('modalBackdrop');
+    const title = row.dataset.title || '';
+    const author = row.dataset.author || '';
+    const date = row.dataset.date || '';
+    const content = row.dataset.content || '';
+
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalMeta').innerText = author + ' — uploaded ' + date;
+    document.getElementById('modalContent').innerText = content;
+
+    // wire modal approve/reject to this row
+    document.getElementById('modalApproveBtn').onclick = function(){ approveNote(Number(row.dataset.id), null, row); };
+    document.getElementById('modalRejectBtn').onclick = function(){ rejectNote(Number(row.dataset.id), null, row); };
+
+    openModal('modalBackdrop');
+  }
+
+  function closeModal(e){
+    // close only if clicking backdrop or close button
+    if (e && e.target && e.target.id !== 'modalBackdrop' && !e.target.closest('.modal')) return;
+    closeModal('modalBackdrop');
+  }
+
+  // Approve/reject stubs - in real app call server then update UI
+  function approveNote(id, btn=null, rowElement=null){
+    // find row if not provided
+    const row = rowElement || (btn && btn.closest ? btn.closest('.note-row') : document.querySelector('.note-row[data-id="'+id+'"]'));
+    if(!row) return alert('Note not found');
+    if(!confirm('Approve this note?')) return;
+    // Example UI update: remove from list and increment approved counter
+    row.remove();
+    incrementCounter('approved');
+    updatePendingCounts();
+    alert('Approved note #' + id + '. Implement server call to persist.');
+    closeModal({target:document.getElementById('modalBackdrop')});
+  }
+
+  function rejectNote(id, btn=null, rowElement=null){
+    const row = rowElement || (btn && btn.closest ? btn.closest('.note-row') : document.querySelector('.note-row[data-id="'+id+'"]'));
+    if(!row) return alert('Note not found');
+    if(!confirm('Reject this note?')) return;
+    row.remove();
+    incrementCounter('rejected');
+    updatePendingCounts();
+    alert('Rejected note #' + id + '. Implement server call to persist and record reason.');
+    closeModal({target:document.getElementById('modalBackdrop')});
+  }
+
+  function incrementCounter(type){
+    const pendingEl = document.getElementById('pendingCount');
+    const approvedEl = document.getElementById('approvedCount');
+    const rejectedEl = document.getElementById('rejectedCount');
+
+    let pending = Number(pendingEl.innerText || 0);
+    let approved = Number(approvedEl.innerText || 0);
+    let rejected = Number(rejectedEl.innerText || 0);
+
+    if(type === 'approved'){ approved++; }
+    if(type === 'rejected'){ rejected++; }
+    // decrease pending if > 0
+    if(pending > 0) pending--;
+
+    pendingEl.innerText = pending;
+    approvedEl.innerText = approved;
+    rejectedEl.innerText = rejected;
+
+    // summary table
+    document.getElementById('summaryPending').innerText = pending;
+    document.getElementById('summaryApproved').innerText = approved;
+    document.getElementById('summaryRejected').innerText = rejected;
+  }
+
+  function updatePendingCounts(){
+    const visible = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none').length;
+    const totalApproved = Number(document.getElementById('approvedCount').innerText || 0);
+    const totalRejected = Number(document.getElementById('rejectedCount').innerText || 0);
+    document.getElementById('pendingCount').innerText = visible;
+    document.getElementById('summaryPending').innerText = visible;
+    document.getElementById('summaryApproved').innerText = totalApproved;
+    document.getElementById('summaryRejected').innerText = totalRejected;
+  }
+
+  // Batch actions (visible only)
+  function approveAllVisible(){
+    if(!confirm('Approve all visible notes?')) return;
+    const visibleRows = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none');
+    visibleRows.forEach(r=>{
+      r.remove();
+      incrementCounter('approved');
+    });
+    updatePendingCounts();
+    alert('Approved visible notes. Implement server batch call.');
+  }
+
+  function rejectAllVisible(){
+    if(!confirm('Reject all visible notes?')) return;
+    const visibleRows = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none');
+    visibleRows.forEach(r=>{
+      r.remove();
+      incrementCounter('rejected');
+    });
+    updatePendingCounts();
+    alert('Rejected visible notes. Implement server batch call.');
+  }
+
+  function exportNotes(){
+    // Simple export of visible notes as CSV (client-side)
+    const rows = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none');
+    if(rows.length === 0){ alert('No notes to export'); return; }
+    const csv = ['id,title,author,date,content'].concat(rows.map(r => {
+      const id = r.dataset.id || '';
+      const title = (r.dataset.title||'').replace(/"/g,'""');
+      const author = (r.dataset.author||'').replace(/"/g,'""');
+      const date = r.dataset.date || '';
+      const content = (r.dataset.content||'').replace(/"/g,'""');
+      return `"${id}","${title}","${author}","${date}","${content}"`;
+    })).join('\n');
+
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'notes_export.csv'; document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // Initialize counters based on existing notes
+  (function init(){
+    const totalVisible = document.querySelectorAll('#notesList .note-row').length;
+    document.getElementById('pendingCount').innerText = totalVisible;
+    document.getElementById('summaryPending').innerText = totalVisible;
+  })();
+</script>
+
+<!-- External admin script placeholder -->
+<script src="scripts/admin.js"></script>
+<script src="js/admin-modals.js"></script>
+</body>
+</html>

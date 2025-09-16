@@ -28,7 +28,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override
@@ -51,12 +51,8 @@ public class UserPrincipal implements UserDetails {
         return user.isEnabled();
     }
 
-    public String getFullName() {
-        return user.getFullName();
-    }
-
-    public boolean isActive() {
-        return user.getIsActive();
+    public String getName() {
+        return user.getName();
     }
 
     public User getUser() {

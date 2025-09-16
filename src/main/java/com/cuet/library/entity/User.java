@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -15,60 +14,40 @@ public class User implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "User_ID")
     private Long id;
     
-    @Column(unique = true, nullable = false)
-    private String studentId;
+    @Column(name = "Name", nullable = false)
+    private String name;
     
-    @Column(nullable = false)
-    private String username;
-    
-    @Column(unique = true, nullable = false)
+    @Column(name = "E-mail", unique = true, nullable = false)
     private String email;
     
-    @Column(nullable = false)
-    private String password;
-    
-    @Column(nullable = false)
-    private String fullName;
-    
+    @Column(name = "Department")
     private String department;
     
-    private String session;
+    @Column(name = "Password", nullable = false)
+    private String password;
     
     @Enumerated(EnumType.STRING)
     private Role role = Role.STUDENT;
     
     private Boolean enabled = true;
     
-    private Boolean isActive = true;
-    
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
-    
     public enum Role {
-        STUDENT, LIBRARIAN, ADMIN
+        STUDENT, ADMIN
     }
     
     // Constructors
     public User() {}
     
-    public User(String studentId, String fullName, String email, String password, String department, String session) {
-        this.studentId = studentId;
-        this.username = studentId; // Use studentId as username
-        this.fullName = fullName;
+    public User(String name, String email, String password, String department) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.department = department;
-        this.session = session;
         this.role = Role.STUDENT;
         this.enabled = true;
-        this.isActive = true;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
     
     // UserDetails implementation
@@ -84,7 +63,7 @@ public class User implements UserDetails {
     
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
     
     @Override
@@ -116,16 +95,12 @@ public class User implements UserDetails {
         this.id = id;
     }
     
-    public String getStudentId() {
-        return studentId;
+    public String getName() {
+        return name;
     }
     
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
     
     public String getEmail() {
@@ -140,28 +115,12 @@ public class User implements UserDetails {
         this.password = password;
     }
     
-    public String getFullName() {
-        return fullName;
-    }
-    
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-    
     public String getDepartment() {
         return department;
     }
     
     public void setDepartment(String department) {
         this.department = department;
-    }
-    
-    public String getSession() {
-        return session;
-    }
-    
-    public void setSession(String session) {
-        this.session = session;
     }
     
     public Role getRole() {
@@ -174,39 +133,5 @@ public class User implements UserDetails {
     
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-    
-    public Boolean getIsActive() {
-        return isActive;
-    }
-    
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-    
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    
-    // Additional utility methods
-    public String getName() {
-        return fullName;
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
     }
 }

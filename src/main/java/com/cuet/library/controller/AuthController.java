@@ -24,37 +24,38 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
-            String jwt = authService.authenticateUser(loginRequest.getStudentId(), loginRequest.getPassword());
+            String jwt = authService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
             User user = authService.getCurrentUser();
-            
-            return ResponseEntity.ok(new JwtResponse(jwt, user.getStudentId(), user.getFullName(), user.getRole()));
+            return ResponseEntity.ok(new JwtResponse(jwt, user.getEmail(), user.getName(), user.getRole()));
+        } catch (org.springframework.security.authentication.BadCredentialsException ex) {
+            // Incorrect email or password
+            System.err.println("Login failed: bad credentials for email " + loginRequest.getEmail());
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
+                                 .body("Invalid email or password");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid credentials");
+            // Unexpected errors
+            e.printStackTrace();
+            return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Authentication error: " + e.getMessage());
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         try {
-            if (userService.existsByStudentId(registerRequest.getStudentId())) {
-                return ResponseEntity.badRequest().body("Student ID is already taken!");
-            }
-
             if (userService.existsByEmail(registerRequest.getEmail())) {
                 return ResponseEntity.badRequest().body("Email is already in use!");
             }
-
-            User user = authService.registerUser(
-                registerRequest.getStudentId(),
-                registerRequest.getFullName(),
+            // Register new user
+            authService.registerUser(
+                registerRequest.getName(),
                 registerRequest.getEmail(),
                 registerRequest.getPassword(),
-                registerRequest.getDepartment(),
-                registerRequest.getSession()
+                registerRequest.getDepartment()
             );
-
             return ResponseEntity.ok("User registered successfully");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
         }
     }

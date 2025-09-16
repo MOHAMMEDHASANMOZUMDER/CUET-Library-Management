@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Prebookings - CUET Library Admin</title>
+
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="css/admin-modals.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        :root{
+            --bg:#f4f6f9; --card:#fff; --accent:#2d6a38; --muted:#64748b; --success:#059669; --danger:#dc2626;
+            --glass: rgba(255,255,255,0.6);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color-scheme: light;
+        }
+        html,body{height:100%;margin:0;background:var(--bg);color:#0f1724;}
+        .admin-layout{display:flex;min-height:100vh}
+        .sidebar{
+            width:260px;background:var(--accent);color:#e6edf3;padding:28px 18px;display:flex;flex-direction:column;gap:18px;
+        }
+        .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+        .nav{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+        .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#cfe7ff;text-decoration:none;font-size:14px}
+        .nav a.active, .nav a:hover{background:rgba(255,255,255,0.05);color:#fff}
+        .small{font-size:12px;color:#bcd8cc;margin-top:auto}
+
+        .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:16px}
+        .main-header{display:flex;justify-content:space-between;align-items:center}
+        .search{display:flex;gap:10px;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.04);min-width:300px}
+        .search input{border:0;outline:0;width:100%;font-size:14px;background:transparent}
+
+        .page-title{display:flex;flex-direction:column;gap:6px}
+        .page-title h1{margin:0;font-size:20px}
+        .meta{color:var(--muted);font-size:13px}
+
+        .controls{display:flex;gap:10px;align-items:center}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;border:0}
+        .btn-primary{background:#0ea5a3;color:#fff}
+        .btn-ghost{background:transparent;border:1px solid #e6eef2;color:#0f1724}
+        .btn-small{padding:6px 8px;font-size:12px;border-radius:6px}
+        .btn-danger{background:var(--danger);color:#fff}
+
+        .card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 8px 24px rgba(12,24,48,0.06)}
+        .table-container{overflow:auto}
+        table{width:100%;border-collapse:collapse;font-size:14px}
+        table th, table td{padding:12px 10px;text-align:left;border-bottom:1px solid #eef2f6;vertical-align:middle}
+        table th{font-weight:600;color:#334155}
+
+        .badge{padding:6px 9px;border-radius:999px;font-size:12px;font-weight:700;display:inline-block}
+        .badge-pending{background:#fff7ed;color:#c2410c;border:1px solid #ffe7c2}
+        .badge-approved{background:#ecfdf5;color:#047857;border:1px solid #d1fae5}
+        .badge-rejected{background:#fff1f2;color:#9f1239;border:1px solid #ffdce0}
+        .badge-expired{background:#f8fafc;color:#6b7280;border:1px solid #e6eef2}
+
+        .muted{color:var(--muted);font-size:13px}
+
+        .row-actions{display:flex;gap:8px}
+
+        .filters{display:flex;gap:8px;align-items:center}
+        .filters select{padding:8px;border-radius:8px;border:1px solid #e6eef2;background:#fff}
+
+        .note{font-size:13px;color:#475569}
+
+        @media (max-width:980px){
+            .sidebar{display:none}
+            .search{min-width:unset}
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar" aria-label="Admin navigation">
+            <div class="brand">
+                <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
+                <div>
+                    <div style="font-size:15px">CUET Library Admin</div>
+                    <div style="font-size:12px;color:#9fb6cc">Management Console</div>
+                </div>
+            </div>
+
+            <nav class="nav" role="navigation">
+                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
+                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
+                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
+                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
+                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
+                <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+            </nav>
+
+            <div class="small">Signed in as <strong>Admin</strong></div>
+        </aside>
+
+        <main class="main">
+            <div class="main-header">
+                <div class="page-title">
+                    <h1>Prebookings Management</h1>
+                    <div class="meta">Review pending reservations, approve pickups, or auto-reject expired holds (3 days)</div>
+                </div>
+
+                <div style="display:flex;gap:12px;align-items:center;">
+                    <div class="search" role="search">
+                        <i data-lucide="search"></i>
+                        <input id="search" placeholder="Search student, book, id..." />
+                    </div>
+                    <div class="controls">
+                        <div class="filters">
+                            <select id="statusFilter" aria-label="Filter status">
+                                <option value="all">All statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="expired">Expired</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-ghost" onclick="location.href='admin.html'">Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card table-container">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <div style="font-weight:700;font-size:15px;display:flex;gap:8px;align-items:center"><i data-lucide="calendar"></i> Prebookings</div>
+                        <div class="muted">Manage holds and pickup confirmations</div>
+                    </div>
+                    <div class="muted">Auto-reject pending holds older than 3 days</div>
+                </div>
+
+                <table id="prebookTable" aria-label="Prebookings list">
+                    <thead>
+                        <tr>
+                            <th>Ref</th>
+                            <th>Student</th>
+                            <th>Book</th>
+                            <th>Pickup Date</th>
+                            <th>Status</th>
+                            <th style="min-width:200px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample rows. In real app populate server-side or via API -->
+                        <tr data-id="1" data-status="pending" data-pickup="2025-02-01">
+                            <td>#PB-001</td>
+                            <td>Fatima Rahman (2204089)</td>
+                            <td>Artificial Intelligence</td>
+                            <td class="pickup">2025-02-01</td>
+                            <td class="status"><span class="badge badge-pending">Pending</span></td>
+                            <td class="row-actions">
+                                <button class="btn btn-primary btn-small" data-action="approve">Approve</button>
+                                <button class="btn btn-ghost btn-small" data-action="reject">Reject</button>
+                                <button class="btn btn-small" data-action="note" title="View details"><i data-lucide="info"></i> Details</button>
+                            </td>
+                        </tr>
+
+                        <tr data-id="2" data-status="pending" data-pickup="2025-02-03">
+                            <td>#PB-002</td>
+                            <td>Ali Hassan</td>
+                            <td>Database Systems</td>
+                            <td class="pickup">2025-02-03</td>
+                            <td class="status"><span class="badge badge-pending">Pending</span></td>
+                            <td class="row-actions">
+                                <button class="btn btn-primary btn-small" data-action="approve">Approve</button>
+                                <button class="btn btn-ghost btn-small" data-action="reject">Reject</button>
+                                <button class="btn btn-small" data-action="note"><i data-lucide="info"></i> Details</button>
+                            </td>
+                        </tr>
+
+                        <tr data-id="3" data-status="approved" data-pickup="2025-01-18">
+                            <td>#PB-003</td>
+                            <td>Mohammad Hasan</td>
+                            <td>Computer Networks</td>
+                            <td class="pickup">2025-01-18</td>
+                            <td class="status"><span class="badge badge-approved">Approved</span></td>
+                            <td class="row-actions">
+                                <button class="btn btn-ghost btn-small" data-action="view">View</button>
+                            </td>
+                        </tr>
+
+                        <tr data-id="4" data-status="rejected" data-pickup="2025-01-10">
+                            <td>#PB-004</td>
+                            <td>Sazid Hossan</td>
+                            <td>Operating Systems</td>
+                            <td class="pickup">2025-01-10</td>
+                            <td class="status"><span class="badge badge-rejected">Rejected</span></td>
+                            <td class="row-actions">
+                                <button class="btn btn-ghost btn-small" data-action="view">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="note">Tip: Use the filter or search to quickly find reservations. Expired holds are auto-rejected after 3 days.</div>
+                <div class="muted">&copy; 2025 CUET Library Management System</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        if (window.lucide) lucide.replace();
+
+        // Utility: parse date (YYYY-MM-DD) to midnight UTC time
+        function parseDateYMD(s){
+            const [y,m,d] = s.split('-').map(Number);
+            return new Date(Date.UTC(y,m-1,d));
+        }
+
+        // Update a row status visually and update data-status attr
+        function setRowStatus(row, status, reason) {
+            row.dataset.status = status;
+            const statusCell = row.querySelector('.status');
+            statusCell.innerHTML = '';
+            let span = document.createElement('span');
+            span.classList.add('badge');
+            if (status === 'pending') { span.classList.add('badge-pending'); span.textContent = 'Pending'; }
+            else if (status === 'approved') { span.classList.add('badge-approved'); span.textContent = 'Approved'; }
+            else if (status === 'rejected') { span.classList.add('badge-rejected'); span.textContent = 'Rejected'; }
+            else if (status === 'expired') { span.classList.add('badge-expired'); span.textContent = 'Expired'; }
+            statusCell.appendChild(span);
+
+            // update actions availability
+            const approveBtn = row.querySelector('[data-action="approve"]');
+            const rejectBtn = row.querySelector('[data-action="reject"]');
+            if (approveBtn) approveBtn.disabled = (status !== 'pending');
+            if (rejectBtn) rejectBtn.disabled = (status !== 'pending');
+            if (reason){
+                const note = document.createElement('div');
+                note.className = 'muted';
+                note.style.marginTop = '6px';
+                note.textContent = reason;
+                // prevent duplicate notes
+                const existing = row.querySelector('.row-reason');
+                if (existing) existing.remove();
+                note.classList.add('row-reason');
+                statusCell.appendChild(note);
+            } else {
+                const existing = row.querySelector('.row-reason');
+                if (existing) existing.remove();
+            }
+        }
+
+        // Actions
+        async function approvePrebooking(row){
+            const id = row.dataset.id;
+            if (!confirm('Approve prebooking #' + id + '?')) return;
+            // TODO: perform server call e.g. fetch(`/api/prebookings/${id}/approve`, {method:'POST'})
+            setRowStatus(row, 'approved', 'Marked approved by admin.');
+        }
+
+        async function rejectPrebooking(row, reason){
+            const id = row.dataset.id;
+            if (!confirm('Reject prebooking #' + id + '?')) return;
+            // TODO: server call e.g. fetch(`/api/prebookings/${id}/reject`, {method:'POST', body: {reason}})
+            setRowStatus(row, 'rejected', reason ? reason : 'Rejected by admin.');
+        }
+
+        // Auto-reject: if pickup date older than 3 days ago and still pending => expire & reject
+        function runAutoExpire(){
+            const rows = Array.from(document.querySelectorAll('#prebookTable tbody tr'));
+            const now = new Date();
+            rows.forEach(row => {
+                const status = row.dataset.status;
+                if (status !== 'pending') return;
+                const pickup = row.dataset.pickup;
+                if (!pickup) return;
+                const pickupDate = parseDateYMD(pickup);
+                // compute difference in days between pickupDate and today
+                const diffMs = now - pickupDate;
+                const diffDays = Math.floor(diffMs / (1000*60*60*24));
+                if (diffDays > 3) {
+                    // auto-reject due to expiry
+                    setRowStatus(row, 'expired', 'Auto-rejected: pickup not taken within 3 days.');
+                    // TODO: notify server about expiry
+                }
+            });
+        }
+
+        // Search & filter
+        function applyFilters(){
+            const q = document.getElementById('search').value.trim().toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const rows = Array.from(document.querySelectorAll('#prebookTable tbody tr'));
+            rows.forEach(row => {
+                const text = (row.textContent || '').toLowerCase();
+                const status = row.dataset.status;
+                const matchesQuery = q === '' || text.includes(q);
+                const matchesStatus = statusFilter === 'all' || status === statusFilter;
+                row.style.display = (matchesQuery && matchesStatus) ? '' : 'none';
+            });
+        }
+
+        // Event delegation for row actions
+        document.querySelector('#prebookTable tbody').addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const row = btn.closest('tr');
+            const action = btn.dataset.action;
+            if (action === 'approve') approvePrebooking(row);
+            else if (action === 'reject') {
+                const reason = prompt('Reason for rejection (optional):', 'Not picked up.');
+                rejectPrebooking(row, reason);
+            }
+            else if (action === 'note' || action === 'view') {
+                alert('Open detail view for ' + row.dataset.id + ' (implement).');
+            }
+        });
+
+        // Wire search/filter inputs
+        document.getElementById('search').addEventListener('input', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            // parse pickup dates into data attributes for rows that show text only
+            document.querySelectorAll('#prebookTable tbody tr').forEach(r => {
+                const pickupCell = r.querySelector('.pickup');
+                if (pickupCell && !r.dataset.pickup) r.dataset.pickup = pickupCell.textContent.trim();
+            });
+
+            runAutoExpire();
+            applyFilters();
+
+            // Periodically re-run auto-expire (every hour)
+            setInterval(runAutoExpire, 1000*60*60);
+        });
+    </script>
+
+    <script src="scripts/admin.js"></script>
+    <script src="js/admin-modals.js"></script>
+</body>
+</html>

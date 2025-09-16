@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class BorrowService {
         }
 
         // Check if user has pending fines
-        BigDecimal pendingFines = fineRepository.getTotalPendingFinesByUser(user);
+        BigDecimal pendingFines = fineRepository.getTotalUnpaidFinesByUser(user);
         if (pendingFines != null && pendingFines.compareTo(BigDecimal.ZERO) > 0) {
             throw new RuntimeException("Please clear pending fines before borrowing");
         }
@@ -61,28 +62,15 @@ public class BorrowService {
         BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowRecordId)
             .orElseThrow(() -> new RuntimeException("Borrow record not found"));
 
-        if (borrowRecord.getStatus() != BorrowRecord.Status.BORROWED) {
-            throw new RuntimeException("Book is not currently borrowed");
+        if (borrowRecord.getReturnDate() != null) {
+            throw new RuntimeException("Book is already returned");
         }
 
-        borrowRecord.setReturnDate(LocalDate.now());
-        borrowRecord.setStatus(BorrowRecord.Status.RETURNED);
+        borrowRecord.returnBook();
 
         // Update book availability
         bookService.returnBook(borrowRecord.getBook().getId());
 
-        return borrowRecordRepository.save(borrowRecord);
-    }
-
-    public BorrowRecord renewBook(Long borrowRecordId) {
-        BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowRecordId)
-            .orElseThrow(() -> new RuntimeException("Borrow record not found"));
-
-        if (!borrowRecord.canRenew()) {
-            throw new RuntimeException("Book cannot be renewed");
-        }
-
-        borrowRecord.renew();
         return borrowRecordRepository.save(borrowRecord);
     }
 
@@ -91,7 +79,7 @@ public class BorrowService {
     }
 
     public List<BorrowRecord> getActiveBorrows(User user) {
-        return borrowRecordRepository.findByUserAndStatus(user, BorrowRecord.Status.BORROWED);
+        return borrowRecordRepository.findByUserAndReturnDateIsNull(user);
     }
 
     public List<BorrowRecord> getOverdueRecords() {
@@ -103,7 +91,7 @@ public class BorrowService {
     }
 
     public long getActiveBorrowCount() {
-        return borrowRecordRepository.countActiveBorrows();
+        return borrowRecordRepository.countByReturnDateIsNull();
     }
 
     @Scheduled(cron = "0 0 1 * * ?") // Run daily at 1 AM
@@ -111,10 +99,7 @@ public class BorrowService {
         List<BorrowRecord> overdueRecords = getOverdueRecords();
         
         for (BorrowRecord record : overdueRecords) {
-            if (record.getStatus() == BorrowRecord.Status.BORROWED) {
-                record.setStatus(BorrowRecord.Status.OVERDUE);
-                borrowRecordRepository.save(record);
-
+            if (record.getReturnDate() == null) {
                 // Create or update fine
                 createOrUpdateFine(record);
             }
@@ -122,23 +107,21 @@ public class BorrowService {
     }
 
     private void createOrUpdateFine(BorrowRecord borrowRecord) {
-        List<Fine> existingFines = fineRepository.findByUserAndStatus(
-            borrowRecord.getUser(), Fine.Status.PENDING);
+        List<Fine> existingFines = fineRepository.findByBorrowRecord(borrowRecord);
         
         Fine existingFine = existingFines.stream()
-            .filter(f -> f.getBorrowRecord().getId().equals(borrowRecord.getId()))
+            .filter(f -> !f.getPayment())
             .findFirst()
             .orElse(null);
 
-        long daysOverdue = borrowRecord.getDaysOverdue();
+        long daysOverdue = ChronoUnit.DAYS.between(borrowRecord.getDueDate(), LocalDate.now());
         BigDecimal fineAmount = DAILY_FINE_RATE.multiply(new BigDecimal(daysOverdue));
 
         if (existingFine != null) {
             existingFine.setAmount(fineAmount);
             fineRepository.save(existingFine);
         } else {
-            Fine fine = new Fine(borrowRecord.getUser(), borrowRecord, fineAmount, Fine.Type.OVERDUE);
-            fine.setDescription("Overdue fine for " + borrowRecord.getBook().getTitle());
+            Fine fine = new Fine(borrowRecord.getUser(), borrowRecord, fineAmount);
             fineRepository.save(fine);
         }
     }

@@ -59,9 +59,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/books/search", "/api/books/filter", "/api/books", "/api/books/{id}").permitAll()
-                .requestMatchers("/**").permitAll() // Allow static resources
+                .requestMatchers("/**").permitAll() // Allow static resources and other endpoints
                 .anyRequest().authenticated()
-            );
+            )
+            // Disable default form login to use REST API authentication
+            .formLogin(form -> form.disable());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public Page<User> searchUsers(String keyword, Pageable pageable) {
-        return userRepository.findByUsernameContainingIgnoreCase(keyword, pageable);
+        return userRepository.findByNameContainingIgnoreCase(keyword, pageable);
     }
 
     public List<User> findByRole(User.Role role) {
@@ -36,8 +36,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> findByStudentId(String studentId) {
-        return userRepository.findByStudentId(studentId);
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public User createUser(User user) {
@@ -53,11 +53,10 @@ public class UserService {
     public User updateUser(Long id, User user) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        existingUser.setUsername(user.getUsername());
+        existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());
         existingUser.setRole(user.getRole());
-        existingUser.setFullName(user.getFullName());
-        existingUser.setIsActive(user.getIsActive());
+        existingUser.setDepartment(user.getDepartment());
         return userRepository.save(existingUser);
     }
 
@@ -88,19 +87,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public boolean existsByStudentId(String studentId) {
-        return userRepository.existsByStudentId(studentId);
-    }
-
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
     public long getStudentCount() {
-        return userRepository.countStudents();
+        return userRepository.countByRole(User.Role.STUDENT);
     }
 
     public long getActiveStudentCount() {
-        return userRepository.countActiveStudents();
+        return userRepository.countByRoleAndEnabledTrue(User.Role.STUDENT);
     }
 }

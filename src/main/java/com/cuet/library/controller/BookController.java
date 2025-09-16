@@ -40,13 +40,12 @@ public class BookController {
     @GetMapping("/filter")
     public ResponseEntity<Page<Book>> filterBooks(
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) String department,
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String author,
             @RequestParam(required = false) Boolean available,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(bookService.findBooksWithFilters(title, department, category, available, pageable));
+        return ResponseEntity.ok(bookService.findBooksWithFilters(title, author, available, pageable));
     }
 
     @GetMapping("/{id}")
@@ -61,18 +60,13 @@ public class BookController {
         return ResponseEntity.ok(bookService.findAvailableBooks());
     }
 
-    @GetMapping("/department/{department}")
-    public ResponseEntity<List<Book>> getBooksByDepartment(@PathVariable String department) {
-        return ResponseEntity.ok(bookService.findByDepartment(department));
-    }
-
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<Book>> getBooksByCategory(@PathVariable String category) {
-        return ResponseEntity.ok(bookService.findByCategory(category));
+    @GetMapping("/author/{author}")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author) {
+        return ResponseEntity.ok(bookService.findByAuthor(author));
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         try {
             Book savedBook = bookService.createBook(book);
@@ -83,7 +77,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
         try {
             book.setId(id);
@@ -95,7 +89,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteBook(@PathVariable Long id) {
         try {
             bookService.deleteBook(id);

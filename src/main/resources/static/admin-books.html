@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Manage Books - CUET Library Admin</title>
+
+<link rel="stylesheet" href="styles/main.css" />
+<link rel="stylesheet" href="css/admin-modals.css" />
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<!-- Removed shared modal script; inlining page-specific modal logic below -->
+
+<style>
+  :root{
+    --sidebar:#047619; --accent:#0ea5a3; --bg:#f4f6f9; --muted:#64748b; --card:#fff;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:#0f1724;}
+  .admin-layout{display:flex;min-height:100vh;}
+  .sidebar{width:260px;background:var(--sidebar);color:#e6edf3;padding:28px 20px;box-shadow:2px 0 8px rgba(2,6,23,0.12);display:flex;flex-direction:column;gap:20px;}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+  .brand img{width:36px;height:36px;border-radius:6px}
+  .nav{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+  .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#cfe7ff;text-decoration:none;font-size:14px}
+  .nav a.active,.nav a:hover{background:rgba(255,255,255,0.04);color:#fff}
+  .small{font-size:12px;color:#97a6b7;margin-top:auto}
+
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .main-header{display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .search{flex:1;display:flex;gap:12px;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .search input{border:0;outline:0;width:100%;font-size:14px;background:transparent}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;border:0}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:transparent;color:#0f1724;border:1px solid #e6eef2}
+  .btn-danger{background:#ef4444;color:#fff}
+  .btn-small{padding:6px 8px;font-size:12px;border-radius:6px}
+  .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
+  .title{display:flex;align-items:center;gap:10px;font-weight:600;color:#0f1724}
+
+  .section-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .table-container{overflow:auto;background:var(--card);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
+  table.admin-table{width:100%;border-collapse:collapse;font-size:14px}
+  table.admin-table th, table.admin-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #eef2f6}
+  table.admin-table th{font-weight:600;color:#334155;background:transparent}
+  .actions button{margin-right:6px}
+
+  .badge{padding:6px 8px;border-radius:999px;font-size:12px;font-weight:600;display:inline-block}
+  .badge-available{background:#ecfdf5;color:#047857;border:1px solid #d1fae5}
+  .badge-issued{background:#fff7ed;color:#c2410c;border:1px solid #ffe7c2}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+}
+
+.modal {
+  width: 720px;
+  max-width: 94%;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 20px 60px rgba(2,6,23,0.35);
+  z-index: 9999;
+}
+
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-row{display:flex;flex-direction:column;gap:6px}
+  label{font-size:13px;color:#1f2937;font-weight:600}
+  input[type="text"], input[type="number"], select, textarea{padding:10px;border-radius:8px;border:1px solid #e6eef2;background:#fff;font-size:14px;outline:none}
+  textarea{resize:vertical;min-height:90px}
+  .file-input{display:flex;gap:10px;align-items:center}
+  .cover-preview{width:72px;height:96px;border-radius:6px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#64748b;font-weight:700}
+  .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+  .muted{font-size:13px;color:var(--muted)}
+
+  .note-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px dashed #f1f5f9}
+  .note-meta{display:flex;gap:10px;align-items:center}
+
+  @media(max-width:980px){
+    .cards-grid{grid-template-columns:repeat(2,1fr)}
+    .section-grid{grid-template-columns:1fr}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+  <div class="admin-layout">
+   <aside class="sidebar" aria-label="Admin navigation">
+      <div class="brand">
+        <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
+        <div>
+          <div style="font-size:15px">CUET Library Admin</div>
+          <div style="font-size:12px;color:#9fb6cc">Management Console</div>
+        </div>
+      </div>
+      <nav class="nav" role="navigation">
+        <a href="admin.html"></i> Dashboard</a>
+        <a href="admin-books.html" class="active"></i> Manage Books</a>
+        <a href="admin-prebook.html"></i> Prebookings</a>
+        <a href="admin-fines.html"></i> Fines</a>
+        <a href="admin-notes.html"></i> Notes Moderation</a>
+        <a href="admin-settings.html"></i> Settings</a>
+      </nav>
+      <div class="small">Signed in as <strong>Admin</strong></div>
+    </aside>
+
+    <main class="main">
+      <div class="main-header">
+        <div style="display:flex;gap:16px;align-items:center;">
+          <h1 style="margin:0;font-size:20px;">Manage Books</h1>
+          <div class="muted">Add, edit and monitor library book inventory</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="search" style="max-width:420px;">
+            <i data-lucide="search"></i>
+            <input id="globalSearch" placeholder="Search books, authors, ISBN..." />
+          </div>
+          <button class="btn btn-ghost" onclick="logout()">Log out</button>
+        </div>
+      </div>
+
+      <div class="section-grid">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="table-container">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <div class="title"><i data-lucide="book"></i> Books Inventory</div>
+              <div>
+                <button class="btn btn-primary btn-small" onclick="openAddModal()"><i data-lucide="plus"></i> Add Book</button>
+              </div>
+            </div>
+            <table class="admin-table" aria-label="Manage books" id="booksTable">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Title</th><th>Author</th><th>ISBN</th><th>Department</th><th>Copies</th><th>Available</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-id="1">
+                  <td>1</td>
+                  <td>Database Management Systems</td>
+                  <td>Raghu Ramakrishnan</td>
+                  <td>978-0123456789</td>
+                  <td>CSE</td>
+                  <td>3</td>
+                  <td><span class="badge badge-available">3</span></td>
+                  <td class="actions">
+                    <button class="btn btn-ghost btn-small" onclick="openEdit(1)"><i data-lucide="edit-2"></i> Edit</button>
+                    <button class="btn btn-danger btn-small" onclick="deleteBook(1)"><i data-lucide="trash-2"></i> Delete</button>
+                  </td>
+                </tr>
+                <tr data-id="2">
+                  <td>2</td>
+                  <td>Operating System Concepts</td>
+                  <td>Silberschatz</td>
+                  <td>978-0987654321</td>
+                  <td>CSE</td>
+                  <td>5</td>
+                  <td><span class="badge badge-issued">0</span></td>
+                  <td class="actions">
+                    <button class="btn btn-ghost btn-small" onclick="openEdit(2)"><i data-lucide="edit-2"></i> Edit</button>
+                    <button class="btn btn-danger btn-small" onclick="deleteBook(2)"><i data-lucide="trash-2"></i> Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="title"><i data-lucide="clock"></i> Recent Additions</div>
+            <div style="margin-top:10px;color:#475569;font-size:13px;">New books added this week</div>
+            <div style="margin-top:12px;">
+              <div class="note-row">
+                <div class="note-meta">
+                  <div style="width:56px;height:40px;background:#eef2ff;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#0f1724;font-weight:700;">DB</div>
+                  <div>
+                    <div style="font-weight:600">Advanced Databases</div>
+                    <div style="font-size:12px;color:var(--muted)">added 2025-01-20</div>
+                  </div>
+                </div>
+                <div class="muted">Copies: 4</div>
+              </div>
+              <div class="note-row">
+                <div class="note-meta">
+                  <div style="width:56px;height:40px;background:#fff7ed;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6b2135;font-weight:700;">AI</div>
+                  <div>
+                    <div style="font-weight:600">Intro to AI</div>
+                    <div style="font-size:12px;color:var(--muted)">added 2025-01-19</div>
+                  </div>
+                </div>
+                <div class="muted">Copies: 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="title"><i data-lucide="alert-triangle"></i> Low Stock</div>
+            <div style="margin-top:10px;color:#475569;font-size:13px;">Titles with low available copies</div>
+            <div style="margin-top:12px;">
+              <div class="note-row">
+                <div>
+                  <div style="font-weight:600">Computer Networks</div>
+                  <div style="font-size:12px;color:var(--muted)">Available: 1 — Department: CSE</div>
+                </div>
+                <div><button class="btn btn-primary btn-small" onclick="openEditByTitle('Computer Networks')">Restock</button></div>
+              </div>
+              <div class="note-row">
+                <div>
+                  <div style="font-weight:600">Advanced Calculus</div>
+                  <div style="font-size:12px;color:var(--muted)">Available: 0 — Department: Math</div>
+                </div>
+                <div><button class="btn btn-primary btn-small" onclick="openEditByTitle('Advanced Calculus')">Restock</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer style="color:#94a3b8;font-size:13px;margin-top:8px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+    <div class="modal" id="modalWindow" role="document" aria-labelledby="modalTitle" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;gap:10px;align-items:center;">
+      <h3 id="modalTitle" style="margin:0;font-size:16px">Add New Book</h3>
+      <div class="muted" id="modalSub">Provide book metadata and inventory</div>
+    </div>
+    <button class="btn btn-ghost btn-small" type="button" aria-label="Close modal" onclick="closeModal('modalBackdrop')">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+
+  <form id="bookForm" style="margin-top:12px;">
+    <input type="hidden" id="editingId" />
+    <div class="form-grid">
+      <div class="form-row">
+        <label for="title">Title *</label>
+        <input id="title" type="text" placeholder="Book title" required />
+      </div>
+      <div class="form-row">
+        <label for="author">Author *</label>
+        <input id="author" type="text" placeholder="Author name" required />
+      </div>
+      <div class="form-row">
+        <label for="isbn">ISBN</label>
+        <input id="isbn" type="text" placeholder="e.g. 978-XXXXXXXXXX" />
+      </div>
+      <div class="form-row">
+        <label for="department">Department</label>
+        <select id="department">
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="ME">ME</option>
+          <option value="Math">Math</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemical">Chemical</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="copies">Total Copies *</label>
+        <input id="copies" type="number" min="0" value="1" required />
+      </div>
+      <div class="form-row">
+        <label for="available">Available Copies</label>
+        <input id="available" type="number" min="0" value="1" />
+        <div class="muted" style="font-size:12px;margin-top:6px">If left blank it will be set to Total Copies.</div>
+      </div>
+      <div class="form-row">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="available">Available</option>
+          <option value="issued">Issued</option>
+          <option value="reference">Reference Only</option>
+        </select>
+      </div>
+      <div class="form-row" style="grid-column:1 / -1;">
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Short description or notes (optional)"></textarea>
+      </div>
+      <div class="form-row">
+        <label>Cover (optional)</label>
+        <div class="file-input">
+          <div class="cover-preview" id="coverPreview">No</div>
+          <input id="cover" type="file" accept="image/*" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modalBackdrop')">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save Book</button>
+    </div>
+  </form>
+</div>
+  </div>
+
+<script>
+  if (window.lucide) lucide.createIcons();
+
+  // --- Inline modal helpers (isolated for this page) ---
+  let lastFocusedElement = null;
+  function openModal(modalId){
+    const m = document.getElementById(modalId);
+    if(!m) return;
+    lastFocusedElement = document.activeElement;
+    m.style.display='flex';
+    m.setAttribute('aria-hidden','false');
+    // focus first input
+    setTimeout(()=>{
+      const first = m.querySelector('input:not([type="hidden"]), select, textarea, button');
+      if(first) first.focus();
+    },30);
+  }
+  function closeModal(modalId){
+    const m = document.getElementById(modalId);
+    if(!m) return;
+    m.style.display='none';
+    m.setAttribute('aria-hidden','true');
+    if(lastFocusedElement && typeof lastFocusedElement.focus==='function'){
+      lastFocusedElement.focus();
+    }
+  }
+  // Escape + backdrop
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape') closeModal('modalBackdrop');
+  });
+  document.addEventListener('click',e=>{
+    if(e.target && e.target.id==='modalBackdrop') closeModal('modalBackdrop');
+  });
+
+  // --- Page state ---
+  const modal = document.getElementById('modalBackdrop');
+  const modalWindow = document.getElementById('modalWindow');
+  const form = document.getElementById('bookForm');
+  const booksTable = document.getElementById('booksTable').querySelector('tbody');
+  let nextId = 3;
+
+  function openAddModal(){
+    document.getElementById('modalTitle').textContent = 'Add New Book';
+    document.getElementById('modalSub').textContent = 'Provide book metadata and inventory';
+    form.reset();
+    document.getElementById('editingId').value = '';
+    document.getElementById('coverPreview').textContent = 'No';
+    document.getElementById('coverPreview').style.background='';
+    openModal('modalBackdrop');
+  }
+
+  function openEdit(id){
+    const row = booksTable.querySelector(`tr[data-id="${id}"]`);
+    if(!row) return alert('Record not found');
+    document.getElementById('modalTitle').textContent = 'Edit Book';
+    document.getElementById('modalSub').textContent = 'Update book details';
+    document.getElementById('editingId').value = id;
+    const cells = row.children;
+    document.getElementById('title').value = cells[1].textContent.trim();
+    document.getElementById('author').value = cells[2].textContent.trim();
+    document.getElementById('isbn').value = cells[3].textContent.trim();
+    document.getElementById('department').value = cells[4].textContent.trim();
+    document.getElementById('copies').value = cells[5].textContent.trim();
+    const ava = cells[6].textContent.trim();
+    document.getElementById('available').value = isNaN(+ava) ? '' : +ava;
+    openModal('modalBackdrop');
+  }
+
+  // Using global modal escape key handling
+
+  document.getElementById('cover').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    const p = document.getElementById('coverPreview');
+    if(!file){
+      p.textContent='No';
+      p.style.background='';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      p.style.background = `url(${ev.target.result}) center/cover no-repeat`;
+      p.textContent='';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const id = document.getElementById('editingId').value;
+    const title = document.getElementById('title').value.trim();
+    const author = document.getElementById('author').value.trim();
+    const isbn = document.getElementById('isbn').value.trim();
+    const department = document.getElementById('department').value;
+    const copies = Math.max(0, parseInt(document.getElementById('copies').value || 0));
+    let available = document.getElementById('available').value;
+    available = available === '' ? copies : Math.max(0, parseInt(available || 0));
+    if(!title || !author) return alert('Title and Author are required');
+
+    if(id){
+      const row = booksTable.querySelector(`tr[data-id="${id}"]`);
+      if(!row) return alert('Record not found');
+      row.children[1].textContent = title;
+      row.children[2].textContent = author;
+      row.children[3].textContent = isbn;
+      row.children[4].textContent = department;
+      row.children[5].textContent = copies;
+      row.children[6].innerHTML = `<span class="badge ${available>0?'badge-available':'badge-issued'}">${available}</span>`;
+    } else {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-id', nextId);
+      tr.innerHTML = `
+        <td>${nextId}</td>
+        <td>${escapeHtml(title)}</td>
+        <td>${escapeHtml(author)}</td>
+        <td>${escapeHtml(isbn)}</td>
+        <td>${escapeHtml(department)}</td>
+        <td>${copies}</td>
+        <td><span class="badge ${available>0?'badge-available':'badge-issued'}">${available}</span></td>
+        <td class="actions">
+          <button class="btn btn-ghost btn-small" onclick="openEdit(${nextId})"><i data-lucide="edit-2"></i> Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteBook(${nextId})"><i data-lucide="trash-2"></i> Delete</button>
+        </td>`;
+      booksTable.prepend(tr);
+      nextId++;
+      if(window.lucide) lucide.createIcons();
+    }
+    closeModal('modalBackdrop');
+    updateStats();
+  });
+
+  function deleteBook(id){
+    if(!confirm('Delete book with ID: '+id+'?')) return;
+    const row = booksTable.querySelector(`tr[data-id="${id}"]`);
+    if(row) row.remove();
+    updateStats();
+  }
+
+  function openEditByTitle(title){
+    const rows = [...booksTable.querySelectorAll('tr')];
+    const found = rows.find(r => r.children[1].textContent.trim() === title);
+    if(found) openEdit(found.getAttribute('data-id'));
+    else alert('Title not found: '+title);
+  }
+
+  function logout(){ location.href='index.html'; }
+
+  function updateStats(){
+    const rows = [...booksTable.querySelectorAll('tr')];
+    const totalTitlesEl = document.getElementById('totalTitles');
+    const totalBooksEl = document.getElementById('totalBooks');
+    const availableInfoEl = document.getElementById('availableInfo');
+    if(!(totalTitlesEl && totalBooksEl && availableInfoEl)) return;
+    totalTitlesEl.textContent = rows.length;
+    let totalBooks = 0, avail = 0;
+    rows.forEach(r=>{
+      const copies = parseInt(r.children[5].textContent||0);
+      const available = parseInt(r.children[6].textContent||0);
+      totalBooks += copies;
+      avail += isNaN(available)?0:available;
+    });
+    totalBooksEl.textContent = totalBooks;
+    availableInfoEl.textContent = `${avail} available`;
+  }
+
+  function escapeHtml(text){
+    return (text+'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  document.getElementById('globalSearch').addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    [...booksTable.querySelectorAll('tr')].forEach(r=>{
+      const text = r.textContent.toLowerCase();
+      r.style.display = text.includes(q)?'':'none';
+    });
+  });
+
+  updateStats();
+
+  // End inline modal helpers
+</script>
+</body>
+</html>

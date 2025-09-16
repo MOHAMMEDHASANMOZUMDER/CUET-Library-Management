@@ -1,24 +1,24 @@
 package com.cuet.library.dto;
 
 public class LoginRequest {
-    private String studentId;
+    private String email;
     private String password;
 
     // Constructors
     public LoginRequest() {}
 
-    public LoginRequest(String studentId, String password) {
-        this.studentId = studentId;
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
     // Getters and Setters
-    public String getStudentId() {
-        return studentId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

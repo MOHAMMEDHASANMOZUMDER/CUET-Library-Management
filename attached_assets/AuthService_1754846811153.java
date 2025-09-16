@@ -32,8 +32,8 @@ public class AuthService {
 
     public User registerUser(String studentId, String name, String email, String password, 
                            String department, String session) {
-        User user = new User(studentId, name, email, password, department, session);
-        return userService.createUser(user);
+    User user = new User(studentId, name, email, password, department, session);
+    return userService.saveUser(user);
     }
 
     public User getCurrentUser() {
@@ -54,3 +54,5 @@ public class AuthService {
         return tokenProvider.getUsernameFromToken(token);
     }
 }
+
+// TODO: Ensure authenticateUser uses correct field (email or studentId) and matches frontend

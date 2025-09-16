@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - CUET Library</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
+                <span class="brand-text">CUET Library</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="books.html" class="nav-link">Books</a>
+                <a href="faq.html" class="nav-link active">FAQ</a>
+                <a href="about.html" class="nav-link">About</a>
+            </nav>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="register.html" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Frequently Asked Questions</h1>
+            <p class="page-description">Find answers to common questions about the CUET Library Management System</p>
+        </div>
+
+        <!-- Search FAQ -->
+        <div class="search-card">
+            <div class="card-header">
+                <h3><i data-lucide="search"></i> Search FAQ</h3>
+            </div>
+            <div class="search-form">
+                <input type="text" id="faq-search" placeholder="Search for questions..." class="search-input">
+            </div>
+        </div>
+
+        <!-- FAQ Categories -->
+        <div class="faq-categories">
+            <button class="category-btn active" data-category="all">All Questions</button>
+            <button class="category-btn" data-category="account">Account & Registration</button>
+            <button class="category-btn" data-category="books">Books & Borrowing</button>
+            <button class="category-btn" data-category="fines">Fines & Payments</button>
+            <button class="category-btn" data-category="notes">Study Notes</button>
+            <button class="category-btn" data-category="technical">Technical Issues</button>
+        </div>
+
+        <!-- FAQ Items -->
+        <div class="faq-container" id="faq-container">
+            <!-- Account & Registration -->
+            <div class="faq-item" data-category="account">
+                <div class="faq-question">
+                    <h3>How do I register for the library system?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To register for the CUET Library Management System:</p>
+                    <ol>
+                        <li>Click on the "Register" button on the homepage</li>
+                        <li>Fill in your Student ID, full name, and email address</li>
+                        <li>Select your department and academic session</li>
+                        <li>Create a secure password</li>
+                        <li>Submit the form and wait for account verification</li>
+                    </ol>
+                    <p>Your account will be activated within 24 hours after verification by the library staff.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="account">
+                <div class="faq-question">
+                    <h3>I forgot my password. How can I reset it?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To reset your password:</p>
+                    <ol>
+                        <li>Go to the login page</li>
+                        <li>Click on "Forgot Password?"</li>
+                        <li>Enter your Student ID or email address</li>
+                        <li>Check your email for reset instructions</li>
+                        <li>Follow the link to create a new password</li>
+                    </ol>
+                    <p>If you don't receive the email within 10 minutes, check your spam folder or contact the library staff.</p>
+                </div>
+            </div>
+
+            <!-- Books & Borrowing -->
+            <div class="faq-item" data-category="books">
+                <div class="faq-question">
+                    <h3>How many books can I borrow at once?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Students can borrow up to <strong>5 books</strong> at any given time. This limit includes:</p>
+                    <ul>
+                        <li>Regular textbooks and reference materials</li>
+                        <li>Research journals and publications</li>
+                        <li>Digital resources (if applicable)</li>
+                    </ul>
+                    <p>Once you return a book, you can immediately borrow another one, provided you don't have any outstanding fines.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="books">
+                <div class="faq-question">
+                    <h3>How long can I keep a borrowed book?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The standard borrowing period is <strong>30 days</strong> from the date of borrowing. You can:</p>
+                    <ul>
+                        <li>Renew books up to 2 times (total 90 days maximum)</li>
+                        <li>Renew online through your dashboard</li>
+                        <li>Renew only if no other student has pre-booked the book</li>
+                    </ul>
+                    <p>Reference books and high-demand textbooks may have shorter borrowing periods.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="books">
+                <div class="faq-question">
+                    <h3>How does the pre-booking system work?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The pre-booking system allows you to reserve books before visiting the library:</p>
+                    <ol>
+                        <li>Search for the book you want</li>
+                        <li>Click "Pre-book" if available</li>
+                        <li>The book will be reserved for 24 hours</li>
+                        <li>Visit the library within this time to collect it</li>
+                        <li>If not collected, the reservation expires automatically</li>
+                    </ol>
+                    <p>You can pre-book up to 5 books simultaneously.</p>
+                </div>
+            </div>
+
+            <!-- Fines & Payments -->
+            <div class="faq-item" data-category="fines">
+                <div class="faq-question">
+                    <h3>How are library fines calculated?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Library fines are calculated as follows:</p>
+                    <ul>
+                        <li><strong>Overdue books:</strong> ৳5 per day per book</li>
+                        <li><strong>Lost books:</strong> Full replacement cost + ৳100 processing fee</li>
+                        <li><strong>Damaged books:</strong> Repair cost or replacement cost</li>
+                    </ul>
+                    <p>Fines start accumulating from the day after the due date. Weekend days and holidays are included in the calculation.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="fines">
+                <div class="faq-question">
+                    <h3>How can I pay my library fines online?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can pay fines online using mobile banking:</p>
+                    <ol>
+                        <li>Log into your student dashboard</li>
+                        <li>Go to "Pay Fines" section</li>
+                        <li>Select your payment method (bKash, Nagad, Rocket)</li>
+                        <li>Enter the payment amount</li>
+                        <li>Complete the transaction using your mobile banking app</li>
+                        <li>Upload the transaction screenshot for verification</li>
+                    </ol>
+                    <p>Payments are usually processed within 2-4 hours during working days.</p>
+                </div>
+            </div>
+
+            <!-- Study Notes -->
+            <div class="faq-item" data-category="notes">
+                <div class="faq-question">
+                    <h3>How can I upload study notes?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To upload study notes:</p>
+                    <ol>
+                        <li>Go to the "Notes" section in your dashboard</li>
+                        <li>Click "Upload New Note"</li>
+                        <li>Fill in the title and description</li>
+                        <li>Select the related book/subject</li>
+                        <li>Upload your PDF file (max 10MB)</li>
+                        <li>Submit for admin review</li>
+                    </ol>
+                    <p>Notes will be available for download after admin approval, usually within 2-3 working days.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="notes">
+                <div class="faq-question">
+                    <h3>What file formats are accepted for notes?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Currently, we only accept <strong>PDF files</strong> for study notes with the following requirements:</p>
+                    <ul>
+                        <li>Maximum file size: 10MB</li>
+                        <li>Clear, readable content</li>
+                        <li>No copyrighted material without permission</li>
+                        <li>Original work or properly cited sources</li>
+                    </ul>
+                    <p>Files in other formats (Word, PowerPoint, images) should be converted to PDF before uploading.</p>
+                </div>
+            </div>
+
+            <!-- Technical Issues -->
+            <div class="faq-item" data-category="technical">
+                <div class="faq-question">
+                    <h3>The website is not loading properly. What should I do?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>If you're experiencing technical issues:</p>
+                    <ol>
+                        <li>Clear your browser cache and cookies</li>
+                        <li>Try using a different browser (Chrome, Firefox, Safari)</li>
+                        <li>Check your internet connection</li>
+                        <li>Disable browser extensions temporarily</li>
+                        <li>Try accessing from a different device</li>
+                    </ol>
+                    <p>If the problem persists, contact our technical support team at <strong>support@cuet.ac.bd</strong></p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="technical">
+                <div class="faq-question">
+                    <h3>Can I access the system from my mobile phone?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! The CUET Library Management System is fully responsive and works on:</p>
+                    <ul>
+                        <li>Smartphones (Android, iOS)</li>
+                        <li>Tablets and iPads</li>
+                        <li>Desktop computers</li>
+                        <li>Laptops</li>
+                    </ul>
+                    <p>All features are available on mobile devices, including book search, pre-booking, fine payment, and note downloads.</p>
+                </div>
+            </div>
+
+            <!-- General Questions -->
+            <div class="faq-item" data-category="all">
+                <div class="faq-question">
+                    <h3>What are the library operating hours?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>CUET Library operating hours:</p>
+                    <ul>
+                        <li><strong>Sunday to Thursday:</strong> 8:00 AM - 8:00 PM</li>
+                        <li><strong>Friday:</strong> 8:00 AM - 12:00 PM, 2:00 PM - 6:00 PM</li>
+                        <li><strong>Saturday:</strong> 9:00 AM - 5:00 PM</li>
+                    </ul>
+                    <p>The online system is available 24/7 for book searches, pre-booking, renewals, and fine payments.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="all">
+                <div class="faq-question">
+                    <h3>How do I contact library staff for help?</h3>
+                    <i data-lucide="chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can contact the library staff through:</p>
+                    <ul>
+                        <li><strong>Email:</strong> library@cuet.ac.bd</li>
+                        <li><strong>Phone:</strong> +880-31-714946</li>
+                        <li><strong>In-person:</strong> Visit the library help desk</li>
+                        <li><strong>Online:</strong> Use the "Help & Support" section</li>
+                    </ul>
+                    <p>For urgent issues, calling during library hours is the fastest way to get assistance.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <div class="contact-card">
+                <h3><i data-lucide="help-circle"></i> Still have questions?</h3>
+                <p>If you couldn't find the answer you're looking for, don't hesitate to contact us.</p>
+                <div class="contact-buttons">
+                    <a href="help.html" class="btn btn-primary">Contact Support</a>
+                    <a href="mailto:library@cuet.ac.bd" class="btn btn-outline">Send Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i data-lucide="book-open"></i>
+                        <span>CUET Library</span>
+                    </div>
+                    <p class="footer-text">
+                        Chittagong University of Engineering and Technology<br>
+                        Chattogram-4349, Bangladesh
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="books.html">Browse Books</a></li>
+                        <li><a href="login.html">Student Login</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                        <li><a href="help.html">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact</h3>
+                    <p class="footer-text">
+                        Email: library@cuet.ac.bd<br>
+                        Phone: +880-31-714946
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CUET Library Management System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/faq.js"></script>
+</body>
+</html>
