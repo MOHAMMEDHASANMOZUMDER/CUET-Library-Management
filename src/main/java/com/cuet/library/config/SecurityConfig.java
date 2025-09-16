@@ -57,9 +57,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/books/search", "/api/books/filter", "/api/books", "/api/books/{id}").permitAll()
-                .requestMatchers("/**").permitAll() // Allow static resources and other endpoints
+                .requestMatchers(
+                    "/", "/index.html", 
+                    "/login.html", "/register.html",
+                    "/styles/**", "/scripts/**", "/images/**", "/favicon.ico",
+                    "/api/auth/**",
+                    "/api/books/search", "/api/books/filter", "/api/books", "/api/books/{id}"
+                ).permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             // Disable default form login to use REST API authentication

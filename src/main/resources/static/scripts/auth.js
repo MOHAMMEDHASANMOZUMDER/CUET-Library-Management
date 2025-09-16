@@ -45,14 +45,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     const errorText = await resp.text();
                     throw new Error(errorText || 'Invalid credentials');
                 }
-                const data = await resp.json();
+                const data = await safeJson(resp);
 
-                // Store minimal auth details
+                // Store auth details
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userType', 'student');
-                localStorage.setItem('userId', email);
+                localStorage.setItem('userId', data.email || email);
                 localStorage.setItem('userName', data.name || 'Student');
+                localStorage.setItem('role', (data.role || 'STUDENT'));
 
+                // Verify token
+                const verify = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + data.token }});
+                if(!verify.ok){
+                    localStorage.clear();
+                    throw new Error('Token verification failed');
+                }
                 window.location.href = 'dashboard.html';
             } catch (err) {
                 alert(err.message || 'Login failed');
@@ -63,21 +70,39 @@ document.addEventListener('DOMContentLoaded', function() {
     // Admin login form
     const adminLoginForm = document.getElementById('admin-login-form');
     if (adminLoginForm) {
-        adminLoginForm.addEventListener('submit', function(e) {
+        adminLoginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const formData = new FormData(this);
             const email = formData.get('email');
             const password = formData.get('password');
-            
-            // Mock authentication - replace with actual API call if admins use backend auth later
-            if (email && password) {
-                localStorage.setItem('userType', 'admin');
-                localStorage.setItem('userId', email);
-                localStorage.setItem('userName', 'Library Admin');
-                window.location.href = 'admin.html';
-            } else {
-                alert('Please enter both Email and Password');
+            if(!email || !password){ alert('Please enter both Email and Password'); return; }
+            try {
+                const resp = await fetch('/api/auth/login', {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({ email, password })
+                });
+                if(!resp.ok){
+                    const t = await resp.text();
+                    throw new Error(t || 'Invalid credentials');
+                }
+                const data = await safeJson(resp);
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.email || email);
+                localStorage.setItem('userName', data.name || 'Admin');
+                localStorage.setItem('role', (data.role || 'ADMIN'));
+                localStorage.setItem('userType', (data.role === 'ADMIN') ? 'admin' : 'student');
+                // Verify token
+                const verify = await fetch('/api/auth/me', { headers: { 'Authorization':'Bearer '+data.token }});
+                if(!verify.ok){
+                    localStorage.clear();
+                    throw new Error('Token verification failed');
+                }
+                // Redirect based on role
+                if((data.role || '').toUpperCase()==='ADMIN') window.location.href='admin.html';
+                else window.location.href='dashboard.html';
+            } catch(err){
+                alert(err.message || 'Admin login failed');
             }
         });
     }
@@ -105,22 +130,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 department: formData.get('department')
             };
 
+            const statusEl = document.getElementById('register-status');
+            if(statusEl){ statusEl.style.display='none'; statusEl.textContent=''; }
             try {
                 const resp = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 if (!resp.ok) {
                     const text = await resp.text();
                     throw new Error(text || 'Registration failed');
                 }
-
-                alert('Registration successful! Please login with your credentials.');
-                window.location.href = 'login.html';
+                if(statusEl){
+                    statusEl.style.display='block';
+                    statusEl.style.color='#047857';
+                    statusEl.textContent='Registration successful! Redirecting to login...';
+                } else {
+                    alert('Registration successful! Please login with your credentials.');
+                }
+                setTimeout(()=>{ window.location.href='login.html'; }, 1000);
             } catch (err) {
-                alert(err.message || 'Registration failed');
+                if(statusEl){
+                    statusEl.style.display='block';
+                    statusEl.style.color='#dc2626';
+                    statusEl.textContent= err.message || 'Registration failed';
+                } else {
+                    alert(err.message || 'Registration failed');
+                }
             }
         });
     }
@@ -215,4 +252,12 @@ function applyAuthenticatedNavbar() {
             if (a.getAttribute('href') === current) a.classList.add('active');
         });
     }
+}
+
+// Safe JSON parse helper
+async function safeJson(resp){
+    const ct = resp.headers.get('Content-Type') || '';
+    if(ct.includes('application/json')) return resp.json();
+    const text = await resp.text();
+    try { return JSON.parse(text); } catch { return { raw: text }; }
 }

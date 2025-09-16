@@ -28,7 +28,6 @@ public class AuthController {
             User user = authService.getCurrentUser();
             return ResponseEntity.ok(new JwtResponse(jwt, user.getEmail(), user.getName(), user.getRole()));
         } catch (org.springframework.security.authentication.BadCredentialsException ex) {
-            // Incorrect email or password
             System.err.println("Login failed: bad credentials for email " + loginRequest.getEmail());
             return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
                                  .body("Invalid email or password");
