@@ -4,6 +4,7 @@
               <meta charset="UTF-8" />
               <meta name="viewport" content="width=device-width, initial-scale=1" />
               <title>CUET Library Management System</title>
+              <link rel="icon" type="image/png" href="images/cuet-logo.png">
 
               <!-- Existing stylesheet (kept) -->
               <link rel="stylesheet" href="styles/main.css" />
@@ -13,28 +14,40 @@
               <!-- Inline styles for newly added / adjusted classes to give a more professional look -->
               <style>
                 :root{
-                  --accent: #08BE27;
-                  --accent-dark: #0aa62b;
-                  --muted:#09ff00;
-                  --bg:#0f1724;
-                  --card:#0b1220;
-                  --glass: rgba(255,255,255,0.03);
+                  --accent: #3B82F6;
+                  --accent-dark: #2563EB;
+                  --accent-light: #60A5FA;
+                  --secondary: #10B981;
+                  --secondary-dark: #059669;
+                  --muted: #94A3B8;
+                  --bg-primary: #0F172A;
+                  --bg-secondary: #1E293B;
+                  --bg-tertiary: #334155;
+                  --card: #1E293B;
+                  --card-hover: #334155;
+                  --glass: rgba(255,255,255,0.05);
+                  --border: rgba(255,255,255,0.1);
+                  --text-primary: #F8FAFC;
+                  --text-secondary: #CBD5E1;
+                  --text-muted: #64748B;
                   --radius:12px;
                   --container:1200px;
                   --max-width:1100px;
                   --gap:18px;
                   --card-width:300px;
+                  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+                  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
                 }
 
                 html,body{
                   height:100%;
                   margin:0;
-                  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-                  background: linear-gradient(180deg, #071021 0%, #08162a 100%);
-                  color:#e6eef8;
+                  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+                  color: var(--text-primary);
                   -webkit-font-smoothing:antialiased;
                   -moz-osx-font-smoothing:grayscale;
-                  line-height:1.45;
+                  line-height:1.6;
                 }
 
                 .container{
@@ -58,15 +71,17 @@
                   position:sticky;
                   top:0;
                   z-index:40;
-                  background-color: #001A00;
-                  border-bottom:1px solid rgba(255,255,255,0.04);
+                  background: rgba(15, 23, 42, 0.95);
+                  backdrop-filter: blur(20px);
+                  border-bottom: 1px solid var(--border);
+                  box-shadow: var(--shadow);
                 }
                 .header .container{
                   display:flex;
                   align-items:center;
                   justify-content:space-between;
                   gap:var(--gap);
-                  padding:14px 20px;
+                  padding:16px 20px;
                   max-width:var(--max-width);
                 }
 
@@ -79,42 +94,55 @@
                   height:44px;
                   width:44px;
                   object-fit:contain;
-                  border-radius:8px;
-                  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-                  background:var(--glass);
+                  border-radius:10px;
+                  box-shadow: var(--shadow);
+                  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
                   padding:6px;
+                  transition: transform 0.2s ease;
+                }
+                .nav-brand .logo:hover{
+                  transform: scale(1.05);
                 }
                 .brand-text{
                   font-weight:700;
-                  font-size:18px;
-                  letter-spacing:0.2px;
-                  color: #fff;
+                  font-size:20px;
+                  letter-spacing:-0.5px;
+                  color: var(--text-primary);
+                  background: linear-gradient(135deg, var(--accent-light), var(--secondary));
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
                 }
 
                 .nav-links{
                   display:flex;
-                  gap:14px;
+                  gap:16px;
                   align-items:center;
                 }
                 .nav-link{
-                  color:#cfe9d1;
+                  color: var(--text-secondary);
                   text-decoration:none;
-                  padding:8px 10px;
-                  border-radius:8px;
-                  font-weight:600;
-                  transition:all .18s ease;
-                  font-size:14px;
+                  padding:10px 16px;
+                  border-radius:10px;
+                  font-weight:500;
+                  transition:all 0.2s ease;
+                  font-size:15px;
+                  position: relative;
                 }
-                .nav-link:hover{ color:#ffffff; background:rgba(255,255,255,0.03); transform:translateY(-1px);}
+                .nav-link:hover{ 
+                  color: var(--text-primary); 
+                  background: var(--glass); 
+                  transform:translateY(-1px);
+                }
                 .nav-link.active{
-                  color:var(--accent);
-                  background:linear-gradient(90deg, rgba(8,190,39,0.08), rgba(8,190,39,0.03));
-                  box-shadow: inset 0 -2px 0 rgba(8,190,39,0.12);
+                  color: var(--accent-light);
+                  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.05));
+                  box-shadow: inset 0 -2px 0 var(--accent);
                 }
 
                 .auth-buttons{
                   display:flex;
-                  gap:10px;
+                  gap:12px;
                   align-items:center;
                 }
                 .btn{
@@ -122,36 +150,62 @@
                   align-items:center;
                   justify-content:center;
                   gap:8px;
-                  padding:8px 14px;
-                  border-radius:10px;
+                  padding:10px 18px;
+                  border-radius:12px;
                   text-decoration:none;
                   cursor:pointer;
-                  font-weight:700;
+                  font-weight:600;
                   font-size:14px;
                   border:1px solid transparent;
-                  transition:all .18s ease;
+                  transition:all 0.2s ease;
+                  position: relative;
+                  overflow: hidden;
                 }
                 .btn-primary{
-                  background: linear-gradient(90deg,var(--accent),var(--accent-dark));
-                  color:#061214;
-                  box-shadow: 0 8px 24px rgba(8,190,39,0.18);
+                  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+                  color: white;
+                  box-shadow: var(--shadow);
                 }
-                .btn-primary:hover{ transform:translateY(-2px); }
+                .btn-primary:hover{ 
+                  transform:translateY(-2px); 
+                  box-shadow: var(--shadow-lg);
+                  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+                }
                 .btn-outline{
-                  background:transparent;
-                  color:#cfe9d1;
-                  border-color:rgba(255,255,255,0.06);
+                  background: rgba(255,255,255,0.05);
+                  color: var(--text-secondary);
+                  border: 1px solid var(--border);
+                  backdrop-filter: blur(10px);
                 }
-                .btn-large{ padding:12px 22px; font-size:16px; border-radius:14px; }
-                .btn-small{ padding:8px 12px; font-size:13px; border-radius:10px; }
+                .btn-outline:hover{
+                  background: rgba(255,255,255,0.1);
+                  color: var(--text-primary);
+                  transform: translateY(-1px);
+                }
+                .btn-large{ padding:14px 28px; font-size:16px; border-radius:14px; }
+                .btn-small{ padding:8px 14px; font-size:13px; border-radius:10px; }
 
                 /* Hero */
                 .hero{
-                  padding:72px 0;
-                  background-image: radial-gradient(ellipse at 10% 10%, rgba(8,190,39,0.04), transparent 10%),
-                                    radial-gradient(ellipse at 90% 80%, rgba(8,190,39,0.02), transparent 15%);
+                  padding:80px 0 100px 0;
+                  background: 
+                    radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.08), transparent 50%),
+                    radial-gradient(ellipse at 80% 80%, rgba(16, 185, 129, 0.06), transparent 50%),
+                    radial-gradient(ellipse at 40% 60%, rgba(139, 92, 246, 0.04), transparent 50%);
+                  position: relative;
+                  overflow: hidden;
                 }
-                .hero .container{ max-width:var(--max-width); }
+                .hero::before{
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+                  opacity: 0.3;
+                }
+                .hero .container{ max-width:var(--max-width); position: relative; z-index: 1; }
                 .hero-content{
                   display:flex;
                   align-items:center;
@@ -159,42 +213,98 @@
                   justify-content:space-between;
                 }
                 .hero-title{
-                  font-size:42px;
-                  margin:0 0 12px 0;
-                  color:#fff;
-                  line-height:1.05;
-                  letter-spacing:-0.6px;
-                  text-shadow: 0 8px 30px rgba(2,6,23,0.9);
+                  font-size:48px;
+                  margin:0 0 20px 0;
+                  color: var(--text-primary);
+                  line-height:1.1;
+                  letter-spacing:-1px;
+                  font-weight: 800;
+                  background: linear-gradient(135deg, var(--text-primary), var(--accent-light));
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
                 }
                 .hero-description{
-                  color:var(--muted);
-                  max-width:640px;
-                  margin:0 0 18px 0;
-                  font-size:16px;
+                  color: var(--text-secondary);
+                  max-width:600px;
+                  margin:0 0 32px 0;
+                  font-size:18px;
+                  line-height: 1.7;
                 }
-                .hero-buttons{ display:flex; gap:12px; }
+                .hero-buttons{ display:flex; gap:16px; flex-wrap: wrap; }
 
                 /* Features */
-                .features{ padding:48px 0; }
-                .section-title{ font-size:22px; margin:0 0 18px 0; color:#fff; }
+                .features{ padding:60px 0; }
+                .section-title{ 
+                  font-size:32px; 
+                  margin:0 0 48px 0; 
+                  color: var(--text-primary);
+                  text-align: center;
+                  font-weight: 700;
+                  background: linear-gradient(135deg, var(--accent-light), var(--secondary));
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                }
                 .features-grid{
                   display:grid;
-                  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-                  gap:18px;
+                  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+                  gap:24px;
                   align-items:stretch;
                 }
                 .feature-card{
-                  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-                  border-radius:var(--radius);
-                  padding:18px;
-                  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-                  transition:transform .18s ease, box-shadow .18s ease;
-                  min-height:150px;
+                  background: linear-gradient(135deg, var(--card), var(--bg-secondary));
+                  border-radius:16px;
+                  padding:32px 24px;
+                  box-shadow: var(--shadow);
+                  transition:all 0.3s ease;
+                  min-height:200px;
+                  border: 1px solid var(--border);
+                  position: relative;
+                  overflow: hidden;
                 }
-                .feature-card:hover{ transform:translateY(-6px); box-shadow: 0 20px 40px rgb(0, 0, 0); }
-                .feature-icon i{ color:black; width:36px; height:36px; display:inline-block; }
-                .feature-title{ margin:10px 0 6px 0; font-size:16px; color:#000000; }
-                .feature-description{ margin:0; color:#2AAA8A; font-size:14px; }
+                .feature-card::before{
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  height: 3px;
+                  background: linear-gradient(90deg, var(--accent), var(--secondary));
+                }
+                .feature-card:hover{ 
+                  transform:translateY(-8px); 
+                  box-shadow: var(--shadow-lg);
+                  background: linear-gradient(135deg, var(--card-hover), var(--bg-tertiary));
+                }
+                .feature-icon{ 
+                  width: 48px;
+                  height: 48px;
+                  background: linear-gradient(135deg, var(--accent), var(--secondary));
+                  border-radius: 12px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 20px;
+                }
+                .feature-icon i{ 
+                  color: white; 
+                  width:24px; 
+                  height:24px; 
+                  display:inline-block; 
+                }
+                .feature-title{ 
+                  margin:0 0 12px 0; 
+                  font-size:20px; 
+                  color: var(--text-primary);
+                  font-weight: 600;
+                }
+                .feature-description{ 
+                  margin:0; 
+                  color: var(--text-secondary); 
+                  font-size:15px; 
+                  line-height: 1.6;
+                }
 
                 /* What's New */
                 .whats-new{ padding:42px 0; }
@@ -265,35 +375,85 @@
 
             .book-card{
                   flex:0 0 var(--card-width);
-                  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-                  border-radius:12px;
-                  padding:16px;
-                  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+                  background: linear-gradient(135deg, var(--card), var(--bg-secondary));
+                  border-radius:16px;
+                  padding:20px;
+                  box-shadow: var(--shadow);
                   display:flex;
                   flex-direction:column;
-                  gap:12px;
+                  gap:16px;
                   min-width:var(--card-width);
                   scroll-snap-align: start;
-                  border: 1px solid rgba(255,255,255,0.1);
-                  transition: transform 0.2s ease, box-shadow 0.2s ease;
+                  border: 1px solid var(--border);
+                  transition: all 0.3s ease;
+                  position: relative;
+                  overflow: hidden;
+                }
+                .book-card::before{
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  height: 3px;
+                  background: linear-gradient(90deg, var(--accent), var(--secondary));
                 }
                 .book-card:hover{
-                  transform: translateY(-4px);
-                  box-shadow: 0 15px 40px rgba(2,6,23,0.8);
+                  transform: translateY(-6px);
+                  box-shadow: var(--shadow-lg);
+                  background: linear-gradient(135deg, var(--card-hover), var(--bg-tertiary));
                 }
                 .book-image{
                   width:100%;
-                  height:170px;
+                  height:180px;
                   object-fit:cover;
-                  border-radius:8px;
-                  background: linear-gradient(180deg, rgba(8,190,39,0.1), rgba(8,190,39,0.05));
-                  border: 1px solid rgba(255,255,255,0.1);
+                  border-radius:12px;
+                  background: linear-gradient(135deg, var(--accent-light), var(--secondary));
+                  border: 1px solid var(--border);
                 }
                 .book-info{
                   display: flex;
                   flex-direction: column;
-                  gap: 8px;
+                  gap: 12px;
                   flex: 1;
+                }
+                .book-title{
+                  font-size: 16px;
+                  font-weight: 600;
+                  color: white!important;
+                  margin: 0;
+                  line-height: 1.4;
+                }
+                .book-author{
+                  font-size: 14px;
+                  color: var(--text-secondary);
+                  margin: 0;
+                }
+                .book-badges{
+                  display: flex;
+                  gap: 8px;
+                  flex-wrap: wrap;
+                }
+                .badge{
+                  padding: 4px 8px;
+                  border-radius: 6px;
+                  font-size: 12px;
+                  font-weight: 500;
+                }
+                .badge-outline{
+                  background: rgba(59, 130, 246, 0.1);
+                  color: var(--accent-light);
+                  border: 1px solid rgba(59, 130, 246, 0.2);
+                }
+                .badge-secondary{
+                  background: rgba(16, 185, 129, 0.1);
+                  color: var(--secondary);
+                  border: 1px solid rgba(16, 185, 129, 0.2);
+                }
+                .book-date{
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  margin: 8px 0 0 0;
                 }
 
                 /* Statistics */
@@ -377,7 +537,7 @@
                   <div class="hero-content">
                     <div>
                       <h1 class="hero-title">CUET Library Management System</h1>
-                      <p class="hero-description" style="color: #d6e9d0;">
+                      <p class="hero-description">
                         A smart, automated, and data-driven system that manages books, members,
                         loans, and administrative tasks seamlessly. Save time, reduce crowding,
                         and enhance your library experience.
@@ -469,51 +629,51 @@
                 <div class="container">
                   <div class="section-header">
                     <h2 class="section-title">What's New?</h2>
-                    <p class="scd" style="color: rgb(0, 0, 0);">
+                    <p class="scd" style="color: var(--text-secondary); font-size: 16px;">
                       Discover the latest features that make your library experience smarter
                       and more convenient :
                     </p>
                   </div>
                   <div class="scroll-stack-scroller">
                   <div class="scroll-stack-inner">
-                    <div class="scroll-stack-card" style="background-color: #B8FFB8;">
-                      <div class="feature-icon" style="color: #000000;">
-                        <i data-lucide="file-text"></i>
+                    <div class="scroll-stack-card" style="background: linear-gradient(135deg, var(--card), var(--bg-secondary)); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+                      <div class="feature-icon" style="background: linear-gradient(135deg, var(--accent), var(--secondary)); border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                        <i data-lucide="file-text" style="color: white; width: 24px; height: 24px;"></i>
                       </div>
-                      <h3 class="feature-title" style="color: #000000;">Book-Related Notes</h3>
-                      <p class="feature-description" style="color:#000000">
+                      <h3 class="feature-title" style="color: var(--text-primary); font-size: 18px; margin: 0 0 12px 0;">Book-Related Notes</h3>
+                      <p class="feature-description" style="color: var(--text-secondary); margin: 0; line-height: 1.6;">
                         Upload and download study notes for any book. Share knowledge with
                         fellow students.
                       </p>
                     </div>
 
-                    <div class="scroll-stack-card" style="background-color: #9dfd9d;">
-                      <div class="feature-icon" style="color: #000000;">
-                        <i data-lucide="credit-card"></i>
+                    <div class="scroll-stack-card" style="background: linear-gradient(135deg, var(--card), var(--bg-secondary)); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+                      <div class="feature-icon" style="background: linear-gradient(135deg, var(--secondary), var(--accent)); border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                        <i data-lucide="credit-card" style="color: white; width: 24px; height: 24px;"></i>
                       </div>
-                      <h3 class="feature-title" style="color: #000000;">Online Fine Payment</h3>
-                      <p class="feature-description" style="color:#000000">
+                      <h3 class="feature-title" style="color: var(--text-primary); font-size: 18px; margin: 0 0 12px 0;">Online Fine Payment</h3>
+                      <p class="feature-description" style="color: var(--text-secondary); margin: 0; line-height: 1.6;">
                         Pay library fines instantly using bKash, Nagad, or Rocket. No more bank
                         visits!
                       </p>
                     </div>
 
-                    <div class="scroll-stack-card" style="background-color: #96fb96;">
-                      <div class="feature-icon" style="color: #000000;">
-                        <i data-lucide="clock"></i>
+                    <div class="scroll-stack-card" style="background: linear-gradient(135deg, var(--card), var(--bg-secondary)); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+                      <div class="feature-icon" style="background: linear-gradient(135deg, var(--accent-light), var(--accent)); border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                        <i data-lucide="clock" style="color: white; width: 24px; height: 24px;"></i>
                       </div>
-                      <h3 class="feature-title" style="color: #000000;">Online Book Renewal</h3>
-                      <p class="feature-description" style="color:#000000">
+                      <h3 class="feature-title" style="color: var(--text-primary); font-size: 18px; margin: 0 0 12px 0;">Online Book Renewal</h3>
+                      <p class="feature-description" style="color: var(--text-secondary); margin: 0; line-height: 1.6;">
                         Renew your borrowed books online without visiting the library counter.
                       </p>
                     </div>
 
-                    <div class="scroll-stack-card" style="background-color: #95fe95;">
-                      <div class="feature-icon" style="color: #000000;">
-                        <i data-lucide="search"></i>
+                    <div class="scroll-stack-card" style="background: linear-gradient(135deg, var(--card), var(--bg-secondary)); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+                      <div class="feature-icon" style="background: linear-gradient(135deg, var(--secondary), var(--secondary-dark)); border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                        <i data-lucide="search" style="color: white; width: 24px; height: 24px;"></i>
                       </div>
-                      <h3 class="feature-title" style="color: #000000;">Book Pre-booking</h3>
-                      <p class="feature-description" style="color:#000000">
+                      <h3 class="feature-title" style="color: var(--text-primary); font-size: 18px; margin: 0 0 12px 0;">Book Pre-booking</h3>
+                      <p class="feature-description" style="color: var(--text-secondary); margin: 0; line-height: 1.6;">
                         Reserve books online before visiting. Guaranteed availability when you
                         need them.
                       </p>
@@ -527,14 +687,14 @@
               <section class="new-arrivals">
                 <div class="container">
                   <div class="section-header" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                    <h2 class="section-title" style="color: rgb(8, 190, 39); margin:0;">New Arrivals</h2>
-                    <p class="section-description" style="margin:0; color:var(--muted); font-size:14px;">
+                    <h2 class="section-title" style="margin:0;">New Arrivals</h2>
+                    <p class="section-description" style="margin:0; color: var(--text-secondary); font-size:16px;">
                       Check out the latest books added to our collection
                     </p>
                   </div>
 
                   <div class="slider-wrapper" style="margin-top:18px;">
-                    <button class="nav-btn prev-btn" aria-label="Previous" style="color: #060080;">&#10094;</button>
+                    <button class="nav-btn prev-btn" aria-label="Previous" style="color: var(--accent);">&#10094;</button>
                     <div class="books-grid">
                       <div class="books-slider">
                         <div class="book-card">

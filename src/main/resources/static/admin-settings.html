@@ -7,18 +7,20 @@
 
     <link rel="stylesheet" href="styles/main.css"/>
     <link rel="stylesheet" href="css/admin-modals.css" />
+    <link rel="stylesheet" href="styles/animations.css" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="scripts/animations.js"></script>
 
     <style>
-        :root { --bg:#f4f6f9; --panel:#fff; --muted:#64748b; --accent:#0ea5a3; --danger:#ef4444; --sidebar:#2d6a38; --sidebar-text:#e6edf3; }
+        :root { --bg:#f4f6f9; --panel:#fff; --muted:#64748b; --accent:#16a34a; --danger:#ef4444; --sidebar:#2d6a38; --sidebar-text:#e6edf3; }
         html,body{height:100%;margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#111}
         .admin-layout{display:flex;min-height:100vh}
-        .sidebar{width:260px;background:var(--sidebar);color:var(--sidebar-text);padding:28px 20px;box-shadow:2px 0 8px rgba(2,6,23,0.12);display:flex;flex-direction:column;gap:20px}
-        .sidebar .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:16px}
-        .sidebar .nav{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-        .sidebar .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#cfe7ff;text-decoration:none;font-size:14px}
-        .sidebar .nav a.active,.sidebar .nav a:hover{background:rgba(255,255,255,0.04);color:#fff}
-        .sidebar .small{font-size:12px;color:#97a6b7;margin-top:auto}
+        .sidebar{width:260px !important;background:var(--sidebar) !important;color:var(--sidebar-text) !important;padding:28px 20px !important;box-shadow:2px 0 8px rgba(2,6,23,0.12);display:flex !important;flex-direction:column !important;gap:20px !important}
+        .sidebar .brand{display:flex !important;align-items:center !important;gap:12px !important;font-weight:700 !important;font-size:16px !important}
+        .sidebar .nav{display:flex !important;flex-direction:column !important;gap:8px !important;margin-top:8px !important}
+        .sidebar .nav a{display:flex !important;align-items:center !important;gap:10px !important;padding:10px 12px !important;border-radius:8px !important;color:#cfe7ff !important;text-decoration:none !important;font-size:14px !important}
+        .sidebar .nav a.active,.sidebar .nav a:hover{background:rgba(255,255,255,0.1) !important;color:#fff !important}
+        .sidebar .small{font-size:12px !important;color:#97a6b7 !important;margin-top:auto !important}
         .main{flex:1;padding:28px}
         .main-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
         h1{margin:0;font-size:20px}
@@ -41,10 +43,13 @@
         .switch.on .knob{left:23px}
         .row{display:flex;gap:12px;align-items:center}
         .muted{color:var(--muted);font-size:13px}
-        .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:13px;border:0;cursor:pointer}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:13px;border:0;cursor:pointer;font-weight:500;transition:all .2s}
         .btn-primary{background:var(--accent);color:#fff}
+        .btn-primary:hover{background:#15803d}
         .btn-ghost{background:transparent;color:#0f1724;border:1px solid #e6eef2}
+        .btn-ghost:hover{background:#f8fafc}
         .btn-danger{background:var(--danger);color:#fff}
+        .btn-danger:hover{background:#dc2626}
         .card{background:var(--panel);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
         .small-list{display:flex;flex-direction:column;gap:8px}
         .integration{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px solid #f1f5f9}
@@ -52,26 +57,25 @@
 </head>
 <body>
 <div class="admin-layout">
-    <aside class="sidebar" aria-label="Admin navigation">
-            <div class="brand">
-                <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
-                <div>
-                    <div style="font-size:15px">CUET Library Admin</div>
-                    <div style="font-size:12px;color:#9fb6cc">Management Console</div>
-                </div>
+ <aside class="sidebar">
+        <div class="brand">
+            <img src="images/cuet-logo.png" alt="CUET" style="width:36px; height:36px; border-radius:6px"/>
+            <div>
+                <div style="font-size:15px">CUET Library Admin</div>
+                <div style="font-size:12px; color:#9fb6cc">Management Console</div>
             </div>
-
-            <nav class="nav" role="navigation">
-                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
-                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
-                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
-                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
-                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
-                <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
-            </nav>
-
-            <div class="small">Signed in as <strong>Admin</strong></div>
-        </aside>
+        </div>
+        <nav class="nav" role="navigation">
+            <a href="admin.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="admin-books.html"><i data-lucide="book-open"></i> Manage Books</a>
+            <a href="admin-prebook.html"><i data-lucide="calendar-clock"></i> Prebookings</a>
+            <a href="admin-borrow.html"><i data-lucide="book-marked"></i> Manage Borrows</a>
+            <a href="admin-fines.html"><i data-lucide="receipt"></i> Fines</a>
+            <a href="admin-notes.html"><i data-lucide="file-check-2"></i> Notes</a>
+            <a href="admin-settings.html" class="active"><i data-lucide="settings"></i> Settings</a>
+        </nav>
+        <div class="small">Signed in as <strong>Admin</strong></div>
+    </aside>
 
     <main class="main">
         <div class="main-header">
@@ -209,7 +213,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.lucide) lucide.replace();
+    if (window.lucide) lucide.createIcons();
 });
 
 function logout(){ location.href = 'index.html'; }
@@ -264,7 +268,6 @@ function searchSettings(){
     });
 }
 </script>
-<script src="scripts/admin.js"></script>
 <script src="js/admin-modals.js"></script>
 </body>
 </html>

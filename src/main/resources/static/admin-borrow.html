@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<titl  .modal-footer{display:flex;justify-content:flex-end;gap:12px;margin-top:20px;padding-top:16px;border-top:2px solid #e2e8f0;}
+  .muted{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px;}Manage Borrows - CUET Library Admin</title>
+<link rel="icon" type="image/png" href="images/cuet-logo.png">
+
+<link rel="stylesheet" href="styles/main.css" />
+<link rel="stylesheet" href="styles/modern-theme.css" />
+<link rel="stylesheet" href="styles/animations.css" />
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="scripts/animations.js"></script>
+
+<style>
+  :root{
+    --sidebar:#2d6a38; --accent:#16a34a; --bg:#f4f6f9; --muted:#64748b; --card:#fff; --danger:#ef4444; --sidebar-text:#e6edf3;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:#0f1724;}
+  .admin-layout{display:flex;min-height:100vh;}
+  
+  /* Sidebar Styles */
+  .sidebar { width: 260px !important; background: var(--sidebar) !important; color: var(--sidebar-text) !important; padding: 28px 20px !important; display: flex !important; flex-direction: column !important; gap: 20px !important; }
+  .sidebar .brand { display: flex !important; align-items: center !important; gap: 12px !important; font-weight: 700 !important; font-size: 16px !important; }
+  .sidebar .brand img{width:36px;height:36px;border-radius:6px}
+  .sidebar .nav { display: flex !important; flex-direction: column !important; gap: 8px !important; margin-top: 8px !important; }
+  .sidebar .nav a { display: flex !important; align-items: center !important; gap: 10px !important; padding: 10px 12px !important; border-radius: 8px !important; color: #cfe7ff !important; text-decoration: none !important; font-size: 14px !important; }
+  .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255, 255, 255, 0.1) !important; color: #fff !important; }
+  .sidebar .small { font-size: 12px !important; color: #97a6b7 !important; margin-top: auto !important; }
+
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .main-header{display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .search{flex:1;display:flex;gap:12px;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .search input{border:0;outline:0;width:100%;font-size:14px;background:transparent}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;border:0;font-weight:500;transition:all .2s}
+  .btn-primary{background:#16a34a;color:#fff}
+  .btn-primary:hover{background:#15803d}
+  .btn-ghost{background:transparent;color:#0f1724;border:1px solid #e6eef2}
+  .btn-ghost:hover{background:#f8fafc}
+  .btn-danger{background:#ef4444;color:#fff!important;}
+  .btn-danger:hover{background:#dc2626}
+  .btn-small{padding:6px 10px;font-size:12px;border-radius:6px}
+  .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
+  .title{display:flex;align-items:center;gap:10px;font-weight:600;color:#0f1724}
+
+  .section-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .table-container{overflow:auto;background:var(--card);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
+  table.admin-table{width:100%;border-collapse:collapse;font-size:14px}
+  table.admin-table th, table.admin-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #eef2f6}
+  table.admin-table th{font-weight:600;color:#334155;background:transparent}
+  .actions button{margin-right:6px}
+
+  .badge{padding:6px 8px;border-radius:999px;font-size:12px;font-weight:600;display:inline-block}
+  .badge-available{background:#ecfdf5;color:#047857;border:1px solid #d1fae5}
+  .badge-issued{background:#fff7ed;color:#c2410c;border:1px solid #ffe7c2}
+  .badge-returned{background:#f1f5f9;color:#64748b;border:1px solid #e5e7eb}
+  .badge-overdue{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+
+  /* ========== BORROW MODAL STYLES ========== */
+  .borrow-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: none;
+    overflow-y: auto;
+  }
+
+  .borrow-modal-overlay.active {
+    display: block;
+  }
+
+  .borrow-modal-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px 15px;
+  }
+
+  .borrow-modal-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 550px;
+    position: relative;
+  }
+
+  .borrow-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .borrow-modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .borrow-modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    background: #f3f4f6;
+    color: #6b7280;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .borrow-modal-close:hover {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .borrow-modal-body {
+    padding: 24px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
+  .borrow-form-group {
+    margin-bottom: 16px;
+  }
+
+  .borrow-form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+
+  .borrow-form-input,
+  .borrow-form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #111827;
+    background: white;
+    transition: all 0.2s;
+    box-sizing: border-box;
+  }
+
+  .borrow-form-input:focus,
+  .borrow-form-select:focus {
+    outline: none;
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+  }
+
+  .borrow-form-input:disabled,
+  .borrow-form-select:disabled {
+    background: #f9fafb;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .borrow-form-hint {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+    display: block;
+  }
+
+  .borrow-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  .borrow-loading-indicator {
+    padding: 12px;
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    border-radius: 8px;
+    color: #166534;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .borrow-loading-indicator.active {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .required-star {
+    color: #ef4444;
+  }
+  .cover-preview{width:72px;height:96px;border-radius:6px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#64748b;font-weight:700}
+  .modal-footer{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:18px;border-top:3px solid #e2e8f0;}
+  .muted{font-size:12px;color:var(--muted);line-height:1.5;}
+
+  .note-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px dashed #f1f5f9}
+  .note-meta{display:flex;gap:10px;align-items:center}
+
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @media(max-width:980px){
+    .cards-grid{grid-template-columns:repeat(2,1fr)}
+    .section-grid{grid-template-columns:1fr}
+   
+    .stats-grid{grid-template-columns:1fr}
+    .modal{width:100%;max-width:100%;border-radius:0;max-height:100vh;}
+  }
+</style>
+</head>
+<body>
+  <div class="admin-layout">
+<aside class="sidebar">
+        <div class="brand">
+            <img src="images/cuet-logo.png" alt="CUET" style="width:36px; height:36px; border-radius:6px"/>
+            <div>
+                <div style="font-size:15px">CUET Library Admin</div>
+                <div style="font-size:12px; color:#9fb6cc">Management Console</div>
+            </div>
+        </div>
+        <nav class="nav" role="navigation">
+            <a href="admin.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="admin-books.html"><i data-lucide="book-open"></i> Manage Books</a>
+            <a href="admin-prebook.html"><i data-lucide="calendar-clock"></i> Prebookings</a>
+            <a href="admin-borrow.html" class="active"><i data-lucide="book-marked"></i> Manage Borrows</a>
+            <a href="admin-fines.html"><i data-lucide="receipt"></i> Fines</a>
+            <a href="admin-notes.html"><i data-lucide="file-check-2"></i> Notes</a>
+            <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+        </nav>
+        <div class="small">Signed in as <strong>Admin</strong></div>
+    </aside>
+
+
+    <main class="main">
+      <div class="main-header">
+        <div style="display:flex;gap:16px;align-items:center;">
+          <h1 style="margin:0;font-size:20px;">Manage Borrows</h1>
+          <div class="muted">View, add, and manage library book borrows</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="search" style="max-width:420px;">
+            <i data-lucide="search"></i>
+            <input id="borrowSearch" placeholder="Search borrows by user, book, or ISBN..." />
+          </div>
+          <button class="btn btn-primary" onclick="openAddBorrowModal()">
+            <i data-lucide="plus"></i>
+            Add Borrow
+          </button>
+          <button class="btn btn-ghost" onclick="logout()">Log out</button>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="stats-grid">
+        <div class="card">
+          <div class="title"><i data-lucide="book-open"></i> Active Borrows</div>
+          <div style="font-size:24px;font-weight:700;color:var(--accent)" id="activeBorrowsCount">0</div>
+          <div style="font-size:12px;color:var(--muted)">Currently borrowed books</div>
+        </div>
+        <div class="card">
+          <div class="title"><i data-lucide="clock"></i> Overdue Books</div>
+          <div style="font-size:24px;font-weight:700;color:#ef4444" id="overdueCount">0</div>
+          <div style="font-size:12px;color:var(--muted)">Books past due date</div>
+        </div>
+        <div class="card">
+          <div class="title"><i data-lucide="check-circle"></i> Returned Today</div>
+          <div style="font-size:24px;font-weight:700;color:#10b981" id="returnedTodayCount">0</div>
+          <div style="font-size:12px;color:var(--muted)">Books returned today</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card">
+        <div class="title"><i data-lucide="filter"></i> Filters</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
+          <select id="statusFilter" onchange="filterBorrows()">
+            <option value="all">All Status</option>
+            <option value="ACTIVE">Active</option>
+            <option value="RETURNED">Returned</option>
+            <option value="OVERDUE">Overdue</option>
+          </select>
+          <select id="dateFilter" onchange="filterBorrows()">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+          </select>
+          <button class="btn btn-ghost" onclick="clearFilters()">
+            <i data-lucide="x"></i>
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Borrow Records Table -->
+      <div class="table-container">
+        <table class="admin-table" id="borrowTable">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Book Title</th>
+              <th>Copy ID</th>
+              <th>Borrow Date</th>
+              <th>Due Date</th>
+              <th>Return Date</th>
+              <th>Extension Count</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="borrowTableBody">
+            <tr>
+              <td colspan="8" style="text-align:center;padding:40px;color:var(--muted)">
+                <i data-lucide="loader-2" class="animate-spin" style="display:inline-block;margin-right:8px"></i>
+                Loading borrow records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <footer style="color:#94a3b8;font-size:13px;margin-top:8px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
+    </main>
+  </div>
+
+  <!-- Add Borrow Modal -->
+  <div class="borrow-modal-overlay" id="addBorrowModal">
+    <div class="borrow-modal-container">
+      <div class="borrow-modal-content">
+        <div class="borrow-modal-header">
+          <h3 class="borrow-modal-title">
+            <i data-lucide="book-plus"></i>
+            Add New Borrow Record
+          </h3>
+          <button class="borrow-modal-close" onclick="closeAddBorrowModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="borrow-modal-body">
+          <!-- Loading Indicator -->
+          <div class="borrow-loading-indicator" id="copyLoadingIndicator">
+            <i data-lucide="loader-circle"></i>
+            <span>Loading available copies...</span>
+          </div>
+
+          <form id="addBorrowForm">
+            <div class="borrow-form-group">
+              <label for="borrowUserId" class="borrow-form-label">Select User <span class="required-star">*</span></label>
+              <select id="borrowUserId" class="borrow-form-select" required>
+                <option value="">Choose a user...</option>
+              </select>
+              <small class="borrow-form-hint">Select the user who will borrow the book</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="borrowBookId" class="borrow-form-label">Select Book <span class="required-star">*</span></label>
+              <select id="borrowBookId" class="borrow-form-select" required>
+                <option value="">Choose a book...</option>
+              </select>
+              <small class="borrow-form-hint">Choose the book to be borrowed</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="borrowCopyId" class="borrow-form-label">Select Copy ID <span class="required-star">*</span></label>
+              <select id="borrowCopyId" class="borrow-form-select" required disabled>
+                <option value="">First select a book...</option>
+              </select>
+              <small class="borrow-form-hint">Available copies will appear after selecting a book</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="borrowDate" class="borrow-form-label">Borrow Date <span class="required-star">*</span></label>
+              <input type="date" id="borrowDate" class="borrow-form-input" required>
+              <small class="borrow-form-hint">Date when the book is borrowed</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="dueDate" class="borrow-form-label">Due Date <span class="required-star">*</span></label>
+              <input type="date" id="dueDate" class="borrow-form-input" required readonly>
+              <small class="borrow-form-hint">Automatically set to 30 days after borrow date</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="extendedCount" class="borrow-form-label">Extension Count</label>
+              <input type="number" id="extendedCount" class="borrow-form-input" value="0" min="0" max="5" placeholder="0">
+              <small class="borrow-form-hint">Number of times extended (default: 0, max: 5)</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="returnDate" class="borrow-form-label">Return Date (Optional)</label>
+              <input type="date" id="returnDate" class="borrow-form-input">
+              <small class="borrow-form-hint">Leave empty if book not returned yet</small>
+            </div>
+
+            <div class="borrow-form-group">
+              <label for="borrowPrebookId" class="borrow-form-label">PreBook ID (Optional)</label>
+              <input type="number" id="borrowPrebookId" class="borrow-form-input" placeholder="Enter prebook ID">
+              <small class="borrow-form-hint">Only for prebook conversions</small>
+            </div>
+          </form>
+        </div>
+
+        <div class="borrow-modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeAddBorrowModal()">
+            <i data-lucide="x"></i>
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" onclick="addManualBorrow()">
+            <i data-lucide="save"></i>
+            Create Borrow Record
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Borrow Details Modal -->
+  <div class="borrow-modal-overlay" id="viewBorrowModal">
+    <div class="borrow-modal-container">
+      <div class="borrow-modal-content">
+        <div class="borrow-modal-header">
+          <h3 class="borrow-modal-title">
+            <i data-lucide="eye"></i>
+            Borrow Record Details
+          </h3>
+          <button class="borrow-modal-close" onclick="closeViewBorrowModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="borrow-modal-body">
+          <div style="display:grid;gap:20px;">
+            <!-- Borrow Record Info -->
+            <div class="card" style="box-shadow:none;border:2px solid #e5e7eb;">
+              <div style="font-weight:600;font-size:15px;margin-bottom:12px;color:#111827;">
+                <i data-lucide="book-marked"></i> Borrow Information
+              </div>
+              <div style="display:grid;gap:10px;">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Borrow ID:</span>
+                  <span style="font-weight:600;font-size:13px;" id="viewBorrowId">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Copy ID:</span>
+                  <span style="font-weight:600;font-size:13px;" id="viewCopyId">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Overdue Days:</span>
+                  <span style="font-weight:600;font-size:13px;color:#dc2626;" id="viewExtensionCount">0</span>
+                  <small style="color:#6b7280;font-size:11px;margin-left:8px;">(Auto-calculated)</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="card" style="box-shadow:none;border:2px solid #e5e7eb;">
+              <div style="font-weight:600;font-size:15px;margin-bottom:12px;color:#111827;">
+                <i data-lucide="user"></i> User Information
+              </div>
+              <div style="display:grid;gap:10px;">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">User ID:</span>
+                  <span style="font-weight:600;font-size:13px;" id="viewUserId">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Name:</span>
+                  <span style="font-weight:600;font-size:13px;" id="viewUserName">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Email:</span>
+                  <span style="font-size:13px;" id="viewUserEmail">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Book Info -->
+            <div class="card" style="box-shadow:none;border:2px solid #e5e7eb;">
+              <div style="font-weight:600;font-size:15px;margin-bottom:12px;color:#111827;">
+                <i data-lucide="book-open"></i> Book Information
+              </div>
+              <div style="display:grid;gap:10px;">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Book ID:</span>
+                  <span style="font-weight:600;font-size:13px;" id="viewBookId">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Title:</span>
+                  <span style="font-weight:600;font-size:13px;" id="viewBookTitle">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Author:</span>
+                  <span style="font-size:13px;" id="viewBookAuthor">-</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">ISBN:</span>
+                  <span style="font-size:13px;" id="viewBookIsbn">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dates Info -->
+            <div class="card" style="box-shadow:none;border:2px solid #e5e7eb;">
+              <div style="font-weight:600;font-size:15px;margin-bottom:12px;color:#111827;">
+                <i data-lucide="calendar"></i> Date Information
+              </div>
+              <div style="display:grid;gap:10px;">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Borrow Date:</span>
+                  <input type="date" id="editBorrowDate" class="borrow-form-input" style="width:auto;padding:4px 8px;">
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Due Date:</span>
+                  <input type="date" id="editDueDate" class="borrow-form-input" style="width:auto;padding:4px 8px;">
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                  <span style="color:#6b7280;font-size:13px;">Return Date:</span>
+                  <input type="date" id="editReturnDate" class="borrow-form-input" style="width:auto;padding:4px 8px;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="borrow-modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeViewBorrowModal()">
+            <i data-lucide="x"></i>
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" onclick="saveEditedBorrow()">
+            <i data-lucide="save"></i>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="notification" class="notification" style="display:none;position:fixed;top:20px;right:20px;padding:12px 16px;border-radius:8px;color:#fff;font-size:14px;z-index:10000">
+    <span id="notificationMessage"></span>
+  </div>
+
+  <script src="scripts/admin-borrow.js"></script>
+</body>
+</html>

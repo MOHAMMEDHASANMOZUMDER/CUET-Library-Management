@@ -4,12 +4,416 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Books - CUET Library</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="icon" type="image/png" href="images/cuet-logo.png">
+    <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/modern-theme.css" />
+  <link rel="stylesheet" href="styles/animations.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Notification System Styles */
+        .notification-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .header-actions {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+        
+        .notification-btn {
+            position: relative !important;
+            padding: 10px !important;
+            border-radius: 50% !important;
+            background: #f0f2f5 !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            width: 40px !important;
+            height: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 40px !important;
+        }
+        
+        .notification-btn:hover {
+            background: #e4e6ea !important;
+        }
+        
+        .notification-btn i {
+            width: 20px !important;
+            height: 20px !important;
+            color: #050505 !important;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #e41e3f;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            border: 2px solid white;
+        }
+        
+        .notification-panel {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 360px;
+            max-height: 400px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .notification-header {
+            padding: 16px 16px 12px 16px;
+            border-bottom: 1px solid #e4e6ea;
+            background: white;
+        }
+        
+        .notification-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1c1e21;
+        }
+        
+        .notification-list {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f2f5;
+            cursor: pointer;
+            transition: background 0.1s ease;
+            position: relative;
+        }
+        
+        .notification-item:hover {
+            background: #f2f3f5;
+        }
+        
+        .notification-item.unread {
+            background: #e7f3ff;
+        }
+        
+        .notification-item.unread:hover {
+            background: #d9edff;
+        }
+        
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #1877f2;
+            border-radius: 50%;
+        }
+        
+        .notification-content {
+            display: flex;
+            gap: 12px;
+            margin-left: 12px;
+        }
+        
+        .notification-icon {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .notification-icon.success { background: #42b883; color: white; }
+        .notification-icon.warning { background: #f39c12; color: white; }
+        .notification-icon.danger { background: #e74c3c; color: white; }
+        .notification-icon.info { background: #1877f2; color: white; }
+        
+        .notification-text {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1c1e21;
+            margin: 0 0 2px 0;
+            line-height: 1.3;
+        }
+        
+        .notification-description {
+            font-size: 13px;
+            color: #65676b;
+            margin: 0 0 4px 0;
+            line-height: 1.3;
+        }
+        
+        .notification-time {
+            font-size: 12px;
+            color: #8a8d91;
+            font-weight: 400;
+        }
+        
+        .notification-footer {
+            padding: 8px 16px;
+            border-top: 1px solid #e4e6ea;
+            background: white;
+            text-align: center;
+        }
+        
+        .notification-link {
+            color: #1877f2;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .notification-link:hover {
+            text-decoration: underline;
+        }
+        
+        .empty-notifications {
+            padding: 40px 20px;
+            text-align: center;
+            color: #8a8d91;
+        }
+        
+        .empty-notifications i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        
+        /* Enhanced user menu styles */
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 250px;
+            display: none;
+            z-index: 1000;
+            margin-top: 8px;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+        }
+        
+        .user-info {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        
+        .user-email {
+            color: #4a5568;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .user-dept {
+            color: #718096;
+            font-size: 12px;
+        }
+        
+        .dropdown-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            color: #4a5568;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .dropdown-link:hover {
+            background: #f7fafc;
+            color: #2d3748;
+        }
+        
+        /* Enhanced section actions */
+        .section-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        /* Notes modal styles */
+        .modal.large .modal-content {
+            max-width: 800px;
+            width: 90%;
+        }
+        
+        .notes-filter {
+            margin-bottom: 20px;
+        }
+        
+        .notes-filter select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .note-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .note-header h4 {
+            margin: 0;
+            color: #2d3748;
+        }
+        
+        .note-book {
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .note-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .note-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .note-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        /* Enhanced book card styles */
+        .book-details .book-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .book-details .book-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .availability-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .availability-indicator.available {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .availability-indicator.limited {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .availability-indicator.unavailable {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+    </style>
 </head>
 <body class="books">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading your books...</div>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="header" style="color: aliceblue;">
+    <header class="header animate-fade-in-down" style="color: aliceblue;">
         <div class="container">
             <a href="dashboard.html" class="nav-brand">
                 <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
@@ -18,13 +422,38 @@
             <nav class="nav-links">
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
                 <a href="books.html" class="nav-link">Books</a>
+                <a href="my-books.html" class="nav-link active">My Books</a>
+                <a href="fines.html" class="nav-link">Fines</a>
                 <a href="notes.html" class="nav-link">Notes</a>
             </nav>
             <div class="header-actions">
+                <!-- Notification Button -->
+                <div class="notification-container">
+                    <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </button>
+                    
+                    <!-- Notification Panel -->
+                    <div class="notification-panel" id="notificationPanel" style="display: none;">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <!-- Notifications will be loaded here -->
+                        </div>
+                        <div class="notification-footer">
+                            <a href="#" class="notification-link" onclick="markAllAsRead()">Mark all as read</a>
+                        </div>
+                    </div>
+                </div>
+                
                 <button class="btn btn-outline" onclick="logout()">
                     <i data-lucide="log-out"></i>
                     Logout
                 </button>
+            </div>
+                </div>
             </div>
         </div>
     </header>
@@ -56,7 +485,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-title">Reservations</span>
+                    <span class="stat-title">Pre-books</span>
                     <i data-lucide="calendar"></i>
                 </div>
                 <div class="stat-number" id="reservations-count">1</div>
@@ -67,7 +496,7 @@
                     <span class="stat-title">Total Fine</span>
                     <i data-lucide="credit-card"></i>
                 </div>
-                <div class="stat-number" id="total-fine">৳50</div>
+                <div class="stat-number" id="total-fine">৳0.00</div>
                 <p class="stat-description">Outstanding amount</p>
             </div>
         </div>
@@ -80,11 +509,7 @@
             </button>
             <button class="tab-btn" data-tab="reservations">
                 <i data-lucide="calendar"></i>
-                Reservations
-            </button>
-            <button class="tab-btn" data-tab="history">
-                <i data-lucide="history"></i>
-                Borrowing History
+                Pre-books
             </button>
         </div>
 
@@ -108,8 +533,8 @@
         <div class="tab-content" id="reservations-tab">
             <div class="books-section">
                 <div class="section-header">
-                    <h2>Reserved Books</h2>
-                    <p>Books reserved and waiting for pickup</p>
+                    <h2>Pre-booked books</h2>
+                    <p>Books pre-booked and waiting for pickup</p>
                 </div>
                 <div class="reserved-books-list" id="reserved-books">
                     <!-- Reservations will be populated by JavaScript -->
@@ -117,46 +542,25 @@
             </div>
         </div>
 
-        <!-- History Tab -->
-        <div class="tab-content" id="history-tab">
-            <div class="books-section">
-                <div class="section-header">
-                    <h2>Borrowing History</h2>
-                    <p style="color: aqua;">Your complete borrowing record</p>
-                </div>
-                <div class="history-books-list" id="history-books">
-                    <!-- History will be populated by JavaScript -->
-                </div>
-            </div>
         </div>
-    </div>
-
-    <!-- Renewal Confirmation Modal -->
-    <div id="renewal-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Renew Book</h2>
-                <button class="modal-close" onclick="closeRenewalModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="renewal-message">Are you sure you want to renew this book?</p>
-                <div class="renewal-details">
-                    <p><strong>Current Due Date:</strong> <span id="current-due-date"></span></p>
-                    <p><strong>New Due Date:</strong> <span id="new-due-date"></span></p>
-                    <p><strong>Renewal Fee:</strong> <span id="renewal-fee">৳0</span></p>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-outline" onclick="closeRenewalModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmRenewal()">Confirm Renewal</button>
-            </div>
-        </div>
-    </div>
 
     <script src="scripts/auth.js"></script>
     <script src="scripts/my-books.js"></script>
     <script>
-        lucide.createIcons();
+        // Hide loading overlay after page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+            }, 500);
+        });
+
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     </script>
 </body>
 </html>

@@ -4,12 +4,287 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Notes - CUET Library</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="images/cuet-logo.png">
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/modern-theme.css" />
+    <link rel="stylesheet" href="styles/animations.css" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .required {
+            color: #ef4444;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+            display: block;
+        }
+        
+        .file-upload-area {
+            position: relative;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+        }
+        
+        .file-upload-area.dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-upload-content i {
+            width: 48px;
+            height: 48px;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        
+        .file-upload-content p {
+            font-size: 1.1rem;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-upload-content small {
+            color: #6b7280;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: #f3f4f6;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            font-size: 0.875rem;
+        }
+
+        .file-info i {
+            width: 16px;
+            height: 16px;
+            color: #3b82f6;
+        }
+
+        .file-info .file-name {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .file-info .file-size {
+            color: #6b7280;
+            margin-left: auto;
+        }
+
+        .file-indicator {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-indicator i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .note-icon {
+            position: relative;
+        }
+
+        .file-attachment {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .file-attachment h4 {
+            margin: 0 0 0.5rem 0;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .select-with-refresh {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .select-with-refresh select {
+            flex: 1;
+        }
+
+        .btn-refresh {
+            padding: 0.75rem;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+        }
+
+        .btn-refresh:active {
+            transform: scale(0.95);
+        }
+
+        .btn-refresh i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-refresh:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+        
+        .file-info i {
+            width: 20px;
+            height: 20px;
+            color: #3b82f6;
+        }
+        
+        .file-info button {
+            margin-left: auto;
+            padding: 0.25rem;
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .file-info button:hover {
+            background: #fee2e2;
+        }
+        
+        .upload-guidelines {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        
+        .upload-guidelines h4 {
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        .upload-guidelines ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 0;
+        }
+        
+        .upload-guidelines li {
+            margin-bottom: 0.25rem;
+            color: #6b7280;
+            font-size: 12px;
+        }
+        
+        .modal {
+            display: none !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
 </head>
 <body class="books">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading notes...</div>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="header">
+    <header class="header animate-fade-in-down">
         <div class="container">
             <a href="dashboard.html" class="nav-brand">
                 <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
@@ -48,7 +323,7 @@
                     <i data-lucide="file-text"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-number">1,234</div>
+                    <div class="stat-number" id="notes-total-count">0</div>
                     <p class="stat-description">Available for download</p>
                 </div>
             </div>
@@ -58,7 +333,7 @@
                     <i data-lucide="upload"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-number">12</div>
+                    <div class="stat-number" id="notes-my-count">0</div>
                     <p class="stat-description">Shared with community</p>
                 </div>
             </div>
@@ -70,16 +345,6 @@
                 <div class="stat-content">
                     <div class="stat-number">156</div>
                     <p class="stat-description">This semester</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">Favorites</span>
-                    <i data-lucide="heart"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-number">23</div>
-                    <p class="stat-description">Bookmarked notes</p>
                 </div>
             </div>
         </div>
@@ -121,10 +386,6 @@
                 <i data-lucide="user"></i>
                 My Notes
             </button>
-            <button class="tab-btn" data-tab="favorites">
-                <i data-lucide="heart"></i>
-                Favorites
-            </button>
         </div>
 
         <!-- Tab Contents -->
@@ -139,57 +400,102 @@
                 <!-- My notes will be populated by JavaScript -->
             </div>
         </div>
-
-        <div class="tab-content" id="favorites-tab">
-            <div class="notes-grid">
-                <!-- Favorite notes will be populated by JavaScript -->
-            </div>
-        </div>
     </div>
 
     <!-- Upload Modal -->
-    <div id="upload-modal" class="modal">
+    <div id="upload-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Upload Study Notes</h2>
                 <button class="modal-close" onclick="closeUploadModal()">&times;</button>
             </div>
-            <form id="upload-form" class="upload-form">
+            <form id="upload-form" class="upload-form" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="note-title">Title</label>
-                    <input type="text" id="note-title" name="title" placeholder="Enter note title" required>
+                    <label for="book-select">Related Book <span class="required">*</span></label>
+                    <div class="select-with-refresh">
+                        <select id="book-select" name="isbn" required>
+                            <option value="">Select a book...</option>
+                        </select>
+                        <button type="button" id="refresh-books" class="btn-refresh" onclick="loadBooksForUpload()" title="Refresh books list">
+                            <i data-lucide="refresh-cw"></i>
+                        </button>
+                    </div>
+                    <small class="help-text">Choose the book your notes are related to</small>
                 </div>
+                
                 <div class="form-group">
-                    <label for="note-description">Description</label>
-                    <textarea id="note-description" name="description" rows="3" placeholder="Brief description of the notes" required></textarea>
+                    <label for="note-title">Note Title <span class="required">*</span></label>
+                    <input type="text" id="note-title" name="title" placeholder="Enter a descriptive title" required>
+                    <small class="help-text">Give your notes a clear, descriptive title</small>
                 </div>
+                
                 <div class="form-group">
                     <label for="note-subject">Subject</label>
-                    <select id="note-subject" name="subject" required>
-                        <option value="">Select Subject</option>
-                        <option value="Programming">Programming</option>
-                        <option value="Database">Database Management</option>
-                        <option value="Networks">Computer Networks</option>
-                        <option value="Algorithms">Data Structures & Algorithms</option>
-                        <option value="Software Engineering">Software Engineering</option>
-                    </select>
+                    <input type="text" id="note-subject" name="subject" placeholder="e.g., Programming, Mathematics, Physics">
+                    <small class="help-text">Help others find your notes by category</small>
                 </div>
+                
                 <div class="form-group">
-                    <label for="note-file">PDF File</label>
-                    <input type="file" id="note-file" name="file" accept=".pdf" required>
+                    <label for="note-description">Description</label>
+                    <textarea id="note-description" name="content" rows="3" placeholder="Brief description of your notes (optional)"></textarea>
+                    <small class="help-text">Provide context about what your notes cover</small>
                 </div>
+                
+                <div class="form-group">
+                    <label for="note-file">Upload File <span class="required">*</span></label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input type="file" id="note-file" name="file" accept=".pdf,.doc,.docx,.txt" required>
+                        <div class="file-upload-content">
+                            <i data-lucide="upload-cloud"></i>
+                            <p>Click to select file or drag and drop</p>
+                            <small>Supported: PDF, Word documents, Text files (Max: 10MB)</small>
+                        </div>
+                        <div id="fileInfo" class="file-info" style="display: none;">
+                            <i data-lucide="file"></i>
+                            <span id="fileName"></span>
+                            <span id="fileSize"></span>
+                            <button type="button" id="removeFile"><i data-lucide="x"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="upload-guidelines">
+                    <h4>Upload Guidelines:</h4>
+                    <ul>
+                        <li>Ensure your notes are original work or properly cited</li>
+                        <li>Files will be reviewed by administrators before approval</li>
+                        <li>Use clear, descriptive titles for easy discovery</li>
+                        <li>Keep file sizes under 10MB for faster uploads</li>
+                    </ul>
+                </div>
+                
                 <div class="form-actions">
                     <button type="button" class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Upload Notes</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i data-lucide="upload"></i> Upload Notes
+                    </button>
                 </div>
             </form>
         </div>
-    </div>
+        </div>
 
     <script src="scripts/auth.js"></script>
     <script src="scripts/notes.js"></script>
     <script>
-        lucide.createIcons();
+        // Hide loading overlay after page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+            }, 500);
+        });
+
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     </script>
 </body>
 </html>

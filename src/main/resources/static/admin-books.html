@@ -4,35 +4,40 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Manage Books - CUET Library Admin</title>
+<link rel="icon" type="image/png" href="images/cuet-logo.png">
 
 <link rel="stylesheet" href="styles/main.css" />
-<link rel="stylesheet" href="css/admin-modals.css" />
+<link rel="stylesheet" href="styles/modern-theme.css" />
+<link rel="stylesheet" href="styles/animations.css" />
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<!-- Removed shared modal script; inlining page-specific modal logic below -->
+<script src="scripts/animations.js"></script>
 
 <style>
   :root{
-    --sidebar:#047619; --accent:#0ea5a3; --bg:#f4f6f9; --muted:#64748b; --card:#fff;
+    --sidebar:#2d6a38; --accent:#16a34a; --bg:#f4f6f9; --muted:#64748b; --card:#fff; --danger:#ef4444;
   }
   html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:#0f1724;}
   .admin-layout{display:flex;min-height:100vh;}
-  .sidebar{width:260px;background:var(--sidebar);color:#e6edf3;padding:28px 20px;box-shadow:2px 0 8px rgba(2,6,23,0.12);display:flex;flex-direction:column;gap:20px;}
-  .brand{display:flex;align-items:center;gap:12px;font-weight:700}
-  .brand img{width:36px;height:36px;border-radius:6px}
-  .nav{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-  .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#cfe7ff;text-decoration:none;font-size:14px}
-  .nav a.active,.nav a:hover{background:rgba(255,255,255,0.04);color:#fff}
-  .small{font-size:12px;color:#97a6b7;margin-top:auto}
+  .sidebar{width:260px !important;background:var(--sidebar) !important;color:#e6edf3 !important;padding:28px 20px !important;box-shadow:2px 0 8px rgba(2,6,23,0.12);display:flex !important;flex-direction:column !important;gap:20px !important;}
+  .sidebar .brand{display:flex !important;align-items:center !important;gap:12px !important;font-weight:700 !important;}
+  .sidebar .brand img{width:36px;height:36px;border-radius:6px}
+  .sidebar .nav{display:flex !important;flex-direction:column !important;gap:8px !important;margin-top:8px !important;}
+  .sidebar .nav a{display:flex !important;align-items:center !important;gap:10px !important;padding:10px 12px !important;border-radius:8px !important;color:#cfe7ff !important;text-decoration:none !important;font-size:14px !important;}
+  .sidebar .nav a.active,.sidebar .nav a:hover{background:rgba(255,255,255,0.1) !important;color:#fff !important;}
+  .sidebar .small{font-size:12px !important;color:#97a6b7 !important;margin-top:auto !important;}
 
   .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
   .main-header{display:flex;justify-content:space-between;align-items:center;gap:16px}
   .search{flex:1;display:flex;gap:12px;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
   .search input{border:0;outline:0;width:100%;font-size:14px;background:transparent}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;border:0}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;border:0;font-weight:500;transition:all .2s}
   .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:#15803d}
   .btn-ghost{background:transparent;color:#0f1724;border:1px solid #e6eef2}
-  .btn-danger{background:#ef4444;color:#fff}
-  .btn-small{padding:6px 8px;font-size:12px;border-radius:6px}
+  .btn-ghost:hover{background:#f8fafc}
+  .btn-danger{background:var(--danger);color: #fff !important;}
+  .btn-danger:hover{background:#dc2626}
+  .btn-small{padding:6px 10px;font-size:12px;border-radius:6px}
   .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(12,24,48,0.06)}
   .title{display:flex;align-items:center;gap:10px;font-weight:600;color:#0f1724}
@@ -47,6 +52,7 @@
   .badge{padding:6px 8px;border-radius:999px;font-size:12px;font-weight:600;display:inline-block}
   .badge-available{background:#ecfdf5;color:#047857;border:1px solid #d1fae5}
   .badge-issued{background:#fff7ed;color:#c2410c;border:1px solid #ffe7c2}
+  .badge-danger{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -89,24 +95,25 @@
 </head>
 <body>
   <div class="admin-layout">
-   <aside class="sidebar" aria-label="Admin navigation">
-      <div class="brand">
-        <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
-        <div>
-          <div style="font-size:15px">CUET Library Admin</div>
-          <div style="font-size:12px;color:#9fb6cc">Management Console</div>
+ <aside class="sidebar">
+        <div class="brand">
+            <img src="images/cuet-logo.png" alt="CUET" style="width:36px; height:36px; border-radius:6px"/>
+            <div>
+                <div style="font-size:15px">CUET Library Admin</div>
+                <div style="font-size:12px; color:#9fb6cc">Management Console</div>
+            </div>
         </div>
-      </div>
-      <nav class="nav" role="navigation">
-        <a href="admin.html"></i> Dashboard</a>
-        <a href="admin-books.html" class="active"></i> Manage Books</a>
-        <a href="admin-prebook.html"></i> Prebookings</a>
-        <a href="admin-fines.html"></i> Fines</a>
-        <a href="admin-notes.html"></i> Notes Moderation</a>
-        <a href="admin-settings.html"></i> Settings</a>
-      </nav>
-      <div class="small">Signed in as <strong>Admin</strong></div>
-    </aside>
+        <nav class="nav" role="navigation">
+            <a href="admin.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="admin-books.html" class="active"><i data-lucide="book-open"></i> Manage Books</a>
+            <a href="admin-prebook.html"><i data-lucide="calendar-clock"></i> Prebookings</a>
+            <a href="admin-borrow.html"><i data-lucide="book-marked"></i> Manage Borrows</a>
+            <a href="admin-fines.html"><i data-lucide="receipt"></i> Fines</a>
+            <a href="admin-notes.html"><i data-lucide="file-check-2"></i> Notes</a>
+            <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+        </nav>
+        <div class="small">Signed in as <strong>Admin</strong></div>
+    </aside>>
 
     <main class="main">
       <div class="main-header">
@@ -123,12 +130,33 @@
         </div>
       </div>
 
+      <!-- Debug Panel -->
+      <div id="debugPanel" style="display: none; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h4 style="margin: 0; font-size: 14px; color: #495057;">🔍 Debug Information</h4>
+          <button class="btn btn-ghost btn-small" onclick="clearDebugLog()">Clear</button>
+        </div>
+        <div id="debugLog" style="background: #fff; border: 1px solid #ced4da; border-radius: 4px; padding: 8px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; white-space: pre-wrap;"></div>
+      </div>
+      
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-ghost btn-small" onclick="toggleDebug()">Toggle Debug</button>
+        <button class="btn btn-ghost btn-small" onclick="testAuth()">Test Auth</button>
+        <button class="btn btn-ghost btn-small" onclick="checkAuthStatus()">Check Auth Status</button>
+        <button class="btn btn-ghost btn-small" onclick="manualLogin()">Re-login</button>
+        <button class="btn btn-ghost btn-small" onclick="testForm()">Test Form</button>
+      </div>
+
       <div class="section-grid">
         <div style="display:flex;flex-direction:column;gap:16px;">
           <div class="table-container">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
               <div class="title"><i data-lucide="book"></i> Books Inventory</div>
-              <div>
+              <div style="display:flex;gap:8px;">
+                <div class="search" style="max-width:280px;">
+                  <i data-lucide="search"></i>
+                  <input id="booksSearch" placeholder="Search books..." />
+                </div>
                 <button class="btn btn-primary btn-small" onclick="openAddModal()"><i data-lucide="plus"></i> Add Book</button>
               </div>
             </div>
@@ -139,87 +167,63 @@
                 </tr>
               </thead>
               <tbody>
-                <tr data-id="1">
-                  <td>1</td>
-                  <td>Database Management Systems</td>
-                  <td>Raghu Ramakrishnan</td>
-                  <td>978-0123456789</td>
-                  <td>CSE</td>
-                  <td>3</td>
-                  <td><span class="badge badge-available">3</span></td>
-                  <td class="actions">
-                    <button class="btn btn-ghost btn-small" onclick="openEdit(1)"><i data-lucide="edit-2"></i> Edit</button>
-                    <button class="btn btn-danger btn-small" onclick="deleteBook(1)"><i data-lucide="trash-2"></i> Delete</button>
-                  </td>
-                </tr>
-                <tr data-id="2">
-                  <td>2</td>
-                  <td>Operating System Concepts</td>
-                  <td>Silberschatz</td>
-                  <td>978-0987654321</td>
-                  <td>CSE</td>
-                  <td>5</td>
-                  <td><span class="badge badge-issued">0</span></td>
-                  <td class="actions">
-                    <button class="btn btn-ghost btn-small" onclick="openEdit(2)"><i data-lucide="edit-2"></i> Edit</button>
-                    <button class="btn btn-danger btn-small" onclick="deleteBook(2)"><i data-lucide="trash-2"></i> Delete</button>
+                <tr>
+                  <td colspan="8" style="text-align:center;color:var(--muted);padding:20px;">
+                    Loading books...
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <div class="card">
-            <div class="title"><i data-lucide="clock"></i> Recent Additions</div>
-            <div style="margin-top:10px;color:#475569;font-size:13px;">New books added this week</div>
-            <div style="margin-top:12px;">
-              <div class="note-row">
-                <div class="note-meta">
-                  <div style="width:56px;height:40px;background:#eef2ff;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#0f1724;font-weight:700;">DB</div>
-                  <div>
-                    <div style="font-weight:600">Advanced Databases</div>
-                    <div style="font-size:12px;color:var(--muted)">added 2025-01-20</div>
-                  </div>
+          <!-- Book Copies Management Section -->
+          <div class="table-container">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <div class="title"><i data-lucide="package"></i> Book Copies Management</div>
+              <div style="display:flex;gap:8px;">
+                <div class="search" style="max-width:200px;">
+                  <i data-lucide="search"></i>
+                  <input id="copiesSearch" placeholder="Search copies..." />
                 </div>
-                <div class="muted">Copies: 4</div>
-              </div>
-              <div class="note-row">
-                <div class="note-meta">
-                  <div style="width:56px;height:40px;background:#fff7ed;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6b2135;font-weight:700;">AI</div>
-                  <div>
-                    <div style="font-weight:600">Intro to AI</div>
-                    <div style="font-size:12px;color:var(--muted)">added 2025-01-19</div>
-                  </div>
-                </div>
-                <div class="muted">Copies: 2</div>
+                <select id="copiesFilterStatus" class="btn btn-ghost btn-small" style="padding:6px 10px;" onchange="filterBookCopies()">
+                  <option value="">All Statuses</option>
+                  <option value="AVAILABLE">Available</option>
+                  <option value="BORROWED">Borrowed</option>
+                  <option value="RESERVED">Reserved</option>
+                  <option value="LOST">Lost</option>
+                  <option value="DAMAGED">Damaged</option>
+                  <option value="UNDER_REPAIR">Under Repair</option>
+                  <option value="RETIRED">Retired</option>
+                </select>
+                <button class="btn btn-ghost btn-small" onclick="loadBookCopies()"><i data-lucide="refresh-cw"></i> Refresh</button>
               </div>
             </div>
+            <div class="muted" style="margin-bottom:12px;font-size:13px;">
+              Manage individual book copies: update locations and status
+            </div>
+            <table class="admin-table" aria-label="Manage book copies" id="bookCopiesTable">
+              <thead>
+                <tr>
+                  <th>Copy ID</th>
+                  <th>Book Title</th>
+                  <th>Author</th>
+                  <th>ISBN</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">
+                    Loading book copies...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
 
-        <div style="display:flex;flex-direction:column;gap:16px;">
-          <div class="card">
-            <div class="title"><i data-lucide="alert-triangle"></i> Low Stock</div>
-            <div style="margin-top:10px;color:#475569;font-size:13px;">Titles with low available copies</div>
-            <div style="margin-top:12px;">
-              <div class="note-row">
-                <div>
-                  <div style="font-weight:600">Computer Networks</div>
-                  <div style="font-size:12px;color:var(--muted)">Available: 1 — Department: CSE</div>
-                </div>
-                <div><button class="btn btn-primary btn-small" onclick="openEditByTitle('Computer Networks')">Restock</button></div>
-              </div>
-              <div class="note-row">
-                <div>
-                  <div style="font-weight:600">Advanced Calculus</div>
-                  <div style="font-size:12px;color:var(--muted)">Available: 0 — Department: Math</div>
-                </div>
-                <div><button class="btn btn-primary btn-small" onclick="openEditByTitle('Advanced Calculus')">Restock</button></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          
 
       <footer style="color:#94a3b8;font-size:13px;margin-top:8px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
     </main>
@@ -273,6 +277,11 @@
         <div class="muted" style="font-size:12px;margin-top:6px">If left blank it will be set to Total Copies.</div>
       </div>
       <div class="form-row">
+        <label for="location">Shelf Location *</label>
+        <input id="location" type="text" placeholder="e.g. Shelf A-12, Row 3" required />
+        <div class="muted" style="font-size:12px;margin-top:6px">Physical location where all copies are stored</div>
+      </div>
+      <div class="form-row">
         <label for="status">Status</label>
         <select id="status">
           <option value="available">Available</option>
@@ -300,46 +309,268 @@
 </div>
   </div>
 
+  <!-- Book Copy Edit Modal -->
+  <div class="modal-backdrop" id="bookCopyModalBackdrop" role="dialog" aria-hidden="true">
+    <div class="modal" id="bookCopyModal" role="document" aria-labelledby="bookCopyModalTitle">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;gap:10px;align-items:center;">
+          <h3 id="bookCopyModalTitle" style="margin:0;font-size:16px">Update Book Copy</h3>
+          <div class="muted" id="bookCopyModalSub">Modify location and status</div>
+        </div>
+        <button class="btn btn-ghost btn-small" type="button" aria-label="Close modal" onclick="closeModal('bookCopyModalBackdrop')">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form id="bookCopyForm" style="margin-top:12px;">
+        <input type="hidden" id="editingCopyId" />
+        
+        <div class="form-row" style="margin-bottom:12px;">
+          <label style="font-weight:600;color:#64748b;font-size:12px;">Book Information</label>
+          <div id="copyBookInfo" style="background:#f8fafc;padding:12px;border-radius:8px;font-size:13px;"></div>
+        </div>
+
+        <div class="form-grid" style="grid-template-columns:1fr;">
+          <div class="form-row">
+            <label for="copyLocation">Location *</label>
+            <input id="copyLocation" type="text" placeholder="e.g. Shelf A-12, Row 3" required />
+            <div class="muted" style="font-size:12px;margin-top:6px">Physical location in the library</div>
+          </div>
+          
+          <div class="form-row">
+            <label for="copyStatus">Status *</label>
+            <select id="copyStatus" required>
+              <option value="AVAILABLE">Available</option>
+              <option value="BORROWED">Borrowed</option>
+              <option value="RESERVED">Pre-Booked</option>
+            </select>
+            <div class="muted" style="font-size:12px;margin-top:6px">Current status of this book copy</div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('bookCopyModalBackdrop')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Copy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 <script>
+  // Check admin authentication
+  document.addEventListener('DOMContentLoaded', async function() {
+    const userType = localStorage.getItem('userType');
+    const token = localStorage.getItem('token');
+    
+    debugLog('Checking authentication', { userType, tokenExists: !!token });
+    
+    // Redirect to login if no token
+    if (!userType || userType !== 'admin' || !token) {
+      debugLog('No valid authentication found - redirecting to login');
+      alert('Please login as admin to access this page');
+      window.location.href = 'login.html';
+      return;
+    }
+    
+    // Test the token by making a simple API call (but don't auto-logout on failure)
+    try {
+      const testResponse = await fetch('/api/books?page=0&size=1', {
+        headers: getAuthHeaders()
+      });
+      debugLog('Token test response', { 
+        status: testResponse.status, 
+        ok: testResponse.ok,
+        statusText: testResponse.statusText 
+      });
+      
+      if (testResponse.status === 403 || testResponse.status === 401) {
+        debugLog('Token test failed - but continuing anyway. You may need to login again if operations fail.');
+      } else if (testResponse.ok) {
+        debugLog('Token test successful - authentication appears valid');
+      }
+    } catch (error) {
+      debugLog('Error testing token', error.message);
+    }
+    
+    // Initialize the page regardless of token test
+    await loadBooksFromDatabase();
+    await loadBookCopies();
+    // updateStats() is now called inside loadBooksFromDatabase()
+  });
+
+  // Utility function to get auth headers
+  function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    const userType = localStorage.getItem('userType');
+    
+    debugLog('Getting auth headers', { 
+      tokenExists: !!token, 
+      tokenLength: token ? token.length : 0,
+      userType: userType,
+      tokenPrefix: token ? token.substring(0, 10) + '...' : 'none'
+    });
+    
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  }
+
+  // Debug logging functions
+  function debugLog(message, data = '') {
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = `[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}`;
+    console.log(logEntry);
+    
+    const debugLogElement = document.getElementById('debugLog');
+    if (debugLogElement) {
+      debugLogElement.textContent += logEntry + '\n';
+      debugLogElement.scrollTop = debugLogElement.scrollHeight;
+    }
+  }
+
+  function toggleDebug() {
+    const panel = document.getElementById('debugPanel');
+    if (panel) {
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+  }
+
+  function clearDebugLog() {
+    const debugLogElement = document.getElementById('debugLog');
+    if (debugLogElement) {
+      debugLogElement.textContent = '';
+    }
+  }
+
+  // Check if response indicates authentication failure
+  function handleAuthError(response, autoLogout = false) {
+    if (response.status === 401 || response.status === 403) {
+      debugLog('Authentication error detected', { 
+        status: response.status, 
+        statusText: response.statusText,
+        autoLogout: autoLogout 
+      });
+      
+      if (autoLogout) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userType');
+        alert('Your session has expired or you don\'t have permission. Please login again.');
+        window.location.href = 'login.html';
+      } else {
+        debugLog('Auth error detected but not auto-logging out. Manual login may be needed.');
+      }
+      return true;
+    }
+    return false;
+  }
+
   if (window.lucide) lucide.createIcons();
 
-  // --- Inline modal helpers (isolated for this page) ---
+  // --- Modal helpers with smooth animations ---
   let lastFocusedElement = null;
   function openModal(modalId){
-    const m = document.getElementById(modalId);
-    if(!m) return;
+    openModalAnimated(modalId);
     lastFocusedElement = document.activeElement;
-    m.style.display='flex';
-    m.setAttribute('aria-hidden','false');
-    // focus first input
-    setTimeout(()=>{
-      const first = m.querySelector('input:not([type="hidden"]), select, textarea, button');
-      if(first) first.focus();
-    },30);
   }
-  function closeModal(modalId){
-    const m = document.getElementById(modalId);
-    if(!m) return;
-    m.style.display='none';
-    m.setAttribute('aria-hidden','true');
-    if(lastFocusedElement && typeof lastFocusedElement.focus==='function'){
-      lastFocusedElement.focus();
-    }
+  function closeModal(modalId, callback){
+    closeModalAnimated(modalId, () => {
+      if(lastFocusedElement && typeof lastFocusedElement.focus==='function'){
+        lastFocusedElement.focus();
+      }
+      if (callback) callback();
+    });
   }
   // Escape + backdrop
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape') closeModal('modalBackdrop');
+    if(e.key==='Escape') {
+      closeModal('modalBackdrop');
+      closeModal('bookCopyModalBackdrop');
+    }
   });
   document.addEventListener('click',e=>{
     if(e.target && e.target.id==='modalBackdrop') closeModal('modalBackdrop');
+    if(e.target && e.target.id==='bookCopyModalBackdrop') closeModal('bookCopyModalBackdrop');
   });
 
   // --- Page state ---
   const modal = document.getElementById('modalBackdrop');
   const modalWindow = document.getElementById('modalWindow');
   const form = document.getElementById('bookForm');
-  const booksTable = document.getElementById('booksTable').querySelector('tbody');
+  const booksTableEl = document.getElementById('booksTable');
+  const booksTable = booksTableEl ? booksTableEl.querySelector('tbody') : null;
   let nextId = 3;
+  
+  // Load books from database API
+  async function loadBooksFromDatabase() {
+    try {
+      debugLog('Loading books from database...');
+      const headers = getAuthHeaders();
+      // Use a large page size to get all books (increase if needed)
+      const response = await fetch('/api/books?page=0&size=1000', { headers });
+      
+      debugLog('Books API response status', response.status);
+      
+      if (response.ok) {
+        const books = await response.json();
+        debugLog('Received books from API', books);
+        
+        // Guard against null booksTable
+        if (!booksTable) {
+          debugLog('Error loading books from database', 'Books table element not found');
+          return;
+        }
+        
+        // Clear existing table
+        booksTable.innerHTML = '';
+        
+        const booksArray = Array.isArray(books) ? books : (books.content || []);
+        debugLog('Books array length', booksArray.length);
+        
+        // Reverse to show newest first (in case backend doesn't sort)
+        booksArray.reverse();
+        
+        if (booksArray.length > 0) {
+          booksArray.forEach(book => {
+            const tr = document.createElement('tr');
+            tr.setAttribute('data-id', book.bookId || book.isbn);
+            tr.setAttribute('data-isbn', book.isbn);
+            tr.innerHTML = `
+              <td>${book.bookId || book.isbn}</td>
+              <td>${escapeHtml(book.title)}</td>
+              <td>${escapeHtml(book.author)}</td>
+              <td>${escapeHtml(book.isbn)}</td>
+              <td>${escapeHtml(book.department || book.category || '')}</td>
+              <td>${book.totalCopies || 0}</td>
+              <td><span class="badge ${(book.availableCopies||0)>0?'badge-available':'badge-issued'}">${book.availableCopies || 0}</span></td>
+              <td class="actions">
+                <button class="btn btn-ghost btn-small" onclick="openEdit('${book.isbn}')"><i data-lucide="edit-2"></i> Edit</button>
+                <button class="btn btn-danger btn-small" onclick="deleteBook('${book.isbn}')"><i data-lucide="trash-2"></i> Delete</button>
+              </td>`;
+            booksTable.appendChild(tr);
+          });
+          
+          // Update nextId to avoid conflicts
+          const maxId = Math.max(...booksArray.map(b => parseInt(b.id) || 0)) + 1;
+          nextId = maxId;
+          
+          debugLog('Successfully loaded books from database', booksArray.length);
+        } else {
+          debugLog('No books found in database, starting with empty table');
+        }
+        
+        if (window.lucide) lucide.createIcons();
+        updateStats(); // Update stats after loading books
+      } else {
+        const errorText = await response.text();
+        debugLog('Failed to load books', `Status: ${response.status}, Error: ${errorText}`);
+        alert('Failed to load books from database. Please try again.');
+      }
+    } catch (error) {
+      debugLog('Error loading books from database', error.message);
+      alert('Error connecting to database. Please check your connection and try again.');
+    }
+  }
 
   function openAddModal(){
     document.getElementById('modalTitle').textContent = 'Add New Book';
@@ -351,12 +582,12 @@
     openModal('modalBackdrop');
   }
 
-  function openEdit(id){
-    const row = booksTable.querySelector(`tr[data-id="${id}"]`);
+  function openEdit(isbn){
+    const row = booksTable.querySelector(`tr[data-isbn="${isbn}"]`);
     if(!row) return alert('Record not found');
     document.getElementById('modalTitle').textContent = 'Edit Book';
     document.getElementById('modalSub').textContent = 'Update book details';
-    document.getElementById('editingId').value = id;
+    document.getElementById('editingId').value = isbn;
     const cells = row.children;
     document.getElementById('title').value = cells[1].textContent.trim();
     document.getElementById('author').value = cells[2].textContent.trim();
@@ -365,7 +596,26 @@
     document.getElementById('copies').value = cells[5].textContent.trim();
     const ava = cells[6].textContent.trim();
     document.getElementById('available').value = isNaN(+ava) ? '' : +ava;
+    
+    // Fetch book details to get location (since it's not in the table)
+    fetchBookDetailsForEdit(isbn);
+    
     openModal('modalBackdrop');
+  }
+  
+  async function fetchBookDetailsForEdit(isbn) {
+    try {
+      const headers = getAuthHeaders();
+      const response = await fetch(`/api/books/isbn/${isbn}`, { headers });
+      if (response.ok) {
+        const book = await response.json();
+        if (book.location) {
+          document.getElementById('location').value = book.location;
+        }
+      }
+    } catch (error) {
+      debugLog('Error fetching book details for edit', error.message);
+    }
   }
 
   // Using global modal escape key handling
@@ -386,68 +636,296 @@
     reader.readAsDataURL(file);
   });
 
-  form.addEventListener('submit', (e)=>{
+  form.addEventListener('submit', async (e)=>{
+    debugLog('Form submission started');
     e.preventDefault();
-    const id = document.getElementById('editingId').value;
-    const title = document.getElementById('title').value.trim();
-    const author = document.getElementById('author').value.trim();
-    const isbn = document.getElementById('isbn').value.trim();
-    const department = document.getElementById('department').value;
-    const copies = Math.max(0, parseInt(document.getElementById('copies').value || 0));
-    let available = document.getElementById('available').value;
-    available = available === '' ? copies : Math.max(0, parseInt(available || 0));
-    if(!title || !author) return alert('Title and Author are required');
+    
+    try {
+      const id = document.getElementById('editingId').value;
+      const title = document.getElementById('title').value.trim();
+      const author = document.getElementById('author').value.trim();
+      const isbn = document.getElementById('isbn').value.trim();
+      const department = document.getElementById('department').value;
+      const copies = Math.max(0, parseInt(document.getElementById('copies').value || 0));
+      let available = document.getElementById('available').value;
+      available = available === '' ? copies : Math.max(0, parseInt(available || 0));
+      const location = document.getElementById('location').value.trim();
+      const description = document.getElementById('description').value.trim();
+      
+      debugLog('Form data collected', { id, title, author, isbn, department, copies, available, location });
+      
+      if(!title || !author || !isbn) {
+        debugLog('Validation failed - missing required fields');
+        alert('Title, Author, and ISBN are required');
+        return;
+      }
 
-    if(id){
-      const row = booksTable.querySelector(`tr[data-id="${id}"]`);
-      if(!row) return alert('Record not found');
-      row.children[1].textContent = title;
-      row.children[2].textContent = author;
-      row.children[3].textContent = isbn;
-      row.children[4].textContent = department;
-      row.children[5].textContent = copies;
-      row.children[6].innerHTML = `<span class="badge ${available>0?'badge-available':'badge-issued'}">${available}</span>`;
-    } else {
-      const tr = document.createElement('tr');
-      tr.setAttribute('data-id', nextId);
-      tr.innerHTML = `
-        <td>${nextId}</td>
-        <td>${escapeHtml(title)}</td>
-        <td>${escapeHtml(author)}</td>
-        <td>${escapeHtml(isbn)}</td>
-        <td>${escapeHtml(department)}</td>
-        <td>${copies}</td>
-        <td><span class="badge ${available>0?'badge-available':'badge-issued'}">${available}</span></td>
-        <td class="actions">
-          <button class="btn btn-ghost btn-small" onclick="openEdit(${nextId})"><i data-lucide="edit-2"></i> Edit</button>
-          <button class="btn btn-danger btn-small" onclick="deleteBook(${nextId})"><i data-lucide="trash-2"></i> Delete</button>
-        </td>`;
-      booksTable.prepend(tr);
-      nextId++;
-      if(window.lucide) lucide.createIcons();
+      if(!location) {
+        debugLog('Validation failed - missing location');
+        alert('Shelf Location is required');
+        return;
+      }
+
+      // Validate ISBN before converting to number
+      if (!isbn || isbn.trim() === '') {
+        debugLog('ISBN validation failed - empty');
+        alert('Valid ISBN is required');
+        return;
+      }
+      
+      // Check if ISBN is numeric and within BIGINT range (database is now BIGINT)
+      const isbnNumber = parseInt(isbn);
+      if (isNaN(isbnNumber) || isbnNumber <= 0 || isbnNumber > 9223372036854775807) {
+        debugLog('ISBN validation failed - out of range');
+        alert('ISBN must be a positive number between 1 and 9,223,372,036,854,775,807 (database BIGINT limit).');
+        return;
+      }
+
+      const bookData = {
+        isbn: isbnNumber, // Use the validated number
+        title: title,
+        author: author,
+        category: department, // Backend uses 'category' not 'department'
+        totalCopies: copies,
+        availableCopies: available,
+        location: location
+        // Note: removed description as it's not in the Book entity
+      };
+
+      debugLog('About to send API request');
+      const headers = getAuthHeaders();
+      let response;
+      
+      debugLog('Preparing book data', bookData);
+      debugLog('Request headers', headers);
+      
+      if(id) {
+        // Edit existing book
+        debugLog('Updating book via PUT', `/api/books/${isbn}`);
+        response = await fetch(`/api/books/${isbn}`, {
+          method: 'PUT',
+          headers: headers,
+          body: JSON.stringify(bookData)
+        });
+      } else {
+        // Add new book
+        debugLog('Adding new book via POST', '/api/books');
+        response = await fetch('/api/books', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(bookData)
+        });
+      }
+
+      debugLog('Book submission response status', response.status);
+
+      if (response.ok) {
+        const result = await response.json();
+        debugLog('Book submission successful', result);
+        
+        // Show success toast
+        showToast(id ? 'Book updated successfully!' : 'Book added successfully!', 'success');
+        
+        // Reload the entire table to reflect changes
+        await loadBooksFromDatabase();
+        closeModal('modalBackdrop');
+        updateStats();
+      } else {
+        // Check if it's an auth error first
+        if (handleAuthError(response)) {
+          return;
+        }
+        
+        // Clone the response so we can try multiple parsing methods
+        const responseClone = response.clone();
+        let errorText;
+        
+        try {
+          // Try to parse as JSON first (most API errors)
+          const errorData = await response.json();
+          errorText = errorData.message || errorData.error || JSON.stringify(errorData);
+        } catch (jsonError) {
+          // If JSON parsing fails, use the cloned response to get text
+          try {
+            errorText = await responseClone.text();
+          } catch (textError) {
+            errorText = `HTTP ${response.status}: ${response.statusText}`;
+          }
+        }
+        
+        debugLog('Book submission failed', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+          bookData: bookData
+        });
+        
+        showToast(`Failed to ${id ? 'update' : 'add'} book: ${errorText || `HTTP ${response.status}: ${response.statusText}`}`, 'error', 5000);
+      }
+    } catch (error) {
+      debugLog('Error in form submission', error.message);
+      debugLog('Error stack', error.stack);
+      showToast(`Error ${id ? 'updating' : 'adding'} book: ${error.message}`, 'error', 5000);
     }
-    closeModal('modalBackdrop');
-    updateStats();
   });
 
-  function deleteBook(id){
+  async function deleteBook(id){
     if(!confirm('Delete book with ID: '+id+'?')) return;
-    const row = booksTable.querySelector(`tr[data-id="${id}"]`);
-    if(row) row.remove();
-    updateStats();
+    
+    try {
+      debugLog('Deleting book with ID', id);
+      const headers = getAuthHeaders();
+      const response = await fetch(`/api/books/${id}`, {
+        method: 'DELETE',
+        headers: headers
+      });
+
+      debugLog('Delete book response status', response.status);
+
+      if (response.ok) {
+        debugLog('Book deleted successfully', id);
+        
+        // Reload the entire table to reflect changes
+        await loadBooksFromDatabase();
+        updateStats();
+        
+        showToast('Book deleted successfully!', 'success');
+      } else {
+        // Clone the response so we can try multiple parsing methods
+        const responseClone = response.clone();
+        let errorText;
+        
+        try {
+          // Try to parse as JSON first
+          const errorData = await response.json();
+          errorText = errorData.message || errorData.error || JSON.stringify(errorData);
+        } catch (jsonError) {
+          // If JSON parsing fails, use the cloned response to get text
+          try {
+            errorText = await responseClone.text();
+          } catch (textError) {
+            errorText = `HTTP ${response.status}: ${response.statusText}`;
+          }
+        }
+        
+        debugLog('Delete book failed', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText
+        });
+        
+        showToast(`Failed to delete book: ${errorText || `HTTP ${response.status}: ${response.statusText}`}`, 'error', 5000);
+      }
+    } catch (error) {
+      debugLog('Error deleting book', error.message);
+      showToast(`Error deleting book: ${error.message}`, 'error', 5000);
+    }
   }
 
   function openEditByTitle(title){
     const rows = [...booksTable.querySelectorAll('tr')];
     const found = rows.find(r => r.children[1].textContent.trim() === title);
     if(found) openEdit(found.getAttribute('data-id'));
-    else alert('Title not found: '+title);
+    else showToast('Title not found: '+title, 'warning');
   }
 
   function logout(){ location.href='index.html'; }
 
+  // Test authentication manually
+  async function testAuth() {
+    debugLog('Manual auth test started');
+    try {
+      const response = await fetch('/api/books?page=0&size=1', {
+        headers: getAuthHeaders()
+      });
+      debugLog('Manual auth test result', { 
+        status: response.status, 
+        ok: response.ok,
+        statusText: response.statusText 
+      });
+      
+      if (response.ok) {
+        alert('Authentication is working! ✅');
+      } else {
+        alert(`Authentication failed: ${response.status} ${response.statusText}`);
+      }
+    } catch (error) {
+      debugLog('Manual auth test error', error.message);
+      alert(`Auth test error: ${error.message}`);
+    }
+  }
+
+  // Manual re-login
+  function manualLogin() {
+    if (confirm('This will take you to the login page. Continue?')) {
+      window.location.href = 'login.html';
+    }
+  }
+
+  // Test form functionality
+  function testForm() {
+    debugLog('Testing form functionality');
+    const form = document.getElementById('bookForm');
+    if (form) {
+      debugLog('Form element found', form);
+      debugLog('Form onsubmit handler', typeof form.onsubmit);
+      
+      // Check if form fields exist
+      const fields = ['title', 'author', 'isbn', 'department', 'copies', 'available'];
+      fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        debugLog(`Field ${fieldId}`, { exists: !!field, value: field ? field.value : 'N/A' });
+      });
+    } else {
+      debugLog('Form element NOT found!');
+    }
+  }
+
+  // Check current authentication status
+  function checkAuthStatus() {
+    debugLog('=== AUTHENTICATION STATUS CHECK ===');
+    const token = localStorage.getItem('token');
+    const userType = localStorage.getItem('userType');
+    const username = localStorage.getItem('username');
+    
+    debugLog('LocalStorage contents', {
+      token: token ? `${token.substring(0, 20)}...` : 'None',
+      tokenLength: token ? token.length : 0,
+      userType: userType,
+      username: username
+    });
+    
+    if (token) {
+      try {
+        // Try to decode JWT token (basic decode, not verification)
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          debugLog('Token payload', {
+            sub: payload.sub,
+            exp: payload.exp,
+            iat: payload.iat,
+            authorities: payload.authorities,
+            currentTime: Math.floor(Date.now() / 1000),
+            isExpired: payload.exp < Math.floor(Date.now() / 1000)
+          });
+        }
+      } catch (e) {
+        debugLog('Could not decode token', e.message);
+      }
+    }
+    
+    alert('Check debug panel for detailed auth status');
+  }
+
   function updateStats(){
-    const rows = [...booksTable.querySelectorAll('tr')];
+    const booksTableEl = document.getElementById('booksTable');
+    if (!booksTableEl) return; // Guard against null
+    
+    const tbody = booksTableEl.querySelector('tbody');
+    if (!tbody) return; // Guard against null
+    
+    const rows = [...tbody.querySelectorAll('tr')];
     const totalTitlesEl = document.getElementById('totalTitles');
     const totalBooksEl = document.getElementById('totalBooks');
     const availableInfoEl = document.getElementById('availableInfo');
@@ -476,7 +954,214 @@
     });
   });
 
-  updateStats();
+  // Books table search
+  document.getElementById('booksSearch').addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    const booksTableEl = document.getElementById('booksTable');
+    if (!booksTableEl) return;
+    const tbody = booksTableEl.querySelector('tbody');
+    if (!tbody) return;
+    [...tbody.querySelectorAll('tr')].forEach(r=>{
+      const text = r.textContent.toLowerCase();
+      r.style.display = text.includes(q)?'':'none';
+    });
+  });
+
+  // Book copies table search
+  document.getElementById('copiesSearch').addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    const copiesTableEl = document.getElementById('bookCopiesTable');
+    if (!copiesTableEl) return;
+    const tbody = copiesTableEl.querySelector('tbody');
+    if (!tbody) return;
+    [...tbody.querySelectorAll('tr')].forEach(r=>{
+      const text = r.textContent.toLowerCase();
+      r.style.display = text.includes(q)?'':'none';
+    });
+  });
+
+  // ========== BOOK COPIES MANAGEMENT ==========
+  
+  let allBookCopies = [];
+  const bookCopiesTable = document.getElementById('bookCopiesTable').querySelector('tbody');
+  
+  // Load all book copies from API
+  async function loadBookCopies() {
+    try {
+      debugLog('Loading book copies from database...');
+      const headers = getAuthHeaders();
+      const response = await fetch('/api/book-copies/all', { headers });
+      
+      debugLog('Book copies API response status', response.status);
+      
+      if (response.ok) {
+        const copies = await response.json();
+        allBookCopies = copies;
+        debugLog('Received book copies from API', copies.length);
+        
+        displayBookCopies(copies);
+      } else if (response.status === 403 || response.status === 401) {
+        // Authentication error - redirect to login
+        debugLog('Authentication failed - token may be expired');
+        alert('Your session has expired. Please login again.');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userType');
+        window.location.href = 'login.html';
+      } else {
+        const errorText = await response.text();
+        debugLog('Failed to load book copies', `Status: ${response.status}, Error: ${errorText}`);
+        bookCopiesTable.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);padding:20px;">
+          Failed to load book copies (Error ${response.status})<br>
+          <button class="btn btn-ghost btn-small" onclick="window.location.href='login.html'" style="margin-top:10px;">
+            Re-login
+          </button>
+        </td></tr>`;
+      }
+    } catch (error) {
+      debugLog('Error loading book copies', error.message);
+      bookCopiesTable.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);padding:20px;">Error: ${error.message}</td></tr>`;
+    }
+  }
+  
+  // Display book copies in table
+  function displayBookCopies(copies) {
+    bookCopiesTable.innerHTML = '';
+    
+    if (copies.length === 0) {
+      bookCopiesTable.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">No book copies found</td></tr>`;
+      return;
+    }
+    
+    // Reverse to show newest first
+    const sortedCopies = [...copies].reverse();
+    
+    sortedCopies.forEach(copy => {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-copy-id', copy.copyId);
+      tr.setAttribute('data-status', copy.status);
+      
+      // Status badge styling
+      let statusClass = 'badge-available';
+      if (copy.status === 'BORROWED' || copy.status === 'RESERVED') {
+        statusClass = 'badge-issued';
+      } else if (copy.status === 'LOST' || copy.status === 'DAMAGED' || copy.status === 'RETIRED') {
+        statusClass = 'badge badge-danger';
+      }
+      
+      tr.innerHTML = `
+        <td style="font-family:monospace;font-size:12px;">${escapeHtml(copy.copyId)}</td>
+        <td>${escapeHtml(copy.bookTitle)}</td>
+        <td>${escapeHtml(copy.bookAuthor)}</td>
+        <td style="font-family:monospace;font-size:12px;">${escapeHtml(copy.isbn)}</td>
+        <td>${escapeHtml(copy.location || 'Not assigned')}</td>
+        <td><span class="badge ${statusClass}">${copy.status}</span></td>
+        <td class="actions">
+          <button class="btn btn-ghost btn-small" onclick="openEditBookCopy('${copy.copyId}')">
+            <i data-lucide="edit-2"></i> Update
+          </button>
+        </td>`;
+      bookCopiesTable.appendChild(tr);
+    });
+    
+    if (window.lucide) lucide.createIcons();
+  }
+  
+  // Filter book copies by status
+  function filterBookCopies() {
+    const statusFilter = document.getElementById('copiesFilterStatus').value;
+    
+    if (!statusFilter) {
+      displayBookCopies(allBookCopies);
+    } else {
+      const filtered = allBookCopies.filter(copy => copy.status === statusFilter);
+      displayBookCopies(filtered);
+    }
+  }
+  
+  // Open edit modal for book copy
+  function openEditBookCopy(copyId) {
+    const copy = allBookCopies.find(c => c.copyId === copyId);
+    if (!copy) {
+      alert('Book copy not found');
+      return;
+    }
+    
+    // Populate form
+    document.getElementById('editingCopyId').value = copyId;
+    document.getElementById('copyLocation').value = copy.location || '';
+    document.getElementById('copyStatus').value = copy.status;
+    
+    // Show book info
+    const bookInfo = document.getElementById('copyBookInfo');
+    bookInfo.innerHTML = `
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:8px;">
+        <strong>Copy ID:</strong><span style="font-family:monospace;">${escapeHtml(copyId)}</span>
+        <strong>Title:</strong><span>${escapeHtml(copy.bookTitle)}</span>
+        <strong>Author:</strong><span>${escapeHtml(copy.bookAuthor)}</span>
+        <strong>ISBN:</strong><span style="font-family:monospace;">${escapeHtml(copy.isbn)}</span>
+      </div>
+    `;
+    
+    openModal('bookCopyModalBackdrop');
+  }
+  
+  // Handle book copy form submission
+  document.getElementById('bookCopyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    try {
+      const copyId = document.getElementById('editingCopyId').value;
+      const location = document.getElementById('copyLocation').value.trim();
+      const status = document.getElementById('copyStatus').value;
+      
+      debugLog('Updating book copy', { copyId, location, status });
+      
+      const headers = getAuthHeaders();
+      const response = await fetch(`/api/book-copies/${encodeURIComponent(copyId)}`, {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify({ location, status })
+      });
+      
+      debugLog('Book copy update response status', response.status);
+      
+      if (response.ok) {
+        const result = await response.json();
+        debugLog('Book copy updated successfully', result);
+        
+        // Show success toast
+        showToast('Book copy updated successfully!', 'success');
+        
+        // Reload book copies
+        await loadBookCopies();
+        closeModal('bookCopyModalBackdrop');
+      } else {
+        const responseClone = response.clone();
+        let errorText;
+        
+        try {
+          const errorData = await response.json();
+          errorText = errorData.message || errorData.error || JSON.stringify(errorData);
+        } catch (jsonError) {
+          try {
+            errorText = await responseClone.text();
+          } catch (textError) {
+            errorText = `HTTP ${response.status}: ${response.statusText}`;
+          }
+        }
+        
+        debugLog('Book copy update failed', {
+          status: response.status,
+          error: errorText
+        });
+        
+        showToast(`Failed to update book copy: ${errorText}`, 'error', 5000);
+      }
+    } catch (error) {
+      debugLog('Error updating book copy', error.message);
+      showToast(`Error updating book copy: ${error.message}`, 'error', 5000);
+    }
+  });
 
   // End inline modal helpers
 </script>

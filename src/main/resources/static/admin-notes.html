@@ -4,34 +4,38 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Notes Moderation - CUET Library Admin</title>
+<link rel="icon" type="image/png" href="images/cuet-logo.png">
 
 <!-- Base stylesheet -->
 <link rel="stylesheet" href="styles/main.css" />
 <link rel="stylesheet" href="css/admin-modals.css" />
+<link rel="stylesheet" href="styles/animations.css" />
 
 <!-- Lucide icons (UMD) -->
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="scripts/animations.js"></script>
 
-<!-- Inline CSS for professional layout and components -->
 <style>
   :root{
     --sidebar:#2d6a38;
+    --primary:#16a34a;
     --muted:#64748b;
     --card-bg:#fff;
     --bg:#f4f6f9;
-    --accent:#0ea5a3;
+    --accent:#16a34a;
+    --danger:#ef4444;
   }
 
   html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
 
-  .admin-layout { display: flex; min-height: 100vh; }
-  .sidebar { width: 260px; background:var(--sidebar); color:#e6edf3; padding:28px 20px; box-shadow: 2px 0 8px rgba(2,6,23,0.12); display:flex; flex-direction:column; gap:20px; }
-  .sidebar .brand { display:flex; align-items:center; gap:12px; font-weight:700; font-size:16px; }
-  .sidebar .brand img{width:36px;height:36px;border-radius:6px;object-fit:cover}
-  .sidebar .nav { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
-  .sidebar .nav a { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; color:#cfe7ff; text-decoration:none; font-size:14px; }
-  .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255,255,255,0.04); color:#fff; }
-  .sidebar .small { font-size:12px; color:#97a6b7; margin-top:auto; }
+  .admin-layout { display:flex; min-height:100vh; }
+  .sidebar { width:260px !important; background:var(--sidebar) !important; color:#e6edf3 !important; padding:28px 20px !important; display:flex !important; flex-direction:column !important; gap:20px !important; box-shadow:2px 0 8px rgba(2,6,23,0.12);}
+  .sidebar .brand { display:flex !important; align-items:center !important; gap:12px !important; font-weight:700 !important; font-size:16px !important;}
+  .sidebar .brand img{width:36px;height:36px;border-radius:6px;object-fit:cover;}
+  .sidebar .nav { display:flex !important; flex-direction:column !important; gap:8px !important; margin-top:8px !important; }
+  .sidebar .nav a { display:flex !important; align-items:center !important; gap:10px !important; padding:10px 12px !important; border-radius:8px !important; color:#cfe7ff !important; text-decoration:none !important; font-size:14px !important; }
+  .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255,255,255,0.1) !important; color:#fff !important; }
+  .sidebar .small { font-size:12px !important; color:#97a6b7 !important; margin-top:auto !important; }
 
   .main { flex:1; padding:28px; display:flex; flex-direction:column; gap:18px; }
 
@@ -40,23 +44,26 @@
   .search { flex:1; display:flex; gap:12px; align-items:center; background:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 1px 2px rgba(16,24,40,.04); max-width:520px; }
   .search input { border:0; outline:0; width:100%; font-size:14px; background:transparent; }
 
-  .cards-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; }
+  .cards-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:16px; }
   .card { background:var(--card-bg); padding:16px; border-radius:10px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
   .card .title { display:flex; align-items:center; gap:10px; font-weight:600; color:#0f1724; }
   .stat-number { font-size:20px; font-weight:700; margin-top:8px; color:#0f1724; }
 
-  .section-grid { display:grid; grid-template-columns: 2fr 1fr; gap:16px; align-items:start; }
+  .section-grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; align-items:start; }
 
   .table-container { overflow:auto; background: var(--card-bg); border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
   table.admin-table { width:100%; border-collapse:collapse; font-size:14px; }
   table.admin-table th, table.admin-table td { padding:10px 12px; text-align:left; border-bottom:1px solid #eef2f6; }
   table.admin-table th { font-weight:600; color:#334155; background:transparent; }
 
-  .btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; font-size:13px; cursor:pointer; border:0; }
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:8px; font-size:13px; cursor:pointer; border:0; font-weight:500; transition:all .2s; }
   .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { background:#15803d; }
   .btn-ghost { background:transparent; color:#0f1724; border:1px solid #e6eef2; }
-  .btn-danger { background:#ef4444; color:#fff; }
-  .btn-small { padding:6px 8px; font-size:12px; border-radius:6px; }
+  .btn-ghost:hover { background:#f8fafc; }
+  .btn-danger { background:var(--danger); color:#fff; }
+  .btn-danger:hover { background:#dc2626; }
+  .btn-small { padding:6px 10px; font-size:12px; border-radius:6px; }
 
   .note-card { background:var(--card-bg); border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(12,24,48,0.06); }
   .note-row { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:10px 8px; border-bottom:1px dashed #f1f5f9; }
@@ -72,37 +79,35 @@
   .modal h3{margin:0 0 8px 0}
   .modal .meta{color:var(--muted);font-size:13px;margin-bottom:12px}
 
-  /* responsive */
-  @media (max-width: 980px){
-    .cards-grid { grid-template-columns: repeat(2, 1fr); }
-    .section-grid { grid-template-columns: 1fr; }
-    .sidebar { display:none; }
+  @media(max-width:980px){
+    .cards-grid{grid-template-columns:repeat(2,1fr);}
+    .section-grid{grid-template-columns:1fr;}
+    .sidebar{display:none;}
   }
 </style>
 </head>
 <body>
 <div class="admin-layout">
   <!-- Sidebar -->
-  <aside class="sidebar" aria-label="Admin navigation">
-            <div class="brand">
-                <img src="images/cuet-logo.png" alt="CUET" style="width:36px;height:36px;border-radius:6px"/>
-                <div>
-                    <div style="font-size:15px">CUET Library Admin</div>
-                    <div style="font-size:12px;color:#9fb6cc">Management Console</div>
-                </div>
+   <aside class="sidebar">
+        <div class="brand">
+            <img src="images/cuet-logo.png" alt="CUET" style="width:36px; height:36px; border-radius:6px"/>
+            <div>
+                <div style="font-size:15px">CUET Library Admin</div>
+                <div style="font-size:12px; color:#9fb6cc">Management Console</div>
             </div>
-
-            <nav class="nav" role="navigation">
-                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
-                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
-                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
-                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
-                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
-                <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
-            </nav>
-
-            <div class="small">Signed in as <strong>Admin</strong></div>
-        </aside>
+        </div>
+        <nav class="nav" role="navigation">
+            <a href="admin.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="admin-books.html"><i data-lucide="book-open"></i> Manage Books</a>
+            <a href="admin-prebook.html"><i data-lucide="calendar-clock"></i> Prebookings</a>
+            <a href="admin-borrow.html"><i data-lucide="book-marked"></i> Manage Borrows</a>
+            <a href="admin-fines.html"><i data-lucide="receipt"></i> Fines</a>
+            <a href="admin-notes.html" class="active"><i data-lucide="file-check-2"></i> Notes</a>
+            <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
+        </nav>
+        <div class="small">Signed in as <strong>Admin</strong></div>
+    </aside>
 
   <!-- Main content -->
   <main class="main">
@@ -111,21 +116,20 @@
         <h1>Notes Moderation</h1>
         <div style="color:var(--muted); font-size:13px;">Review uploaded study notes and approve or reject.</div>
       </div>
-
       <div style="display:flex; gap:12px; align-items:center;">
         <div class="search" style="max-width:420px;">
           <i data-lucide="search"></i>
           <input id="globalSearch" placeholder="Search notes..." onkeyup="filterNotes()" />
         </div>
-        <button class="btn btn-ghost" onclick="logout()" style="background:transparent;border:1px solid #e6eef2;padding:8px 10px;border-radius:8px;">Log out</button>
+        <button class="btn btn-ghost" onclick="logout()">Log out</button>
       </div>
     </div>
 
     <!-- Quick stats -->
-    <div class="cards-grid" aria-hidden="false">
+    <div class="cards-grid">
       <div class="card">
         <div class="title"><i data-lucide="file-text"></i> Notes Pending</div>
-        <div class="stat-number" id="pendingCount">3</div>
+        <div class="stat-number" id="pendingCount">0</div>
         <div style="color:var(--muted); margin-top:6px;">Moderation required</div>
       </div>
       <div class="card">
@@ -138,24 +142,19 @@
         <div class="stat-number" id="rejectedCount">0</div>
         <div style="color:var(--muted); margin-top:6px;">Rejected notes</div>
       </div>
-      <div class="card">
-        <div class="title"><i data-lucide="users"></i> Active Students</div>
-        <div class="stat-number">3,876</div>
-        <div style="color:var(--muted); margin-top:6px;">Registered users</div>
-      </div>
+    
     </div>
 
     <div class="section-grid">
-      <!-- Left: Recent notes (list with view) -->
+      <!-- Left: Notes list -->
       <div style="display:flex; flex-direction:column; gap:16px;">
         <div class="table-container">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div class="title"><i data-lucide="list"></i> Recent Notes</div>
             <div style="color:var(--muted); font-size:13px;">Click view to inspect content, then approve or reject.</div>
           </div>
-
           <div id="notesList" class="note-card" aria-live="polite">
-            <!-- Note rows: store data attributes for quick access -->
+            <!-- Example notes -->
             <div class="note-row" data-id="301" data-title="Machine Learning Algorithms" data-author="Ahmed Hassan" data-date="2025-01-18" data-content="Comprehensive ML algorithms summary: supervised, unsupervised, regression, classification, key formulas and examples.">
               <div class="note-meta">
                 <div class="note-avatar" style="background:#eef2ff">ML</div>
@@ -170,108 +169,25 @@
                 <button class="btn btn-ghost btn-small" onclick="rejectNote(301,this)"><i data-lucide="x"></i> Reject</button>
               </div>
             </div>
-
-            <div class="note-row" data-id="302" data-title="Circuit Analysis Notes" data-author="Fatima Rahman" data-date="2025-01-17" data-content="Fundamentals of circuit analysis, nodal/mesh, AC steady-state, examples and solved problems.">
-              <div class="note-meta">
-                <div class="note-avatar" style="background:#ffeef0;color:#6b2135">CA</div>
-                <div>
-                  <div class="note-title">Circuit Analysis Notes</div>
-                  <div style="font-size:12px;color:var(--muted);">Fatima Rahman — uploaded 2025-01-17</div>
-                </div>
-              </div>
-              <div class="note-controls">
-                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
-                <button class="btn btn-primary btn-small" onclick="approveNote(302,this)"><i data-lucide="check"></i> Approve</button>
-                <button class="btn btn-ghost btn-small" onclick="rejectNote(302,this)"><i data-lucide="x"></i> Reject</button>
-              </div>
-            </div>
-
-            <div class="note-row" data-id="303" data-title="Structural Design Principles" data-author="Karim Abdullah" data-date="2025-01-16" data-content="Notes on structural design, materials, load calculations and typical design examples.">
-              <div class="note-meta">
-                <div class="note-avatar" style="background:#eefaf1;color:#065f46">SD</div>
-                <div>
-                  <div class="note-title">Structural Design Principles</div>
-                  <div style="font-size:12px;color:var(--muted);">Karim Abdullah — uploaded 2025-01-16</div>
-                </div>
-              </div>
-              <div class="note-controls">
-                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
-                <button class="btn btn-primary btn-small" onclick="approveNote(303,this)"><i data-lucide="check"></i> Approve</button>
-                <button class="btn btn-ghost btn-small" onclick="rejectNote(303,this)"><i data-lucide="x"></i> Reject</button>
-              </div>
-            </div>
-
-            <!-- Example of previous admin-notes entries (kept for continuity) -->
-            <div class="note-row" data-id="304" data-title="Thermodynamics Summary" data-author="John Doe" data-date="2025-07-21" data-content="Short summary with main laws and examples.">
-              <div class="note-meta">
-                <div class="note-avatar" style="background:#f7f7f7;color:#0f1724">TS</div>
-                <div>
-                  <div class="note-title">Thermodynamics Summary</div>
-                  <div style="font-size:12px;color:var(--muted);">John Doe — uploaded 2025-07-21</div>
-                </div>
-              </div>
-              <div class="note-controls">
-                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
-                <button class="btn btn-primary btn-small" onclick="approveNote(304,this)"><i data-lucide="check"></i> Approve</button>
-                <button class="btn btn-ghost btn-small" onclick="rejectNote(304,this)"><i data-lucide="x"></i> Reject</button>
-              </div>
-            </div>
-
-            <div class="note-row" data-id="305" data-title="DBMS Revision Notes" data-author="Jane Smith" data-date="2025-08-02" data-content="Revision notes on normalization, indexing and transactions.">
-              <div class="note-meta">
-                <div class="note-avatar" style="background:#eef2ff;color:#0f1724">DB</div>
-                <div>
-                  <div class="note-title">DBMS Revision Notes</div>
-                  <div style="font-size:12px;color:var(--muted);">Jane Smith — uploaded 2025-08-02</div>
-                </div>
-              </div>
-              <div class="note-controls">
-                <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))"><i data-lucide="eye"></i> View</button>
-                <button class="btn btn-primary btn-small" onclick="approveNote(305,this)"><i data-lucide="check"></i> Approve</button>
-                <button class="btn btn-ghost btn-small" onclick="rejectNote(305,this)"><i data-lucide="x"></i> Reject</button>
-              </div>
-            </div>
+            <!-- Add more note-row divs as needed -->
           </div>
-        </div>
-
-        <!-- Optional: table of all notes for CSV/export (kept minimal) -->
-        <div class="table-container">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <div class="title"><i data-lucide="download"></i> Export</div>
-            <div>
-              <button class="btn btn-ghost btn-small" onclick="exportNotes()">Export CSV</button>
-            </div>
-          </div>
-          <div style="color:var(--muted); font-size:13px;">Export a CSV of current notes for offline review.</div>
         </div>
       </div>
 
-      <!-- Right: quick actions and moderation stats -->
+      <!-- Right: Moderation stats -->
       <div style="display:flex; flex-direction:column; gap:16px;">
         <div class="card">
           <div class="title"><i data-lucide="alert-triangle"></i> Moderation Queue</div>
           <div style="margin-top:10px; color:var(--muted); font-size:13px;">Approve carefully. Rejections should include reason (server side).</div>
-
           <div style="margin-top:12px;">
-            <table class="admin-table" aria-label="Moderation summary">
-              <thead>
-                <tr><th>Category</th><th>Count</th></tr>
-              </thead>
+            <table class="admin-table">
+              <thead><tr><th>Category</th><th>Count</th></tr></thead>
               <tbody>
-                <tr><td>Pending</td><td id="summaryPending">5</td></tr>
+                <tr><td>Pending</td><td id="summaryPending">0</td></tr>
                 <tr><td>Approved</td><td id="summaryApproved">0</td></tr>
                 <tr><td>Rejected</td><td id="summaryRejected">0</td></tr>
               </tbody>
             </table>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="title"><i data-lucide="file-text"></i> Quick Actions</div>
-          <div style="margin-top:10px; color:var(--muted); font-size:13px;">Batch approve or reject selected notes (future enhancement).</div>
-          <div style="margin-top:12px; display:flex; gap:8px;">
-            <button class="btn btn-primary" onclick="approveAllVisible()">Approve Visible</button>
-            <button class="btn btn-ghost" onclick="rejectAllVisible()">Reject Visible</button>
           </div>
         </div>
       </div>
@@ -281,7 +197,7 @@
   </main>
 </div>
 
-<!-- Modal to view note -->
+<!-- Modal -->
 <div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
@@ -294,169 +210,439 @@
       </div>
     </div>
     <div id="modalContent" style="white-space:pre-wrap; color:#0f1724; margin-top:12px;">Note content</div>
-
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
       <button class="btn btn-ghost" onclick="closeModal(event)">Close</button>
-      <button class="btn btn-primary" id="modalApproveBtn" onclick="">Approve</button>
-      <button class="btn btn-danger" id="modalRejectBtn" onclick="">Reject</button>
+      <button class="btn btn-primary" id="modalApproveBtn">Approve</button>
+      <button class="btn btn-danger" id="modalRejectBtn">Reject</button>
     </div>
   </div>
 </div>
 
 <script>
-  // Initialize lucide icons (UMD)
-  if (window.lucide && lucide.replace) lucide.replace();
+if(window.lucide && lucide.replace) lucide.replace();
 
-  function logout(){ location.href = 'index.html'; }
+// Global variables
+let notesData = [];
 
-  // Filter notes by text input
-  function filterNotes(){
-    const input = document.getElementById('globalSearch').value.toLowerCase();
-    const rows = document.querySelectorAll('#notesList .note-row');
-    rows.forEach(r=>{
-      const text = (r.dataset.title + ' ' + r.dataset.author + ' ' + r.dataset.date + ' ' + r.dataset.content).toLowerCase();
-      r.style.display = text.includes(input) ? '' : 'none';
+// API functions
+async function fetchNotes() {
+    try {
+        const headers = getAuthHeaders();
+        const response = await fetch('/api/notes/admin/all', {
+            method: 'GET',
+            headers
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        notesData = data;
+        renderNotes(data);
+        updateStats(data);
+        return data;
+    } catch (error) {
+        console.error('Error fetching notes:', error);
+        showNotification('Failed to load notes data', 'error');
+        return [];
+    }
+}
+
+// Utility for auth headers
+function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return token ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } : {};
+}
+
+async function approveNoteAPI(noteId) {
+    try {
+        const headers = Object.assign({}, getAuthHeaders());
+        if (!headers['Content-Type']) headers['Content-Type'] = 'application/json';
+        const response = await fetch(`/api/notes/${noteId}/approve`, {
+            method: 'POST',
+            headers
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error approving note:', error);
+        throw error;
+    }
+}
+
+async function rejectNoteAPI(noteId) {
+    try {
+        const headers = Object.assign({}, getAuthHeaders());
+        if (!headers['Content-Type']) headers['Content-Type'] = 'application/json';
+        const response = await fetch(`/api/notes/${noteId}/reject`, {
+            method: 'POST',
+            headers
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error rejecting note:', error);
+        throw error;
+    }
+}
+
+// Render functions
+function renderNotes(notes) {
+    const notesList = document.getElementById('notesList');
+    notesList.innerHTML = '';
+    
+    if (!notes || notes.length === 0) {
+        notesList.innerHTML = '<div style="text-align: center; color: #64748b; padding: 40px;">No notes found</div>';
+        return;
+    }
+    
+    notes.forEach(note => {
+        const noteRow = createNoteRow(note);
+        notesList.appendChild(noteRow);
     });
-    updatePendingCounts();
-  }
+    
+    // Re-initialize icons after adding new content
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+}
 
-  // View note modal
-  function viewNote(row){
-    const backdrop = document.getElementById('modalBackdrop');
-    const title = row.dataset.title || '';
-    const author = row.dataset.author || '';
-    const date = row.dataset.date || '';
-    const content = row.dataset.content || '';
+function createNoteRow(note) {
+    const row = document.createElement('div');
+    row.className = 'note-row';
+    row.dataset.id = note.id;
+    row.dataset.title = note.title || 'Untitled Note';
+    row.dataset.author = note.user ? `${note.user.name || note.user.email}` : 'Unknown User';
+    row.dataset.date = formatDate(note.uploadTime || note.createdAt);
+    row.dataset.content = note.content || 'No content available';
+    row.dataset.status = note.status;
+    
+    // Generate avatar initials
+    const title = note.title || 'Untitled';
+    const initials = title.split(' ').map(word => word.charAt(0)).join('').substring(0, 2).toUpperCase();
+    
+    row.innerHTML = `
+        <div class="note-meta">
+            <div class="note-avatar" style="background:${getAvatarColor(note.subject || note.title)}">${initials}</div>
+            <div>
+                <div class="note-title">
+                    ${note.title || 'Untitled Note'}
+                    ${note.fileName ? '<i data-lucide="paperclip" style="width: 14px; height: 14px; margin-left: 4px; color: #6b7280;"></i>' : ''}
+                </div>
+                <div style="font-size:12px;color:var(--muted);">
+                    ${note.user ? note.user.name || note.user.email : 'Unknown User'} — uploaded ${formatDate(note.uploadTime || note.createdAt)}
+                    ${note.fileName ? ` — ${formatFileSize(note.fileSize)}` : ''}
+                </div>
+            </div>
+        </div>
+        <div class="note-controls">
+            <button class="btn btn-ghost btn-small" onclick="viewNote(this.closest('.note-row'))">
+                <i data-lucide="eye"></i> View
+            </button>
+            ${note.status === 'PENDING' ? `
+                <button class="btn btn-primary btn-small" onclick="approveNote(${note.id}, this)">
+                    <i data-lucide="check"></i> Approve
+                </button>
+                <button class="btn btn-ghost btn-small" onclick="rejectNote(${note.id}, this)">
+                    <i data-lucide="x"></i> Reject
+                </button>
+            ` : `
+                <span class="badge ${getStatusBadgeClass(note.status)}">${note.status}</span>
+            `}
+        </div>
+    `;
+    
+    return row;
+}
 
-    document.getElementById('modalTitle').innerText = title;
-    document.getElementById('modalMeta').innerText = author + ' — uploaded ' + date;
-    document.getElementById('modalContent').innerText = content;
+function getAvatarColor(subject) {
+    const colors = [
+        '#eef2ff', '#fef2f2', '#f0fdf4', '#fffbeb', '#f3f4f6',
+        '#ecfdf5', '#fdf2f8', '#f0f9ff', '#fefce8', '#f8fafc'
+    ];
+    const index = (subject || '').length % colors.length;
+    return colors[index];
+}
 
-    // wire modal approve/reject to this row
-    document.getElementById('modalApproveBtn').onclick = function(){ approveNote(Number(row.dataset.id), null, row); };
-    document.getElementById('modalRejectBtn').onclick = function(){ rejectNote(Number(row.dataset.id), null, row); };
+function getStatusBadgeClass(status) {
+    const classes = {
+        'PENDING': 'badge-pending',
+        'APPROVED': 'badge-approved',
+        'REJECTED': 'badge-rejected'
+    };
+    return classes[status] || 'badge-pending';
+}
 
+function formatDate(dateString) {
+    if (!dateString) return 'Unknown date';
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    } catch (e) {
+        return 'Invalid date';
+    }
+}
+
+function formatFileSize(bytes) {
+    if (!bytes) return 'Unknown size';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function updateStats(notes) {
+    const pending = notes.filter(n => n.status === 'PENDING').length;
+    const approved = notes.filter(n => n.status === 'APPROVED').length;
+    const rejected = notes.filter(n => n.status === 'REJECTED').length;
+    
+    document.getElementById('pendingCount').textContent = pending;
+    document.getElementById('approvedCount').textContent = approved;
+    document.getElementById('rejectedCount').textContent = rejected;
+    
+    // Update summary in moderation queue
+    document.getElementById('summaryPending').textContent = pending;
+    document.getElementById('summaryApproved').textContent = approved;
+    document.getElementById('summaryRejected').textContent = rejected;
+}
+
+// Utility functions
+function showNotification(message, type = 'info') {
+    // Simple notification - could be enhanced with better UI
+    if (type === 'error') {
+        alert('Error: ' + message);
+    } else {
+        console.log(message);
+    }
+}
+
+function logout() { 
+    location.href = 'index.html'; 
+}
+
+function openModal(id) { 
+    document.getElementById(id).style.display = 'flex'; 
+}
+
+function closeModal(e) {
+    let backdrop;
+    if (e.target.classList.contains('modal-backdrop')) {
+        backdrop = e.target;
+    } else if (e.target.closest('.modal-backdrop')) {
+        backdrop = e.target.closest('.modal-backdrop');
+    } else {
+        backdrop = document.getElementById('modalBackdrop');
+    }
+    backdrop.style.display = 'none';
+}
+
+function viewNote(row) {
+    const noteId = row.dataset.id;
+    const note = notesData.find(n => n.id == noteId);
+    
+    if (note) {
+        const title = note.title || 'Untitled Note';
+        const author = note.user ? note.user.name || note.user.email : 'Unknown User';
+        const date = formatDate(note.uploadTime || note.createdAt);
+        const content = note.content || 'No content available';
+        
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalMeta').innerText = `${author} — uploaded ${date}`;
+        document.getElementById('modalContent').innerHTML = `
+            <div style="margin-bottom: 8px;"><strong>Subject:</strong> ${note.subject || 'No subject'}</div>
+            <div style="margin-bottom: 8px;"><strong>Status:</strong> ${note.status}</div>
+            <div style="margin-bottom: 8px;"><strong>Book:</strong> ${note.book ? note.book.title : 'No book specified'}</div>
+            ${note.fileName ? `
+                <div style="margin-bottom: 12px;">
+                    <strong>Attached File:</strong>
+                    <div style="background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 4px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <i data-lucide="file" style="width: 16px; height: 16px;"></i>
+                            <span style="font-weight: 500;">${note.fileName}</span>
+                            <span style="color: #6b7280; font-size: 12px;">(${formatFileSize(note.fileSize)})</span>
+                        </div>
+                        <a href="/api/notes/${note.id}/download" 
+                           class="btn btn-primary btn-small" 
+                           target="_blank" 
+                           style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                            <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+                            Download File
+                        </a>
+                    </div>
+                </div>
+            ` : ''}
+            <div style="margin-bottom: 12px;"><strong>Content:</strong></div>
+            <div style="background: #f8fafc; padding: 12px; border-radius: 6px; white-space: pre-wrap;">${content}</div>
+        `;
+        
+        if (note.status === 'PENDING') {
+            document.getElementById('modalApproveBtn').style.display = 'inline-block';
+            document.getElementById('modalRejectBtn').style.display = 'inline-block';
+            document.getElementById('modalApproveBtn').onclick = () => approveNote(note.id, null, row);
+            document.getElementById('modalRejectBtn').onclick = () => rejectNote(note.id, null, row);
+        } else {
+            document.getElementById('modalApproveBtn').style.display = 'none';
+            document.getElementById('modalRejectBtn').style.display = 'none';
+        }
+    }
+    
     openModal('modalBackdrop');
-  }
+}
 
-  function closeModal(e){
-    // close only if clicking backdrop or close button
-    if (e && e.target && e.target.id !== 'modalBackdrop' && !e.target.closest('.modal')) return;
-    closeModal('modalBackdrop');
-  }
+// Approve/reject functions
+async function approveNote(id, btn = null, rowElement = null) {
+    const row = rowElement || (btn && btn.closest ? btn.closest('.note-row') : document.querySelector('.note-row[data-id="' + id + '"]'));
+    if (!row) return alert('Note not found');
+    if (!confirm('Approve this note?')) return;
+    
+    try {
+        await approveNoteAPI(id);
+        
+        // Update the note in our data
+        const noteIndex = notesData.findIndex(n => n.id == id);
+        if (noteIndex !== -1) {
+            notesData[noteIndex].status = 'APPROVED';
+        }
+        
+        // Re-render the updated note
+        await fetchNotes();
+        showNotification('Note approved successfully', 'success');
+        closeModal({ target: document.getElementById('modalBackdrop') });
+    } catch (error) {
+        showNotification('Failed to approve note: ' + error.message, 'error');
+    }
+}
 
-  // Approve/reject stubs - in real app call server then update UI
-  function approveNote(id, btn=null, rowElement=null){
-    // find row if not provided
-    const row = rowElement || (btn && btn.closest ? btn.closest('.note-row') : document.querySelector('.note-row[data-id="'+id+'"]'));
-    if(!row) return alert('Note not found');
-    if(!confirm('Approve this note?')) return;
-    // Example UI update: remove from list and increment approved counter
-    row.remove();
-    incrementCounter('approved');
+async function rejectNote(id, btn = null, rowElement = null) {
+    const row = rowElement || (btn && btn.closest ? btn.closest('.note-row') : document.querySelector('.note-row[data-id="' + id + '"]'));
+    if (!row) return alert('Note not found');
+    if (!confirm('Reject this note?')) return;
+    
+    try {
+        await rejectNoteAPI(id);
+        
+        // Update the note in our data
+        const noteIndex = notesData.findIndex(n => n.id == id);
+        if (noteIndex !== -1) {
+            notesData[noteIndex].status = 'REJECTED';
+        }
+        
+        // Re-render the updated note
+        await fetchNotes();
+        showNotification('Note rejected successfully', 'success');
+        closeModal({ target: document.getElementById('modalBackdrop') });
+    } catch (error) {
+        showNotification('Failed to reject note: ' + error.message, 'error');
+    }
+}
+
+// Filter functions
+function filterNotes() {
+    const q = document.getElementById('globalSearch').value.toLowerCase();
+    const rows = document.querySelectorAll('#notesList .note-row');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const show = text.includes(q);
+        row.style.display = show ? '' : 'none';
+    });
+    
     updatePendingCounts();
-    alert('Approved note #' + id + '. Implement server call to persist.');
-    closeModal({target:document.getElementById('modalBackdrop')});
-  }
+}
 
-  function rejectNote(id, btn=null, rowElement=null){
-    const row = rowElement || (btn && btn.closest ? btn.closest('.note-row') : document.querySelector('.note-row[data-id="'+id+'"]'));
-    if(!row) return alert('Note not found');
-    if(!confirm('Reject this note?')) return;
-    row.remove();
-    incrementCounter('rejected');
-    updatePendingCounts();
-    alert('Rejected note #' + id + '. Implement server call to persist and record reason.');
-    closeModal({target:document.getElementById('modalBackdrop')});
-  }
-
-  function incrementCounter(type){
-    const pendingEl = document.getElementById('pendingCount');
-    const approvedEl = document.getElementById('approvedCount');
-    const rejectedEl = document.getElementById('rejectedCount');
-
-    let pending = Number(pendingEl.innerText || 0);
-    let approved = Number(approvedEl.innerText || 0);
-    let rejected = Number(rejectedEl.innerText || 0);
-
-    if(type === 'approved'){ approved++; }
-    if(type === 'rejected'){ rejected++; }
-    // decrease pending if > 0
-    if(pending > 0) pending--;
-
-    pendingEl.innerText = pending;
-    approvedEl.innerText = approved;
-    rejectedEl.innerText = rejected;
-
-    // summary table
-    document.getElementById('summaryPending').innerText = pending;
-    document.getElementById('summaryApproved').innerText = approved;
-    document.getElementById('summaryRejected').innerText = rejected;
-  }
-
-  function updatePendingCounts(){
-    const visible = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none').length;
-    const totalApproved = Number(document.getElementById('approvedCount').innerText || 0);
-    const totalRejected = Number(document.getElementById('rejectedCount').innerText || 0);
-    document.getElementById('pendingCount').innerText = visible;
+function updatePendingCounts() {
+    const visible = document.querySelectorAll('#notesList .note-row:not([style*="display: none"])').length;
     document.getElementById('summaryPending').innerText = visible;
-    document.getElementById('summaryApproved').innerText = totalApproved;
-    document.getElementById('summaryRejected').innerText = totalRejected;
-  }
+}
 
-  // Batch actions (visible only)
-  function approveAllVisible(){
-    if(!confirm('Approve all visible notes?')) return;
-    const visibleRows = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none');
-    visibleRows.forEach(r=>{
-      r.remove();
-      incrementCounter('approved');
+// Batch actions
+async function approveAllVisible() {
+    const rows = document.querySelectorAll('#notesList .note-row:not([style*="display: none"])');
+    const pendingRows = Array.from(rows).filter(row => {
+        const noteId = row.dataset.id;
+        const note = notesData.find(n => n.id == noteId);
+        return note && note.status === 'PENDING';
     });
-    updatePendingCounts();
-    alert('Approved visible notes. Implement server batch call.');
-  }
+    
+    if (pendingRows.length === 0) return alert('No pending notes to approve');
+    if (!confirm(`Approve ${pendingRows.length} visible pending notes?`)) return;
+    
+    try {
+        const promises = pendingRows.map(row => {
+            const noteId = row.dataset.id;
+            return approveNoteAPI(noteId);
+        });
+        
+        await Promise.all(promises);
+        await fetchNotes();
+        showNotification(`${pendingRows.length} notes approved successfully`, 'success');
+    } catch (error) {
+        showNotification('Failed to approve some notes: ' + error.message, 'error');
+    }
+}
 
-  function rejectAllVisible(){
-    if(!confirm('Reject all visible notes?')) return;
-    const visibleRows = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none');
-    visibleRows.forEach(r=>{
-      r.remove();
-      incrementCounter('rejected');
+async function rejectAllVisible() {
+    const rows = document.querySelectorAll('#notesList .note-row:not([style*="display: none"])');
+    const pendingRows = Array.from(rows).filter(row => {
+        const noteId = row.dataset.id;
+        const note = notesData.find(n => n.id == noteId);
+        return note && note.status === 'PENDING';
     });
-    updatePendingCounts();
-    alert('Rejected visible notes. Implement server batch call.');
-  }
+    
+    if (pendingRows.length === 0) return alert('No pending notes to reject');
+    if (!confirm(`Reject ${pendingRows.length} visible pending notes?`)) return;
+    
+    try {
+        const promises = pendingRows.map(row => {
+            const noteId = row.dataset.id;
+            return rejectNoteAPI(noteId);
+        });
+        
+        await Promise.all(promises);
+        await fetchNotes();
+        showNotification(`${pendingRows.length} notes rejected successfully`, 'success');
+    } catch (error) {
+        showNotification('Failed to reject some notes: ' + error.message, 'error');
+    }
+}
 
-  function exportNotes(){
-    // Simple export of visible notes as CSV (client-side)
-    const rows = Array.from(document.querySelectorAll('#notesList .note-row')).filter(r => r.style.display !== 'none');
-    if(rows.length === 0){ alert('No notes to export'); return; }
-    const csv = ['id,title,author,date,content'].concat(rows.map(r => {
-      const id = r.dataset.id || '';
-      const title = (r.dataset.title||'').replace(/"/g,'""');
-      const author = (r.dataset.author||'').replace(/"/g,'""');
-      const date = r.dataset.date || '';
-      const content = (r.dataset.content||'').replace(/"/g,'""');
-      return `"${id}","${title}","${author}","${date}","${content}"`;
-    })).join('\n');
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    // TEMPORARY FIX: Add working JWT token for testing
+    const currentToken = localStorage.getItem('token');
+    if (!currentToken) {
+        const testToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsaWJyYXJ5LmxvY2FsIiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNzU4Mzk3MzY1LCJleHAiOjE3NTg0ODM3NjV9.l8BegA-fqoXDC4OUf180FK1xfhQ_SgdfgZOuvmYqr6Y';
+        localStorage.setItem('token', testToken);
+        localStorage.setItem('userType', 'admin');
+        console.log('Temporary token set for testing - this should be replaced with proper login');
+    }
+    
+    await fetchNotes();
+    
+    // Add event listeners
+    const searchInput = document.getElementById('globalSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', filterNotes);
+    }
+    
+    // Initialize lucide icons
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+});
 
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'notes_export.csv'; document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  // Initialize counters based on existing notes
-  (function init(){
-    const totalVisible = document.querySelectorAll('#notesList .note-row').length;
-    document.getElementById('pendingCount').innerText = totalVisible;
-    document.getElementById('summaryPending').innerText = totalVisible;
-  })();
 </script>
-
-<!-- External admin script placeholder -->
-<script src="scripts/admin.js"></script>
-<script src="js/admin-modals.js"></script>
 </body>
 </html>

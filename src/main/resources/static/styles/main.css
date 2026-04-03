@@ -7,7 +7,6 @@
   line-height: 1.6;
   color: #333;
   background-color: #a1d2a4;
-  background-image: url('../images/cuet\ \(2\).png');
   background-repeat: no-repeat;
   background-attachment: fixed; 
   background-size: 100% 100%;
@@ -782,7 +781,7 @@ body {
 
 .form-group label {
   font-weight: 500;
-  color: #374151;
+  color: #9fcca1;
 }
 
 .form-group input,
@@ -848,12 +847,12 @@ body {
 .welcome-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #c2d9ff;
   margin-bottom: 0.5rem;
 }
 
 .welcome-subtitle {
-  color: #64748b;
+  color: #bed8fc;
 }
 
 .stats-grid {
@@ -1504,7 +1503,7 @@ body {
 }
 
 .book-author {
-  color: #ffffff;
+  color: var(--text-secondary, #334155);
   margin-bottom: 0.25rem;
 }
 
@@ -1515,12 +1514,12 @@ body {
 .borrowed-date,
 .prebook-date,
 .returned-date {
-  color: #ffffff;
+  color: var(--text-muted, #64748b);
 }
 
 .due-date,
 .expiry-date {
-  color: #ffffff;
+  color: var(--text-muted, #64748b);
 }
 
 .overdue-text {
@@ -1530,7 +1529,7 @@ body {
 
 .book-author, .book-isbn, .book-dates, .book-status {
   font-size: 0.9rem;
-  color: #ffffff;
+  color: var(--text-secondary, #334155);
 }
 
 .renewal-info,
@@ -3321,7 +3320,7 @@ background: #fffbeb;
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #374151;
+  color: #9ed9b2;
   font-weight: 500;
 }
 
@@ -3954,4 +3953,395 @@ tr:hover { background:#f9f9f9; }
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
   font-size: 14px;
+}
+
+/* Enhanced Modal and UI Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #64748b;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+/* Notes Modal Styles */
+.notes-filter {
+    margin-bottom: 20px;
+}
+
+.notes-filter select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    min-width: 150px;
+}
+
+.add-note-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.add-note-section textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical;
+    margin-bottom: 12px;
+    font-family: inherit;
+}
+
+.note-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.note-actions select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.note-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.note-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.note-category {
+    background: #6b7280;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.note-date {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.note-content {
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.note-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-small {
+    padding: 4px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-small:hover {
+    background: #f3f4f6;
+}
+
+.btn-small.btn-outline {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.btn-small.btn-outline:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-small.btn-danger {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.btn-small.btn-danger:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* Book Details Modal */
+.book-detail-card {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.book-cover {
+    flex-shrink: 0;
+    width: 80px;
+    height: 120px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+}
+
+.book-info {
+    flex: 1;
+}
+
+.book-info h3 {
+    margin: 0 0 12px 0;
+    color: #1e293b;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.book-info p {
+    margin: 8px 0;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.book-description {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.book-description p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* User Menu Styles */
+.user-menu {
+    position: relative;
+}
+
+.user-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.user-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+    min-width: 200px;
+    z-index: 100;
+    margin-top: 4px;
+}
+
+.user-info {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+.user-dept {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    color: #374151;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-link:hover {
+    background: #f3f4f6;
+    color: #1e293b;
+}
+
+/* Enhanced Book Actions */
+.book-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.book-actions .btn {
+    margin: 0;
+    text-align: center;
+}
+
+/* Empty State Styles */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+}
+
+.empty-state h3 {
+    margin: 16px 0 8px;
+    color: #374151;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .book-detail-card {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .user-dropdown {
+        min-width: 180px;
+    }
+    
+    .book-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .book-actions .btn {
+        flex: 1;
+        min-width: 120px;
+    }
 }

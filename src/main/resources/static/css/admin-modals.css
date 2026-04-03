@@ -1,4 +1,27 @@
-/* CSS for admin modals */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;          /* hidden by default */
+  align-items: center;    /* center child vertically */
+  justify-content: center;/* center child horizontally */
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  z-index: 1001; /* higher than backdrop */
+  display: block; /* make sure it's not hidden */
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;

@@ -4,11 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - CUET Library</title>
+    <link rel="icon" type="image/png" href="images/cuet-logo.png">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modern-theme.css">
+    <link rel="stylesheet" href="styles/animations.css">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body class="auth-page">
-    <div class="auth-container">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="auth-container animate-fade-in-up">
         <!-- Header -->
         <div class="auth-header">
             <a href="index.html" class="back-to-home"><i data-lucide="arrow-left"></i><span>Back to Home</span></a>
@@ -28,8 +39,8 @@
 
             <form class="auth-form" id="registration-form">
                 <div class="form-group">
-                    <label for="student-id">User ID</label>
-                    <input type="text" id="student-id" name="UserId" placeholder="e.g., 2204054" required>
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id" name="studentId" placeholder="e.g., 2204054" required>
                 </div>
 
                 <div class="form-group">
@@ -43,17 +54,27 @@
                 </div>
 
                 <div class="form-group">
+                    <button type="button" id="send-register-otp" class="btn btn-outline btn-full">Send Email OTP</button>
+                    <p id="register-otp-hint" style="margin-top:8px;font-size:0.85rem;display:none"></p>
+                </div>
+
+                <div class="form-group" id="register-otp-group" style="display:none">
+                    <label for="register-otp">Email OTP</label>
+                    <input type="text" id="register-otp" name="otp" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter the 6-digit code" maxlength="6">
+                </div>
+
+                <div class="form-group">
                     <label for="department">Department</label>
                     <select id="department" name="department" required>
                         <option value="">Select your department</option>
-                        <option value="cse">Computer Science & Engineering</option>
-                        <option value="eee">Electrical & Electronic Engineering</option>
-                        <option value="me">Mechanical Engineering</option>
-                        <option value="ce">Civil Engineering</option>
-                        <option value="che">Chemical Engineering</option>
-                        <option value="ipe">Industrial & Production Engineering</option>
-                        <option value="arch">Architecture</option>
-                        <option value="urp">Urban & Regional Planning</option>
+                        <option value="CSE">Computer Science & Engineering</option>
+                        <option value="EEE">Electrical & Electronic Engineering</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="CE">Civil Engineering</option>
+                        <option value="ChE">Chemical Engineering</option>
+                        <option value="IPE">Industrial & Production Engineering</option>
+                        <option value="ARCH">Architecture</option>
+                        <option value="URP">Urban & Regional Planning</option>
                     </select>
                 </div>
 
@@ -80,7 +101,7 @@
                 </div>
 
                 <div id="register-status" style="margin:8px 0;font-size:0.85rem;color:#dc2626;display:none"></div>
-                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                <button type="submit" id="register-submit" class="btn btn-primary btn-full" disabled>Create Account</button>
             </form>
         </div>
 
@@ -90,5 +111,15 @@
     </div>
 
     <script src="scripts/auth.js"></script>
+    <script>
+        // Hide loading overlay
+        setTimeout(() => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+        }, 300);
+
+        // Initialize Lucide icons
+        if (window.lucide) lucide.createIcons();
+    </script>
 </body>
 </html>

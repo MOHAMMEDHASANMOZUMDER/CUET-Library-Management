@@ -4,18 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - CUET Library</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link rel="stylesheet" href="styles/main.css" />
-    <link rel="stylesheet" href="css/admin-modals.css" />
+    <link rel="stylesheet" href="styles/modern-theme.css" />
+    <link rel="stylesheet" href="styles/animations.css" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="scripts/animations.js"></script>
     <style>
         /* Layout */
         .admin-layout { display: flex; min-height: 100vh; background:#f4f6f9; color:#222; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-        .sidebar { width: 260px; background: #2d6a38; color: #e6edf3; padding: 28px 20px; box-shadow: 2px 0 8px rgba(2,6,23,0.12); display:flex; flex-direction:column; gap:20px; }
-        .sidebar .brand { display:flex; align-items:center; gap:12px; font-weight:700; font-size:16px; }
-        .sidebar .nav { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
-        .sidebar .nav a { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; color:#cfe7ff; text-decoration:none; font-size:14px; }
-        .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255,255,255,0.04); color:#fff; }
-        .sidebar .small { font-size:12px; color:#97a6b7; margin-top:auto; }
+        .sidebar { width: 260px !important; background: #2d6a38 !important; color: #e6edf3 !important; padding: 28px 20px !important; box-shadow: 2px 0 8px rgba(2,6,23,0.12); display:flex !important; flex-direction:column !important; gap:20px !important; }
+        .sidebar .brand { display:flex !important; align-items:center !important; gap:12px !important; font-weight:700 !important; font-size:16px !important; }
+        .sidebar .nav { display:flex !important; flex-direction:column !important; gap:8px !important; margin-top:8px !important; }
+        .sidebar .nav a { display:flex !important; align-items:center !important; gap:10px !important; padding:10px 12px !important; border-radius:8px !important; color:#cfe7ff !important; text-decoration:none !important; font-size:14px !important; }
+        .sidebar .nav a.active, .sidebar .nav a:hover { background: rgba(255,255,255,0.1) !important; color:#fff !important; }
+        .sidebar .small { font-size:12px !important; color:#97a6b7 !important; margin-top:auto !important; }
 
         .main { flex:1; padding:28px; }
 
@@ -48,11 +51,42 @@
         table.admin-table th { font-weight:600; color:#334155; background:transparent; }
 
         /* Action buttons */
-        .btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; font-size:13px; cursor:pointer; border:0; }
-        .btn-primary { background:#0ea5a3; color:#fff; }
+        .action-buttons { display: flex; gap: 6px; }
+        .btn { padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-small { padding: 4px 8px; font-size: 12px; }
+        .btn-primary { background: #2563eb; color: white; border-color: #2563eb; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-success { background: #10b981; color: white; border-color: #10b981; }
+        .btn-success:hover { background: #059669; }
+        .btn-warning { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-danger { background: #ef4444; color: white !important; border-color: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-ghost { background: transparent; color: #6b7280; border-color: #d1d5db; }
+        .btn-ghost:hover { background: #f9fafb; }
+        .btn-outline { background: transparent; border-color: #d1d5db; }
+        .btn-outline:hover { background: #f9fafb; }
+
+        /* Status badges */
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .status-active { background: #dcfce7; color: #166534; }
+        .status-inactive { background: #fee2e2; color: #991b1b; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-paid { background: #dcfce7; color: #166534; }
+        .status-unpaid { background: #fee2e2; color: #991b1b; }
+
+        /* Text utilities */
+        .text-success { color: #10b981; }
+        .text-danger { color: #ef4444; }
+        .text-warning { color: #f59e0b; }
+        .btn { display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:8px; font-size:13px; cursor:pointer; border:0; font-weight:500; transition:all .2s; }
+        .btn-primary { background:#16a34a; color:#fff; }
+        .btn-primary:hover { background:#15803d; }
         .btn-ghost { background:transparent; color:#0f1724; border:1px solid #e6eef2; }
+        .btn-ghost:hover { background:#f8fafc; }
         .btn-danger { background:#ef4444; color:#fff; }
-        .btn-small { padding:6px 8px; font-size:12px; border-radius:6px; }
+        .btn-danger:hover { background:#dc2626; }
+        .btn-small { padding:6px 10px; font-size:12px; border-radius:6px; }
 
         /* Badges */
         .badge { padding:6px 8px; border-radius:999px; font-size:12px; font-weight:600; display:inline-block; }
@@ -87,11 +121,12 @@
             </div>
 
             <nav class="nav" role="navigation">
-                <a href="admin.html"><i data-lucide="grid"></i> Dashboard</a>
-                <a href="admin-books.html"><i data-lucide="book"></i> Manage Books</a>
-                <a href="admin-prebook.html"><i data-lucide="calendar"></i> Prebookings</a>
-                <a href="admin-fines.html"><i data-lucide="dollar-sign"></i> Fines</a>
-                <a href="admin-notes.html"><i data-lucide="file-text"></i> Notes Moderation</a>
+                <a href="admin.html" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+                <a href="admin-books.html"><i data-lucide="book-open"></i> Manage Books</a>
+                <a href="admin-prebook.html"><i data-lucide="calendar-clock"></i> Prebookings</a>
+                <a href="admin-borrow.html"><i data-lucide="book-marked"></i> Manage Borrows</a>
+                <a href="admin-fines.html"><i data-lucide="receipt"></i> Fines</a>
+                <a href="admin-notes.html"><i data-lucide="file-check-2"></i> Notes</a>
                 <a href="admin-settings.html"><i data-lucide="settings"></i> Settings</a>
             </nav>
 
@@ -139,16 +174,46 @@
                 </div>
             </div>
 
-            <!-- Main sections: tables and moderation -->
+            <!-- Main sections: User Management, Books & Prebookings -->
             <div class="section-grid">
-                <!-- Left: Manage Books & Prebookings -->
+                <!-- Left: User Management -->
                 <div style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- User Management -->
+                    <div class="table-container">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <div class="title"><i data-lucide="users"></i> User Management</div>
+                            <div style="color:#64748b; font-size:13px;">Manage student accounts and permissions</div>
+                        </div>
+
+                        <table class="admin-table" aria-label="Manage users">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Student ID</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body">
+                                <!-- User rows will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                        <div class="show-more-container" style="margin-top: 12px; text-align: center;">
+                            <button id="show-more-users" class="btn btn-outline" onclick="showMoreUsers()" style="display: block;">
+                                <i data-lucide="chevron-down"></i> Show More Users
+                            </button>
+                            <div id="users-loading" style="display: none; color: #64748b; font-size: 13px;">Loading more users...</div>
+                        </div>
+                    </div>
+
                     <!-- Manage Books -->
                     <div class="table-container">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                             <div class="title"><i data-lucide="book"></i> Manage Books</div>
                             <div>
-                                <button class="btn btn-primary btn-small" onclick="openAddBook()">Add Book</button>
+                                <a class="btn btn-primary btn-small" href="admin-books.html">Add Book</a>
                             </div>
                         </div>
 
@@ -157,15 +222,20 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Author</th>
+                                    <th>ISBN</th>
                                     <th>Copies</th>
-                                    <th>Available</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="books-table-body">
+                            <tbody id="book-table-body">
                                 <!-- Book rows will be inserted here by JavaScript -->
                             </tbody>
                         </table>
+                        <div class="show-more-container" style="margin-top: 12px; text-align: center;">
+                            <a href="admin-books.html" class="btn btn-outline">
+                                <i data-lucide="external-link"></i> View All Books
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Prebookings -->
@@ -180,15 +250,20 @@
                                 <tr>
                                     <th>Student</th>
                                     <th>Book</th>
-                                    <th>Pickup Date</th>
+                                    <th>Request Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="prebookings-table-body">
+                            <tbody id="prebooking-table-body">
                                 <!-- Prebooking rows will be inserted here by JavaScript -->
                             </tbody>
                         </table>
+                        <div class="show-more-container" style="margin-top: 12px; text-align: center;">
+                            <a href="admin-prebook.html" class="btn btn-outline">
+                                <i data-lucide="external-link"></i> View All Prebookings
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -204,25 +279,48 @@
                                 <thead>
                                     <tr>
                                         <th>Student</th>
-                                        <th>Amount (৳)</th>
-                                        <th>Overdue days</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="fines-table-body">
+                                <tbody id="fine-table-body">
                                     <!-- Fines rows will be inserted here by JavaScript -->
                                 </tbody>
                             </table>
+                            <div class="show-more-container" style="margin-top: 12px; text-align: center;">
+                                <a href="admin-fines.html" class="btn btn-outline btn-small">
+                                    <i data-lucide="external-link"></i> View All Fines
+                                </a>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Notes moderation -->
                     <div class="card">
-                        <div class="title"><i data-lucide="file-text"></i> Notes Moderation</div>
-                        <div style="margin-top:10px; color:#475569; font-size:13px;">Review and approve or reject uploaded study notes</div>
+                        <div class="title"><i data-lucide="file-text"></i> Notes Management</div>
+                        <div style="margin-top:10px; color:#475569; font-size:13px;">Review and manage uploaded study notes</div>
 
-                        <div style="margin-top:12px;" id="notes-moderation-list">
-                            <!-- Note rows will be inserted here by JavaScript -->
+                        <div style="margin-top:12px;">
+                            <table class="admin-table" aria-label="Notes list">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Book</th>
+                                        <th>Upload Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="note-table-body">
+                                    <!-- Note rows will be inserted here by JavaScript -->
+                                </tbody>
+                            </table>
+                            <div class="show-more-container" style="margin-top: 12px; text-align: center;">
+                                <a href="admin-notes.html" class="btn btn-outline btn-small">
+                                    <i data-lucide="external-link"></i> View All Notes
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -240,7 +338,7 @@
                 <h2 class="modal-title">Add New Book</h2>
                 <button onclick="closeModal('addBookModal')" style="background:transparent;border:0;cursor:pointer;"><i data-lucide="x"></i></button>
             </div>
-            <form id="addBookForm" onsubmit="addBook(event)">
+            <form id="add-book-form">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="bookTitle">Title</label>
@@ -249,6 +347,14 @@
                     <div class="form-group">
                         <label for="bookAuthor">Author</label>
                         <input type="text" id="bookAuthor" name="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookIsbn">ISBN</label>
+                        <input type="text" id="bookIsbn" name="isbn" required pattern="[0-9]{10,13}" title="ISBN must be 10-13 digits">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCategory">Category</label>
+                        <input type="text" id="bookCategory" name="category">
                     </div>
                     <div class="form-group">
                         <label for="bookCopies">Total Copies</label>
@@ -263,20 +369,58 @@
         </div>
     </div>
 
+    <!-- Edit Book Modal -->
+    <div id="editBookModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Book</h2>
+                <button onclick="closeModal('editBookModal')" style="background:transparent;border:0;cursor:pointer;"><i data-lucide="x"></i></button>
+            </div>
+            <form id="edit-book-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editBookTitle">Title</label>
+                        <input type="text" id="editBookTitle" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookAuthor">Author</label>
+                        <input type="text" id="editBookAuthor" name="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookIsbn">ISBN</label>
+                        <input type="text" id="editBookIsbn" name="isbn" required readonly pattern="[0-9]{10,13}" title="ISBN must be 10-13 digits">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookCategory">Category</label>
+                        <input type="text" id="editBookCategory" name="category">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookTotalCopies">Total Copies</label>
+                        <input type="number" id="editBookTotalCopies" name="totalCopies" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookAvailableCopies">Available Copies</label>
+                        <input type="number" id="editBookAvailableCopies" name="availableCopies" required min="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal('editBookModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script>
-        // Replace lucide icons
-        if (window.lucide) lucide.replace();
-
-        // Minimal action stubs (replace with real implementations)
-        function logout(){ location.href = 'index.html'; }
-        
-        function openAddBook(){ 
-            openModal('addBookModal');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+        // Replace lucide icons (defensive) - prefer replace(), fallback to createIcons()
+        try {
+            if (window.lucide) {
+                if (typeof lucide.replace === 'function') lucide.replace();
+                else if (typeof lucide.createIcons === 'function') lucide.createIcons();
+            }
+        } catch (e) {
+            console.warn('Lucide icon replacement failed:', e);
         }
 
         // Sync active nav link
@@ -290,46 +434,21 @@
                     link.classList.remove('active');
                 }
             });
+            
+            // Ensure show more button is visible after page loads
+            setTimeout(() => {
+                const showMoreButton = document.getElementById('show-more-users');
+                if (showMoreButton) {
+                    showMoreButton.style.display = 'block';
+                    showMoreButton.style.visibility = 'visible';
+                    console.log('Show More Users button made visible');
+                } else {
+                    console.error('Show More Users button not found in DOM');
+                }
+            }, 1000);
         });
     </script>
 
-    <script src="scripts/admin.js"></script>
+    <script src="scripts/admin-fixed.js"></script>
 </body>
 </html>
-                                <div class="note-controls">
-                                    <button class="btn btn-primary btn-small" onclick="approveNote(203)">Approve</button>
-                                    <button class="btn btn-ghost btn-small" onclick="rejectNote(203)">Reject</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <footer style="color:#94a3b8; font-size:13px; margin-top:14px;">&copy; 2025 CUET Library Management System — Admin Panel</footer>
-        </main>
-    </div>
-
-    <script>
-        // Replace lucide icons
-        if (window.lucide) lucide.replace();
-
-        // Minimal action stubs (replace with real implementations)
-        function logout(){ location.href = 'index.html'; }
-        function openAddBook(){ alert('Open add book modal (implement).'); }
-        function confirmPrebooking(id){ alert('Confirm prebooking #' + id + ' (implement).'); }
-        function cancelPrebooking(id){ alert('Cancel prebooking #' + id + ' (implement).'); }
-        function markPaid(id){ alert('Mark fine paid for record #' + id + ' (implement).'); }
-        function approveNote(id){
-            alert('Approved note #' + id + ' (implement server call).');
-            // UI update could be done here after response
-        }
-        function rejectNote(id){
-            alert('Rejected note #' + id + ' (implement server call).');
-        }
-    </script>
-
-    <script src="scripts/admin.js"></script>
-</body>
-</html></div>

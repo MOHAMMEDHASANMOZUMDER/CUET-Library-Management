@@ -4,10 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Books - CUET Library</title>
+  <link rel="icon" type="image/png" href="images/cuet-logo.png">
   <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/modern-theme.css" />
+  <link rel="stylesheet" href="styles/animations.css" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
   <style>
+    .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
     :root {
       --accent: #08BE27;
       --accent-dark: #0aa62b;
@@ -24,106 +33,20 @@
       font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
 
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: #001A00;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-    }
+    /* Fix navbar spacing - override main.css */
     .header .container {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--nav-gap);
       padding: 12px 20px;
-      max-width: var(--nav-max-width);
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .nav-brand .logo {
-      height: 44px;
-      width: 44px;
-      object-fit: contain;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.02);
-      padding: 6px;
-      box-shadow: 0 6px 18px rgba(2,6,23,0.12);
-    }
-    .brand-text {
-      font-weight: 700;
-      font-size: 18px;
-      color: #fff;
-      letter-spacing: 0.2px;
     }
 
     .nav-links {
       display: flex;
-      gap: 14px;
+      gap: 2rem;
       align-items: center;
-      margin-left: 6px;
-    }
-    .nav-link {
-      color: rgba(255,255,255,0.9);
-      text-decoration: none;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all .15s ease;
-      font-size: 14px;
-    }
-    .nav-link:hover { color: #fff; background: rgba(255,255,255,0.03); transform: translateY(-1px); }
-    .nav-link.active {
-      color: var(--accent);
-      background: linear-gradient(90deg, rgba(8,190,39,0.07), rgba(8,190,39,0.03));
-      box-shadow: inset 0 -2px 0 rgba(8,190,39,0.08);
-    }
-
-    .header-actions, .auth-buttons {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      border: 1px solid transparent;
-      transition: all .15s ease;
-    }
-    .btn-primary {
-      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-      color: #061214;
-      box-shadow: 0 8px 24px rgba(8,190,39,0.12);
-      border: none;
-    }
-    .btn-primary:hover { transform: translateY(-2px); }
-    .btn-outline {
-      background: transparent;
-      color: #dffbe6;
-      border-color: rgba(255,255,255,0.25);
-    }
-    .btn-outline:hover { background: rgba(255,255,255,0.08); }
-
-    .header i, .nav-link i {
-      vertical-align: middle;
-      margin-right: 6px;
-      color: rgba(255,255,255,0.9);
+      margin-left: 10rem; /* Control the gap between logo and nav links */
+      flex: 1;
     }
 
     .card-enhanced {
@@ -285,32 +208,38 @@
       #book-modal .modal-cover { width: 60%; height: auto; aspect-ratio: 2/3; margin-bottom: 10px; }
       .books-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
       .book-cover { height: 220px; }
-      .header .container { padding: 10px 14px; }
-      .nav-links { display: none; }
     }
   </style>
 </head>
 <body class="books">
-  <header class="header">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading books...</div>
+    </div>
+  </div>
+
+  <header class="header animate-fade-in-down">
     <div class="container">
       <div class="nav-brand">
-        <a href="index.html" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
-          <img src="images/cuet-logo.png" alt="CUET Logo" class="logo" />
-          <span class="brand-text">CUET Library</span>
-        </a>
+        <img src="images/cuet-logo.png" alt="CUET Logo" class="logo" />
+        <span class="brand-text">CUET Library</span>
       </div>
-      <nav class="nav-links" aria-label="Main navigation">
+
+      <nav class="nav-links">
         <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="books.html" class="nav-link active">Books</a>
         <a href="my-books.html" class="nav-link">My Books</a>
         <a href="fines.html" class="nav-link">Fines</a>
         <a href="notes.html" class="nav-link">Notes</a>
       </nav>
-      <div class="header-actions auth-buttons">
+
+      <div class="header-actions auth-buttons">        
         <button id="logoutNavBtn" class="btn btn-outline" onclick="logout()"><i data-lucide="log-out"></i> Logout</button>
       </div>
     </div>
   </header>
-
   <div class="page-container">
     <div class="page-header">
       <h1 class="page-title">Library Catalog</h1>
@@ -326,7 +255,7 @@
 
     <div class="search-card">
       <div class="card-header" style="padding:16px 20px; border-bottom:1px solid #eee;">
-        <h3 style="margin:0; font-size:1.05rem; display:flex; align-items:center; gap:6px; font-weight:600;"></h3>
+        <h3 style="margin:0; font-size:1.05rem; display:flex; align-items:center; gap:6px; font-weight:600;">
           <i data-lucide="search" style="width:18px; height:18px;"></i> Search Books
         </h3>
       </div>
@@ -394,7 +323,7 @@
           <label for="isbn">ISBN</label>
           <input type="text" id="isbn" name="isbn">
         </div>
-        <div class="form-group"></div>
+        <div class="form-group">
           <label for="totalCopies">Total Copies *</label>
           <input type="number" id="totalCopies" name="totalCopies" min="1" value="1" required>
         </div>
@@ -421,10 +350,77 @@
   </div>
 
   <script src="scripts/auth.js"></script>
-  <script src="scripts/books.js"></script>
 
   <script>
     lucide.createIcons();
+
+    // Check authentication and show appropriate navbar
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      const navLinks = document.querySelector('.nav-links');
+      const authButtons = document.querySelector('.header-actions.auth-buttons');
+      
+      if (token) {
+        // User is logged in - show all nav links and replace logout button with user menu
+        if (navLinks) {
+          navLinks.style.display = 'flex';
+        }
+        
+        if (authButtons) {
+          const name = (localStorage.getItem('userName') || 'Profile').split(' ')[0];
+          authButtons.innerHTML = `
+            <div class="user-menu" style="position:relative;">
+              <button id="userMenuBtn" class="btn btn-outline">
+                <i data-lucide="user"></i><span style="margin:0 6px;">${name}</span><i data-lucide="chevron-down"></i>
+              </button>
+              <div id="userDropdown" style="display:none; position:absolute; right:0; top:110%; background:#0b1220; border:1px solid rgba(255,255,255,0.1); border-radius:10px; min-width:180px; padding:6px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); z-index:1000;">
+                <a class="nav-link" href="editprof.html" style="display:block; padding:10px 12px; color:#cfe9d1; text-decoration:none; border-radius:6px; margin:2px 0;">Edit Profile</a>
+                <button id="logoutBtn" style="width:100%; text-align:left; background:transparent; border:none; color:#cfe9d1; padding:10px 12px; border-radius:6px; cursor:pointer; margin:2px 0;">Logout</button>
+              </div>
+            </div>
+          `;
+
+          // Add dropdown functionality
+          const btn = authButtons.querySelector('#userMenuBtn');
+          const dd = authButtons.querySelector('#userDropdown');
+          if (btn && dd) {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              dd.style.display = (dd.style.display === 'none' || !dd.style.display) ? 'block' : 'none';
+            });
+            document.addEventListener('click', (e) => {
+              if (!authButtons.contains(e.target)) dd.style.display = 'none';
+            });
+          }
+          const logoutBtn = authButtons.querySelector('#logoutBtn');
+          if (logoutBtn) logoutBtn.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+          // Recreate icons
+          if (window.lucide) lucide.createIcons();
+        }
+      } else {
+        // User is NOT logged in - show public nav links and login/register buttons
+        if (navLinks) {
+          navLinks.innerHTML = `
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="books.html" class="nav-link active">Books</a>
+            <a href="faq.html" class="nav-link">FAQ</a>
+            <a href="about.html" class="nav-link">About</a>
+          `;
+          navLinks.style.display = 'flex';
+        }
+        
+        if (authButtons) {
+          authButtons.innerHTML = `
+            <a href="login.html" class="btn btn-outline">Login</a>
+            <a href="register.html" class="btn btn-primary">Register</a>
+          `;
+          
+          // Recreate icons
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    });
 
     (function () {
       const modal = document.getElementById('book-modal');
@@ -476,88 +472,160 @@
       window.closeBookModal = closeBookModal;
     })();
 
-    // Admin Add Book Modal Logic
-    (function() {
-      const addModal = document.getElementById('add-book-modal');
-      const adminControls = document.getElementById('admin-controls');
-      const backdrop = addModal.querySelector('[data-backdrop]');
+    // Load books and initialize page
+    let allBooks = [];
+    let filteredBooks = [];
 
-      function showAddBookModal() {
-        addModal.classList.add('open');
-        addModal.setAttribute('aria-hidden', 'false');
-        document.documentElement.style.overflow = 'hidden';
-        lucide.createIcons();
-      }
-      function closeAddBookModal() {
-        addModal.classList.remove('open');
-        addModal.setAttribute('aria-hidden', 'true');
-        document.documentElement.style.overflow = '';
-      }
-      function handleAddBook(e) {
-        e.preventDefault();
-        const fd = new FormData(e.target);
-        const newBook = {
-          title: fd.get('title').trim(),
-            author: fd.get('author').trim(),
-            isbn: fd.get('isbn').trim(),
-            totalCopies: parseInt(fd.get('totalCopies'),10) || 1,
-            department: fd.get('department') || '',
-            image: fd.get('image')?.trim() || 'images/default-cover.png',
-            available: parseInt(fd.get('totalCopies'),10) || 1,
-            description: 'No description yet.'
-        };
-        if (window.addBookToCollection) {
-          addBookToCollection(newBook); // optional hook in books.js
-        } else {
-          // simple fallback: append locally
-          if (window.renderBookCard) {
-            const container = document.getElementById('books-container');
-            container.prepend(renderBookCard(newBook));
-            updateResultsCount();
-          }
-        }
-        e.target.reset();
-        closeAddBookModal();
-      }
+    document.addEventListener('DOMContentLoaded', function() {
+        loadBooks();
+    });
 
-      backdrop.addEventListener('click', closeAddBookModal);
-      document.addEventListener('keydown', (e)=> {
-        if (e.key === 'Escape' && addModal.classList.contains('open')) closeAddBookModal();
-      });
-
-      // Simple role detection (adjust to your auth logic)
-      function detectAdmin() {
+    async function loadBooks() {
         try {
-          // Example: auth.js could set window.currentUser
-          if (window.currentUser && (currentUser.role === 'ADMIN' || currentUser.isAdmin)) {
-            adminControls.style.display = 'block';
-            lucide.createIcons();
-            return;
-          }
-          const stored = localStorage.getItem('user');
-          if (stored) {
-            const u = JSON.parse(stored);
-            if (u.role === 'ADMIN' || u.isAdmin) {
-              adminControls.style.display = 'block';
-              lucide.createIcons();
+            console.log('Loading books from API...');
+            const token = localStorage.getItem('token');
+            
+            const response = await fetch('/api/books/available', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-          }
-        } catch (_) {}
-      }
 
-      window.showAddBookModal = showAddBookModal;
-      window.closeAddBookModal = closeAddBookModal;
-      window.handleAddBook = handleAddBook;
-
-      detectAdmin();
-    })();
-
-    // Utility to update results count if not already handled
-    function updateResultsCount() {
-      const c = document.querySelectorAll('#books-container .book-card').length;
-      const el = document.getElementById('results-count');
-      if (el) el.textContent = 'Showing ' + c + ' book' + (c===1?'':'s');
+            const books = await response.json();
+            console.log('Loaded books from /api/books/available:', books.length);
+            
+            allBooks = books;
+            filteredBooks = books;
+            renderBooks();
+        } catch (error) {
+            console.error('Error loading books:', error);
+            alert('Failed to load books. Please try again.');
+        }
     }
+
+    function renderBooks() {
+        const container = document.getElementById('books-container');
+        if (!container) return;
+
+        if (filteredBooks.length === 0) {
+            container.innerHTML = '<p>No books found</p>';
+            return;
+        }
+
+        container.innerHTML = filteredBooks.map(book => `
+            <div class="book-card" onclick="openBookModal(${JSON.stringify(book).replace(/"/g, '&quot;')})">
+                <img src="${book.imageUrl || 'images/book-placeholder.png'}" alt="${book.title}" class="book-cover" />
+                <div class="book-info">
+                    <h3 class="book-title">${book.title}</h3>
+                    <p class="book-author">${book.author}</p>
+                    <p class="book-dept">${book.category || book.department || ''}</p>
+                    <div style="margin-top: auto; padding-top: 10px;">
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); borrowBook(${book.isbn})" 
+                                ${book.availableCopies <= 0 ? 'disabled' : ''}>
+                            ${book.availableCopies > 0 ? 'Request Book' : 'Unavailable'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Update results count
+        const resultsCount = document.getElementById('results-count');
+        if (resultsCount) {
+            resultsCount.textContent = `Showing ${filteredBooks.length} books`;
+        }
+    }
+
+    function searchBooks() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const deptFilter = document.getElementById('department-filter').value;
+
+        filteredBooks = allBooks.filter(book => {
+            const matchesSearch = !searchTerm || 
+                book.title.toLowerCase().includes(searchTerm) ||
+                book.author.toLowerCase().includes(searchTerm) ||
+                (book.isbn && book.isbn.toString().includes(searchTerm));
+
+            const matchesDept = deptFilter === 'all' || 
+                book.category === deptFilter || 
+                book.department === deptFilter;
+
+            return matchesSearch && matchesDept;
+        });
+
+        renderBooks();
+    }
+
+    // Request book function (PreBook system)
+    async function borrowBook(isbn) {
+        try {
+            const token = localStorage.getItem('token');
+            
+            // Find book by ISBN to get bookId
+            const book = allBooks.find(b => b.isbn == isbn);
+            if (!book) {
+                throw new Error('Book not found');
+            }
+            
+            const response = await fetch('/api/prebooks/request', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bookId: book.bookId
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Failed to request book');
+            }
+
+            const result = await response.json();
+            alert('✅ Book request submitted successfully! Wait for admin approval.');
+            loadBooks(); // Reload to update availability
+        } catch (error) {
+            console.error('Request error:', error);
+            alert('❌ Failed to request book: ' + error.message);
+        }
+    }
+
+    // Make functions globally available
+    window.searchBooks = searchBooks;
+    window.borrowBook = borrowBook;
+
+    // Add search on Enter key
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide loading overlay
+        setTimeout(() => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('hidden');
+            }
+        }, 500);
+
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBooks();
+                }
+            });
+        }
+    });
+
   </script>
 </body>
 </html>

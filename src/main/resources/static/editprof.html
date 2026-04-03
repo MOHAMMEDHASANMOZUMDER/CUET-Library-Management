@@ -50,19 +50,133 @@
   <script>
     lucide.createIcons();
 
-    document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+    // Load current user data on page load
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadCurrentUserData();
+    });
+
+    async function loadCurrentUserData() {
+      try {
+        const token = localStorage.getItem('token');
+        const userEmail = localStorage.getItem('userEmail');
+        
+        if (!token || !userEmail) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const response = await fetch(`/api/users/${encodeURIComponent(userEmail)}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to load user data');
+
+        const user = await response.json();
+        
+        // Populate form fields
+        document.getElementById('fullName').value = user.name || '';
+        document.getElementById('email').value = user.email || '';
+        document.getElementById('department').value = user.department || '';
+        
+      } catch (e) {
+        console.error(e);
+        showNotification(e.message || 'Failed to load user data', 'error');
+      }
+    }
+
+    document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const pwd = e.target.password.value;
       const confirmPwd = e.target.confirmPassword.value;
-      if (pwd !== confirmPwd) {
-        alert("Passwords don't match!");
+      
+      if (pwd && pwd !== confirmPwd) {
+        showNotification("Passwords don't match!", 'error');
         return;
       }
 
-      // Here you would add your actual update logic (e.g., API call)
-      alert("Profile updated successfully!");
+      try {
+        const token = localStorage.getItem('token');
+        const userEmail = localStorage.getItem('userEmail');
+        
+        if (!token || !userEmail) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const formData = {
+          name: e.target.fullName.value,
+          email: e.target.email.value,
+          department: e.target.department.value
+        };
+
+        // Only include password if it's provided
+        if (pwd) {
+          formData.password = pwd;
+        }
+
+        const response = await fetch(`/api/users/${encodeURIComponent(userEmail)}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to update profile');
+        }
+
+        // Update localStorage if email changed
+        if (formData.email !== userEmail) {
+          localStorage.setItem('userEmail', formData.email);
+        }
+        
+        // Update stored name
+        localStorage.setItem('userName', formData.name);
+
+        showNotification('Profile updated successfully!', 'success');
+        
+        // Clear password fields
+        e.target.password.value = '';
+        e.target.confirmPassword.value = '';
+        
+      } catch (e) {
+        console.error(e);
+        showNotification(e.message || 'Failed to update profile', 'error');
+      }
     });
+
+    // Utility function for notifications
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 6px;
+        color: white;
+        z-index: 9999;
+        font-weight: 500;
+        ${type === 'success' ? 'background: #10b981;' : ''}
+        ${type === 'error' ? 'background: #ef4444;' : ''}
+        ${type === 'warning' ? 'background: #f59e0b;' : ''}
+        ${type === 'info' ? 'background: #3b82f6;' : ''}
+      `;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 3000);
+    }
   </script>
 </body>
 </html>

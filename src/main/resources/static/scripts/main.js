@@ -1,5 +1,12 @@
 // Main JavaScript for the application
 document.addEventListener('DOMContentLoaded', function() {
+    // Apply persisted theme (settings.html stores cuet-theme)
+    try {
+        const theme = localStorage.getItem('cuet-theme') || 'light';
+        if (theme === 'dark') document.body.classList.add('dark-theme');
+        else document.body.classList.remove('dark-theme');
+    } catch (_) {}
+
     // Initialize Lucide icons
     if (window.lucide) {
         lucide.createIcons();
@@ -175,16 +182,20 @@ function apiCall(endpoint, options = {}) {
     });
 }
 document.addEventListener("DOMContentLoaded", () => {
-  const scroller = document.querySelector(".scroll-stack-scroller");
-  const cards = Array.from(document.querySelectorAll(".scroll-stack-card"));
+    try {
+        const scroller = document.querySelector(".scroll-stack-scroller");
+        const cards = Array.from(document.querySelectorAll(".scroll-stack-card"));
 
-  // Setup Lenis
-  const lenis = new Lenis({
-    wrapper: scroller,
-    content: scroller.querySelector(".scroll-stack-inner"),
-    smoothWheel: true,
-    duration: 1.2,
-  });
+        if (!scroller || cards.length === 0) return;
+        if (typeof Lenis !== 'function') return;
+
+        // Setup Lenis
+        const lenis = new Lenis({
+            wrapper: scroller,
+            content: scroller.querySelector(".scroll-stack-inner"),
+            smoothWheel: true,
+            duration: 1.2,
+        });
 
   function calculateProgress(scrollTop, start, end) {
     if (scrollTop < start) return 0;
@@ -215,9 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
   scroller.addEventListener("scroll", updateCardTransforms);
 
   // Lenis RAF loop
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+    } catch (e) {
+        console.warn('Scroll stack init failed:', e);
+    }
 });

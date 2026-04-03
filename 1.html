@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibraryForge - Final Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .slide {
+            width: 100%;
+            max-width: 1200px;
+            height: 675px; /* Standard 16:9 ratio for slides */
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            margin-bottom: 40px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide-header {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #1e3a8a; /* Dark blue */
+            border-bottom: 4px solid #3b82f6; /* Blue 500 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .text-innovation {
+            color: #10b981; /* Emerald 500 */
+            font-weight: 600;
+        }
+        .placeholder {
+            background-color: #f1f5f9; /* Slate 100 */
+            border: 2px dashed #94a3b8; /* Slate 400 */
+            color: #64748b; /* Slate 500 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .icon {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Front Page -->
+<div class="slide bg-gradient-to-br from-indigo-50 to-blue-100">
+    <div class="text-center mt-20">
+        <h1 class="text-6xl font-extrabold text-gray-900 tracking-tight mb-4">
+            <span class="text-indigo-600">LibraryForge:</span> A Modern, Full-Stack LMS
+        </h1>
+        <h2 class="text-3xl font-light text-gray-600 mb-12">
+            Automating Operations with Smart Prebooking, Note Sharing, and Digital Payments
+        </h2>
+    </div>
+    <div class="flex justify-between items-end text-lg text-gray-700">
+        <div>
+            <p class="font-bold">Project By:</p>
+            <p>[Your Name(s) / Team Name]</p>
+        </div>
+        <div class="text-right">
+            <p class="font-bold">Stack Highlight:</p>
+            <p>Spring Boot 3.x • MySQL • Vanilla JS (ES6+)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Contents (Roadmap) -->
+<div class="slide">
+    <h1 class="slide-header">Presentation Roadmap</h1>
+    <div class="grid grid-cols-3 gap-8 h-full pb-10">
+        <div class="col-span-2 space-y-4 text-xl">
+            <div class="p-4 bg-indigo-50 rounded-lg shadow-md hover:shadow-lg transition">
+                <span class="text-indigo-600 font-extrabold">1 & 2.</span> Introduction & Motivation
+            </div>
+            <div class="p-4 bg-green-50 rounded-lg shadow-md hover:shadow-lg transition">
+                <span class="text-green-600 font-extrabold">3.</span> Objectives & Innovation (The Solutions)
+            </div>
+            <div class="p-4 bg-yellow-50 rounded-lg shadow-md hover:shadow-lg transition">
+                <span class="text-yellow-600 font-extrabold">4.</span> Implementation (Architecture & Backend)
+            </div>
+            <div class="p-4 bg-red-50 rounded-lg shadow-md hover:shadow-lg transition">
+                <span class="text-red-600 font-extrabold">5.</span> System Workflows (Borrowing & Payment Flow)
+            </div>
+            <div class="p-4 bg-blue-50 rounded-lg shadow-md hover:shadow-lg transition">
+                <span class="text-blue-600 font-extrabold">6.</span> Conclusion & Future Vision
+            </div>
+        </div>
+        <div class="placeholder h-full">
+            Image Placeholder: Roadmap/Table of Contents Graphic
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Introduction -->
+<div class="slide">
+    <h1 class="slide-header">Introducing LibraryForge: System Overview</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div>
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">What is LibraryForge?</h3>
+            <p class="text-lg mb-6">A **full-stack, modern web application** built to automate and streamline core library operations, transitioning from manual effort to **data-driven efficiency**.</p>
+            
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Core Architecture (Three-Tier)</h3>
+            <ul class="list-disc ml-6 text-lg space-y-2">
+                <li><span class="font-bold text-blue-600">Presentation:</span> HTML, CSS, <span class="font-extrabold">Vanilla JavaScript</span> (Fast, lightweight UI)</li>
+                <li><span class="font-bold text-blue-600">Application:</span> **Spring Boot 3.x** REST API (Business Logic)</li>
+                <li><span class="font-bold text-blue-600">Data:</span> **MySQL** Database (JPA/Hibernate)</li>
+            </ul>
+        </div>
+        <div class="placeholder h-full">
+            Image Placeholder: Three-Tier Architecture Diagram (Showing Presentation -> Application -> Data)
+            <span class="absolute bottom-4 text-xs text-gray-500">Suggested Title: LibraryForge System Architecture</span>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Motivation (The Problem) -->
+<div class="slide">
+    <h1 class="slide-header">Motivation: The Crisis of the Traditional Library</h1>
+    <div class="grid grid-cols-3 gap-8 h-full pb-10">
+        <div class="col-span-2 space-y-6">
+            <div class="p-4 border-l-4 border-red-500 bg-red-50 rounded-md">
+                <h3 class="text-xl font-bold text-red-700 flex items-center mb-2">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    The Pre-Exam Chaos
+                </h3>
+                <p class="text-lg">Immense overcrowding, leading to **long, stressful queues** and slow processing. Students often miss out on essential books due to rush and lack of availability tracking.</p>
+            </div>
+
+            <div class="p-4 border-l-4 border-orange-500 bg-orange-50 rounded-md">
+                <h3 class="text-xl font-bold text-orange-700 flex items-center mb-2">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    The Manual Fine Hassle
+                </h3>
+                <p class="text-lg">Fines must be paid manually by visiting a **bank or counter**. This creates a massive **time sink** for students and adds unnecessary administrative load for staff.</p>
+            </div>
+
+            <div class="p-4 border-l-4 border-yellow-500 bg-yellow-50 rounded-md">
+                <h3 class="text-xl font-bold text-yellow-700 flex items-center mb-2">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8l-4 4z"/><path d="M10 16L18 8"/></svg>
+                    Digital Disconnect
+                </h3>
+                <p class="text-lg">No essential online services: **no online renewal**, **no pre-booking** for physical books, and no platform for sharing user-generated study **notes**.</p>
+            </div>
+        </div>
+        <div class="placeholder h-full">
+            Image Placeholder: Student/Library Chaos - Long Queue or Frustrated Student
+            <span class="absolute bottom-4 text-xs text-gray-500">Suggested Title: Inefficiency and Stress</span>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Motivation (The Need) -->
+<div class="slide">
+    <h1 class="slide-header">Defining the Need: The LibraryForge Mandate</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div class="placeholder h-full">
+            Image Placeholder: Modern, Clear, Digital Library Dashboard UI
+            <span class="absolute bottom-4 text-xs text-gray-500">Suggested Title: Vision of a Digital-First Library</span>
+        </div>
+        <div class="space-y-6">
+            <h3 class="text-2xl font-semibold text-gray-800">Key Objectives for Digital Transformation</h3>
+            
+            <div class="flex items-start space-x-4">
+                <div class="p-3 bg-indigo-500 rounded-full text-white flex-shrink-0">
+                    <svg class="icon w-6 h-6" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                    <p class="text-xl font-bold text-indigo-700">Student Empowerment & Time Saving</p>
+                    <p class="text-lg">Enable instant, 24/7 access to services like borrowing, renewal, and payment, eliminating unnecessary campus visits.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+                <div class="p-3 bg-green-500 rounded-full text-white flex-shrink-0">
+                    <svg class="icon w-6 h-6" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div>
+                    <p class="text-xl font-bold text-green-700">Resource Collaboration</p>
+                    <p class="text-lg">Foster a community by providing a moderated platform for students to share and access user-generated study notes (PDFs).</p>
+                </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+                <div class="p-3 bg-red-500 rounded-full text-white flex-shrink-0">
+                    <svg class="icon w-6 h-6" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div>
+                    <p class="text-xl font-bold text-red-700">Administrative Automation</p>
+                    <p class="text-lg">Automate manual tasks like fine calculation and payment verification to significantly reduce staff workload and errors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Objectives & Innovation (Core Solutions) -->
+<div class="slide">
+    <h1 class="slide-header">Innovation 1: Prebooking & Fine Payment Systems</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center">
+                <svg class="icon w-7 h-7" viewBox="0 0 24 24"><path d="M5 21l-1-1 4.58-4.58a1 1 0 0 1 1.42 0L14 19l4.58-4.58a1 1 0 0 1 1.42 0l1 1-1 1"/></svg>
+                The Smart Prebook Workflow
+            </h3>
+            <ul class="list-disc ml-6 text-lg space-y-3">
+                <li>**Problem Solved:** Couldn't reserve unavailable books.</li>
+                <li>**Solution:** Queue-based prebooking with status tracking (PENDING, APPROVED, EXPIRED).</li>
+                <li><span class="text-innovation">**Key Innovation:**</span> The **Admin Pickup Modal** requires staff to select the specific physical `Copy_ID` when fulfilling the prebook, ensuring **100% inventory accuracy**.</li>
+            </ul>
+
+            <div class="placeholder h-40">
+                Image Placeholder: Admin Prebook Pickup Modal UI
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-green-600 mb-4 flex items-center">
+                <svg class="icon w-7 h-7" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                Digital Fine Payment (TrxID)
+            </h3>
+            <ul class="list-disc ml-6 text-lg space-y-3">
+                <li>**Problem Solved:** Manual, inconvenient payment process.</li>
+                <li>**Solution:** Students submit payment proof via mobile money (bKash/Nagad TrxID).</li>
+                <li><span class="text-innovation">**Key Innovation:**</span> **Two-Step Verification:** <span class="font-semibold">Student submits proof</span> $\rightarrow$ <span class="font-semibold">Admin approves payment</span>. This ensures security and prevents duplicate submissions using a unique TrxID validation check.</li>
+            </ul>
+            <div class="placeholder h-40">
+                Image Placeholder: Student Fines Payment UI with TrxID field
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Objectives & Innovation (Collaboration & Automation) -->
+<div class="slide">
+    <h1 class="slide-header">Innovation 2: Collaboration and Automation</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-purple-600 mb-4 flex items-center">
+                <svg class="icon w-7 h-7" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                Community Note Sharing Platform
+            </h3>
+            <ul class="list-disc ml-6 text-lg space-y-3">
+                <li>**Problem Solved:** No system to share study resources.</li>
+                <li>**Functionality:** Students can upload notes (PDF, DOCX) tied to a book's ISBN.</li>
+                <li><span class="text-innovation">**Key Innovation:**</span> **Moderation Workflow:** All notes enter a **PENDING** state and require an **ADMIN approval** before becoming publicly available. File data is securely stored as `LONGBLOB` in the `notes` table.</li>
+            </ul>
+            <div class="placeholder h-40">
+                Image Placeholder: Note Browsing/Download UI
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-teal-600 mb-4 flex items-center">
+                <svg class="icon w-7 h-7" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Automation & Notifications
+            </h3>
+            <ul class="list-disc ml-6 text-lg space-y-3">
+                <li><span class="font-semibold">Auto Fine Calculation:</span> When a book is returned late, the `BorrowService` automatically calculates the overdue days and generates a fine record (`UNPAID` status), adhering to the **1 taka/day** policy.</li>
+                <li><span class="font-semibold">Real-time Notifications:</span> Centralized system informs students instantly about **Prebook status changes**, **overdue book reminders**, and **fine payment updates**.</li>
+            </ul>
+
+            <div class="p-4 bg-teal-50 rounded-lg border border-teal-300">
+                <p class="text-xl font-semibold text-teal-700">Logic Snippet Highlight:</p>
+                <code class="block text-sm mt-2 text-teal-800">long overdueDays = DAYS.between(dueDate, returnDate);</code>
+                <code class="block text-sm text-teal-800">fineAmount = overdueDays * 1.0;</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Implementation (Architecture & Backend) -->
+<div class="slide">
+    <h1 class="slide-header">Implementation Deep Dive: Backend & Security</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div class="space-y-4">
+            <h3 class="text-2xl font-bold text-indigo-700">Security Architecture (JWT & RBAC)</h3>
+            <ul class="list-disc ml-6 text-lg space-y-2">
+                <li>**Authentication:** **JWT** generated by `JwtTokenProvider` on successful login, stored client-side.</li>
+                <li>**Password Security:** Passwords are hashed using **BCrypt** with salt.</li>
+                <li>**Authorization:** **RBAC** enforced via Spring Security's `SecurityFilterChain` and method-level `@PreAuthorize` annotations (ADMIN/STUDENT).</li>
+                <li>**SQL Injection:** Prevented by using **JPA/Hibernate** parameterized queries.</li>
+            </ul>
+            
+            <h3 class="text-2xl font-bold text-indigo-700 mt-6">Database Schema Highlights</h3>
+            <ul class="list-disc ml-6 text-lg space-y-2">
+                <li>**Fines Table:** Critical fields include `Amount`, `status (UNPAID/PENDING/PAID)`, and **`trXID` (UNIQUE constraint)**.</li>
+                <li>**Borrow Records:** Tracks `Due_Date` (auto-calculated) and `extended_count` (overdue days).</li>
+                <li>**Notes Table:** Includes `fileData` (LONGBLOB) and `status` for moderation.</li>
+            </ul>
+        </div>
+        <div class="placeholder h-full">
+            Image Placeholder: Simplified Database Relationship Diagram (ERD)
+            <span class="absolute bottom-4 text-xs text-gray-500">Suggested Title: LibraryForge ER Diagram</span>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: Implementation (Frontend & Key Logic) -->
+<div class="slide">
+    <h1 class="slide-header">Implementation Deep Dive: Frontend & Maintainability</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-green-700">Frontend Principles (Vanilla JS)</h3>
+            <ul class="list-disc ml-6 text-lg space-y-2">
+                <li>**Lightweight:** Zero reliance on heavy frameworks, resulting in extremely fast load times and minimal bundle size.</li>
+                <li>**Structure:** Modularized JavaScript (`api-service.js`, `auth.js`, `dashboard.js`) for clear separation of concerns.</li>
+                <li>**State Management:** Minimal state managed using **localStorage** (for JWT/User Role) and transient JS variables.</li>
+                <li>**UX:** Implemented **Pagination** and **Debounced Search** for efficient browsing of large book catalogs.</li>
+            </ul>
+            
+            <h3 class="text-2xl font-bold text-green-700 mt-6">Deployment Readiness</h3>
+            <div class="p-4 bg-gray-100 rounded-lg">
+                <p class="font-semibold text-lg mb-2">Docker Configuration</p>
+                <code class="block text-sm text-gray-800">Uses **docker-compose** to define the `backend` (Spring Boot) and `mysql` services, ensuring a reproducible, one-command deployment environment.</code>
+            </div>
+        </div>
+        <div class="placeholder h-full">
+            Image Placeholder: Complete Borrowing Flow Diagram (Showing Prebook Path and Fine Path)
+            <span class="absolute bottom-4 text-xs text-gray-500">Suggested Title: End-to-End Borrowing & Return Flow</span>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Conclusion -->
+<div class="slide bg-indigo-50">
+    <h1 class="slide-header">Conclusion: Key Achievements & Future Vision</h1>
+    <div class="grid grid-cols-2 gap-10 h-full pb-10">
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-indigo-700">Project Achievements</h3>
+            <ul class="list-disc ml-6 text-xl space-y-2 font-semibold">
+                <li class="text-innovation">Successfully delivered **3 Core Innovations**: Smart Prebooking, Digital Fine Payments, and Note Sharing.</li>
+                <li>**Automation:** Eliminated manual fine calculation and payment tracking.</li>
+                <li>**Technical Excellence:** Secure, RESTful architecture with JWT, BCrypt, and strong RBAC.</li>
+                <li>**User-Centric:** Built a fast, intuitive UI using pure JavaScript.</li>
+            </ul>
+        </div>
+        <div class="space-y-6">
+            <h3 class="text-2xl font-bold text-indigo-700">Future Enhancements</h3>
+            <ul class="list-disc ml-6 text-lg space-y-2">
+                <li>**AI Recommendations:** Suggesting books based on user history.</li>
+                <li>**Email Notifications:** SMTP integration for overdue and due date reminders.</li>
+                <li>**Advanced Analytics:** Dedicated dashboard for staff with charts and reports.</li>
+                <li>**Mobile App:** Development using React Native or Flutter.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="text-center mt-auto">
+        <h2 class="text-4xl font-extrabold text-indigo-800">Thank You!</h2>
+        <p class="text-xl text-gray-600 mt-2">Questions and Feedback Welcome.</p>
+    </div>
+</div>
+
+</body>
+</html>

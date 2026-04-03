@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Help & Support - CUET Library</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="header">
+    <header class="header animate-fade-in-down">
         <div class="container">
             <div class="nav-brand">
                 <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
@@ -351,7 +360,8 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-brand">
-                        <i data-lucide="book-open"></i>
+                        
+                        <img src="images/cuet-logo.png" alt="CUET Logo" class="footer-logo" style="height: auto; width: 25px" />
                         <span>CUET Library</span>
                     </div>
                     <p class="footer-text">
@@ -383,5 +393,17 @@
     </footer>
 
     <script src="scripts/help.js"></script>
+    <script>
+        // Hide loading overlay
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            }, 300);
+        });
+
+        // Initialize Lucide icons
+        if (window.lucide) lucide.createIcons();
+    </script>
 </body>
 </html>

@@ -4,12 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fines & Payments - CUET Library</title>
+    <link rel="icon" type="image/png" href="images/cuet-logo.png">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modern-theme.css">
+    <link rel="stylesheet" href="styles/animations.css">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Styles for the new payment proof modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .payment-instructions {
+            font-size: 0.9rem;
+            color: #4b5563;
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body class="books">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading fines...</div>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="header">
+    <header class="header animate-fade-in-down">
         <div class="container">
             <a href="dashboard.html" class="nav-brand">
                 <img src="images/cuet-logo.png" alt="CUET Logo" class="logo">
@@ -19,6 +80,7 @@
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
                 <a href="books.html" class="nav-link">Books</a>
                 <a href="my-books.html" class="nav-link">My Books</a>
+                <a href="fines.html" class="nav-link active">Fines</a>
                 <a href="notes.html" class="nav-link">Notes</a>
             </nav>
             <div class="header-actions">
@@ -31,143 +93,110 @@
     </header>
 
     <div class="page-container">
-        <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">Fines & Payments</h1>
-            <p class="page-description">Manage your library fines and payment history</p>
+            <p class="page-subtitle" style="color: #acc7ec;">Manage your library fines and view payment history.</p>
         </div>
 
-        <!-- Fine Summary -->
-        <div class="fine-summary">
-            <div class="summary-card total">
-                <div class="summary-icon">
-                    <i data-lucide="credit-card"></i>
-                </div>
-                <div class="summary-info">
-                    <div class="summary-amount" id="total-outstanding">৳150</div>
-                    <div class="summary-label">Total Outstanding</div>
-                </div>
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card">
+                <h3 class="card-title">Total Unpaid</h3>
+                <p class="card-value" id="total-unpaid">৳0.00</p>
             </div>
-            <div class="summary-card overdue">
-                <div class="summary-icon">
-                    <i data-lucide="clock"></i>
-                </div>
-                <div class="summary-info">
-                    <div class="summary-amount" id="overdue-fines">৳100</div>
-                    <div class="summary-label">Overdue Fines</div>
-                </div>
+            <div class="card">
+                <h3 class="card-title">Pending Verification</h3>
+                <p class="card-value" id="pending-verification">0</p>
             </div>
-            <div class="summary-card paid">
-                <div class="summary-icon">
-                    <i data-lucide="check-circle"></i>
-                </div>
-                <div class="summary-info">
-                    <div class="summary-amount" id="paid-this-month">৳75</div>
-                    <div class="summary-label">Paid This Month</div>
-                </div>
+            <div class="card">
+                <h3 class="card-title">Total Paid</h3>
+                <p class="card-value" id="total-paid">৳0.00</p>
             </div>
         </div>
 
-        <!-- Payment Options -->
-        <div class="payment-section">
-            <div class="section-header">
-                <h2>Quick Payment</h2>
-                <p>Pay your outstanding fines securely</p>
-            </div>
-            <div class="payment-options">
-                <button class="btn btn-primary btn-large" onclick="payAll()">
-                    <i data-lucide="credit-card"></i>
-                    Pay All Outstanding (৳150)
-                </button>
-                <button class="btn btn-outline btn-large" onclick="showCustomPayment()">
-                    <i data-lucide="calculator"></i>
-                    Custom Amount
-                </button>
-            </div>
+        <!-- Fines Table -->
+        <div class="table-container">
+            <h2>Outstanding Fines</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fine ID</th>
+                        <th>Book Title</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="outstanding-fines-body">
+                    <!-- Fines will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
 
-        <!-- Outstanding Fines -->
-        <div class="fines-section">
-            <div class="section-header">
-                <h2>Outstanding Fines</h2>
-                <div class="section-actions">
-                    <select id="fine-filter" onchange="filterFines()">
-                        <option value="all">All Fines</option>
-                        <option value="overdue">Overdue Books</option>
-                        <option value="late">Late Returns</option>
-                    </select>
-                </div>
-            </div>
-            <div class="fines-list" id="outstanding-fines">
-                <!-- Outstanding fines will be populated by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Payment History -->
-        <div class="fines-section">
-            <div class="section-header">
-                <h2>Payment History</h2>
-                <p>Record of your fine payments</p>
-            </div>
-            <div class="payment-history" style="color: aliceblue;" id="payment-history">
-                <!-- Payment history will be populated by JavaScript -->
-            </div>
+        <div class="table-container">
+            <h2>Payment History</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fine ID</th>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Submission Date</th>
+                    </tr>
+                </thead>
+                <tbody id="payment-history-body">
+                    <!-- History will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Payment Modal -->
-    <div id="payment-modal" class="modal">
+    <!-- NEW: Payment Proof Submission Modal -->
+    <div id="payment-proof-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Make Payment</h2>
-                <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+                <h2 class="modal-title">Submit Payment Proof</h2>
+                <button class="close-button" onclick="closePaymentModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="payment-form">
-                    <div class="form-group">
-                        <label>Payment Amount</label>
-                        <input type="number" id="payment-amount" placeholder="Enter amount" min="1" step="1">
-                    </div>
-                    <div class="form-group">
-                        <label>Payment Method</label>
-                        <select id="payment-method">
-                            <option value="bkash">bKash</option>
-                            <option value="nagad">Nagad</option>
-                            <option value="rocket">Rocket</option>
-                            <option value="card">Credit/Debit Card</option>
-                            <option value="cash">Cash (At Library)</option>
-                        </select>
-                    </div>
-                    <div class="payment-summary">
-                        <div class="summary-row">
-                            <span>Amount to Pay:</span>
-                            <span id="payment-summary-amount">৳0</span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Processing Fee:</span>
-                            <span id="processing-fee">৳2</span>
-                        </div>
-                        <div class="summary-row total">
-                            <span><strong>Total:</strong></span>
-                            <span id="payment-total"><strong>৳2</strong></span>
-                        </div>
-                    </div>
+                <div class="payment-instructions">
+                    <p>Please pay the amount of <strong id="modal-fine-amount">৳0.00</strong> to the specified bKash/Nagad number.</p>
+                    <p>After payment, enter the <strong>Transaction ID (TrxID)</strong> you received in the field below.</p>
                 </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-outline" onclick="closePaymentModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="processPayment()">
-                    <i data-lucide="credit-card"></i>
-                    Pay Now
-                </button>
+                <form id="payment-proof-form">
+                    <div class="form-group">
+                        <label for="trxIdInput">Transaction ID (TrxID)</label>
+                        <input type="text" id="trxIdInput" placeholder="e.g., 9M4321ABCD" required>
+                    </div>
+                    <div class="form-actions" style="text-align: right; margin-top: 1.5rem;">
+                         <button type="button" class="btn btn-outline" onclick="closePaymentModal()">Cancel</button>
+                         <button type="submit" class="btn btn-primary">Submit for Verification</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
+
+    <script src="scripts/api-service.js"></script>
     <script src="scripts/auth.js"></script>
     <script src="scripts/fines.js"></script>
     <script>
-        lucide.createIcons();
+        // Hide loading overlay after page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+            }, 500);
+        });
+
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     </script>
 </body>
 </html>

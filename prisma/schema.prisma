@@ -1,0 +1,206 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+enum BookCopyStatus {
+  AVAILABLE
+  BORROWED
+  RESERVED
+  LOST
+  DAMAGED
+  UNDER_REPAIR
+  RETIRED
+}
+
+enum PreBookStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FULFILLED
+  EXPIRED
+  CANCELLED
+}
+
+enum FineStatus {
+  UNPAID
+  PENDING_VERIFICATION
+  PAID
+}
+
+enum NoteStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OtpPurpose {
+  REGISTER
+  PASSWORD_RESET
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String
+  studentId  String?  @unique
+  department String?
+  session    String?
+  password   String
+  role       UserRole @default(STUDENT)
+  enabled    Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  borrowRecords BorrowRecord[]
+  preBooks      PreBook[]
+  fines         Fine[]
+  notes         Note[]
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String
+  password   String
+  department String?
+  createdAt  DateTime @default(now())
+  superAdmin Boolean  @default(false)
+  enabled    Boolean  @default(true)
+}
+
+model Book {
+  id             Int      @id @default(autoincrement())
+  isbn           BigInt   @unique
+  title          String
+  author         String
+  category       String?
+  totalCopies    Int      @default(1)
+  availableCopies Int     @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  copies        BookCopy[]    @relation("BookIsbnCopies")
+  preBooks      PreBook[]
+  notes         Note[]
+  borrowRecords BorrowRecord[]
+
+  @@index([title])
+  @@index([author])
+  @@index([category])
+}
+
+model BookCopy {
+  copyId   String         @id
+  isbn     BigInt
+  status   BookCopyStatus @default(AVAILABLE)
+  location String?
+
+  book Book @relation("BookIsbnCopies", fields: [isbn], references: [isbn], onDelete: Cascade)
+
+  borrowRecords BorrowRecord[]
+
+  @@index([isbn])
+  @@index([status])
+}
+
+model PreBook {
+  id          Int          @id @default(autoincrement())
+  userId      Int
+  bookId      Int
+  requestDate DateTime     @default(now())
+  status      PreBookStatus @default(PENDING)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  borrowRecords BorrowRecord[]
+
+  @@index([userId])
+  @@index([bookId])
+  @@index([status])
+}
+
+model BorrowRecord {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  bookId        Int
+  copyId        String
+  preBookId     Int?
+  borrowDate    DateTime @default(now())
+  dueDate       DateTime
+  returnDate    DateTime?
+  extendedCount Int      @default(0)
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book     Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookCopy BookCopy @relation(fields: [copyId], references: [copyId], onDelete: Cascade)
+  preBook  PreBook? @relation(fields: [preBookId], references: [id], onDelete: SetNull)
+
+  fine Fine?
+
+  @@index([userId])
+  @@index([bookId])
+  @@index([copyId])
+  @@index([preBookId])
+}
+
+model Fine {
+  id                    Int        @id @default(autoincrement())
+  userId                Int
+  borrowRecordId         Int        @unique
+  amount                Decimal    @db.Decimal(10, 2)
+  status                FineStatus @default(UNPAID)
+  trxId                 String?    @unique
+  paymentSubmissionDate DateTime?
+  paymentApprovalDate   DateTime?
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  borrowRecord BorrowRecord @relation(fields: [borrowRecordId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Note {
+  id         Int        @id @default(autoincrement())
+  userId     Int
+  bookId     Int?
+  title      String
+  subject    String?
+  fileName   String?
+  fileType   String?
+  fileSize   Int?
+  fileData   Bytes?
+  status     NoteStatus @default(PENDING)
+  uploadTime DateTime   @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book Book? @relation(fields: [bookId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([bookId])
+  @@index([status])
+}
+
+model OtpCode {
+  id        Int        @id @default(autoincrement())
+  email     String
+  purpose   OtpPurpose
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int        @default(0)
+  createdAt DateTime   @default(now())
+
+  @@unique([email, purpose])
+  @@index([expiresAt])
+}

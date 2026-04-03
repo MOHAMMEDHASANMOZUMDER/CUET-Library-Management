@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CUET Library</title>
+    <link rel="icon" type="image/png" href="images/cuet-logo.png">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modern-theme.css">
+    <link rel="stylesheet" href="styles/animations.css">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         /* Modal Styles */
@@ -64,7 +67,15 @@
     </style>
 </head>
 <body class="auth-page">
-    <div class="auth-container">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    <div class="auth-container animate-fade-in-up">
         <!-- Header -->
         <div class="auth-header">
             <a href="index.html" class="back-to-home"><i data-lucide="arrow-left"></i><span>Back to Home</span></a>
@@ -99,11 +110,11 @@
                 <div class="tab-content active" id="student-tab">
                     <form class="auth-form" id="student-login-form">
                         <div class="form-group">
-                            <label for="student-email">Email</label>
+                            <label for="student-email"><p style="color: black!important;">Email</p></label>
                             <input type="email" id="student-email" name="email" placeholder="Enter your email" required>
                         </div>
                         <div class="form-group">
-                            <label for="student-password">Password</label>
+                            <label for="student-password"><p style="color: black!important;">Password</p></label>
                             <input type="password" id="student-password" name="password" placeholder="Enter your password" required>
                         </div>
                         <div class="form-group forgot-option">
@@ -117,11 +128,11 @@
                 <div class="tab-content" id="admin-tab">
                     <form class="auth-form" id="admin-login-form">
                         <div class="form-group">
-                            <label for="admin-email">Email</label>
+                            <label for="admin-email"><p style="color: black!important;">Email</p></label>
                             <input type="email" id="admin-email" name="email" placeholder="Enter your email" required>
                         </div>
                         <div class="form-group">
-                            <label for="admin-password">Password</label>
+                            <label for="admin-password"><p style="color: black!important;">Password</p></label>
                             <input type="password" id="admin-password" name="password" placeholder="Enter your password" required>
                         </div>
                         <div class="form-group forgot-option">
@@ -134,7 +145,7 @@
         </div>
 
         <div class="auth-footer">
-            <p>Don't have an account? <a href="register.html">Register here</a></p>
+            <p style="color: black!important;">Don't have an account? <a href="register.html" style="color: rgb(13, 0, 250)!important;">Register here</a></p>
         </div>
     </div>
 
@@ -146,12 +157,28 @@
                 <h2>Forgot Password</h2>
             </div>
             <form id="forgot-password-form" class="auth-form">
-                <p>Enter your email address and we'll send you a link to reset your password.</p>
+                <p>Enter your email and we'll send an OTP to reset your password.</p>
                 <div class="form-group">
                     <label for="reset-email">Email</label>
                     <input type="email" id="reset-email" name="email" placeholder="Enter your email" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full">Send Password Reset Link</button>
+
+                <div class="form-group">
+                    <button type="button" id="send-reset-otp" class="btn btn-outline btn-full">Send Reset OTP</button>
+                </div>
+
+                <div class="form-group" id="reset-otp-group" style="display:none">
+                    <label for="reset-otp">OTP</label>
+                    <input type="text" id="reset-otp" name="otp" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter the 6-digit code" maxlength="6">
+                </div>
+
+                <div class="form-group" id="reset-password-group" style="display:none">
+                    <label for="reset-new-password">New Password</label>
+                    <input type="password" id="reset-new-password" name="newPassword" placeholder="Enter a new password">
+                </div>
+
+                <div id="reset-status" style="margin:8px 0;font-size:0.85rem;color:#dc2626;display:none"></div>
+                <button type="submit" id="reset-submit" class="btn btn-primary btn-full" disabled>Reset Password</button>
             </form>
         </div>
     </div>
@@ -182,14 +209,14 @@
             closeBtn.addEventListener('click', closeModal);
             window.addEventListener('click', (e) => { if (e.target === modal) { closeModal(); } });
 
-            const forgotForm = document.getElementById('forgot-password-form');
-            forgotForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('reset-email').value;
-                alert(`Password reset link sent to ${email}`);
-                closeModal();
-                forgotForm.reset();
-            });
+            // Hide loading overlay
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            }, 300);
+
+            // Initialize Lucide icons
+            if (window.lucide) lucide.createIcons();
         });
     </script>
 </body>
