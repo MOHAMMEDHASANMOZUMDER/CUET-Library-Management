@@ -6,6 +6,7 @@
   <title>Settings - CUET Library</title>
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="stylesheet" href="styles/modern-theme.css" />
+  <link rel="stylesheet" href="styles/navbar.css" />
   <link rel="stylesheet" href="styles/dashboard.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -74,12 +75,27 @@
     }
   </style>
 </head>
-<body class="dashboard">
-  <header class="dashboard-header">
+<body class="dashboard theme-dark">
+  <header class="header">
     <div class="container">
       <div class="nav-brand">
         <img src="images/cuet-logo.png" alt="CUET Logo" class="logo" />
         <span class="brand-text">CUET Library</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="books.html" class="nav-link">Books</a>
+        <a href="my-books.html" class="nav-link">My Books</a>
+        <a href="fines.html" class="nav-link">Fines</a>
+        <a href="notes.html" class="nav-link">Notes</a>
+      </nav>
+
+      <div class="header-actions auth-buttons">
+        <a href="dashboard.html" class="back-btn">
+          <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+          Back
+        </a>
       </div>
     </div>
   </header>
@@ -145,5 +161,6 @@
     // Initialize theme on page load
     applyTheme(savedTheme);
   </script>
+  <script src="js/navbar.js"></script>
 </body>
 </html>
