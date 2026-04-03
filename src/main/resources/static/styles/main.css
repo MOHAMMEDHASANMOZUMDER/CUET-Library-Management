@@ -847,12 +847,12 @@ body {
 .welcome-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #c2d9ff;
+  color: #1e293b;
   margin-bottom: 0.5rem;
 }
 
 .welcome-subtitle {
-  color: #bed8fc;
+  color: #475569;
 }
 
 .stats-grid {

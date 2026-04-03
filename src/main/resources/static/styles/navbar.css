@@ -217,6 +217,7 @@ body.theme-light {
 
 /* Notification Button */
 .notification-btn {
+  display: none !important;
   position: relative;
   padding: 10px;
   border-radius: 8px;
@@ -224,7 +225,6 @@ body.theme-light {
   border: 1px solid var(--navbar-border);
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -255,6 +255,15 @@ body.theme-light {
 }
 
 /* User Profile Menu */
+.notification-container {
+  display: none !important;
+}
+
+/* Hide debug panel from user view */
+#debug-panel {
+  display: none !important;
+}
+
 .user-menu {
   position: relative;
 }
@@ -265,8 +274,8 @@ body.theme-light {
   gap: 10px;
   padding: 8px 14px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.1));
+  border: 1px solid rgba(59, 130, 246, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
   color: var(--navbar-text-primary);
@@ -274,12 +283,14 @@ body.theme-light {
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
+  min-width: fit-content;
 }
 
 .user-profile-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(16, 185, 129, 0.15));
   color: var(--navbar-text-primary);
-  border-color: rgba(255, 255, 255, 0.35);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px);
 }
 
 .user-avatar {
